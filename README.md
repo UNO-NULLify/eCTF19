@@ -158,7 +158,9 @@ Once you reset the board, you should see output on the screen indicating that th
 
 #### Creating Your Own Fork
 **this is the private repository**
+
 You can now fetch and push as you normally would using `git fetch origin` and `git push origin`
+
 If we push out updated code, you can fetch this new code using `git fetch mitre`
 
 ## Things To Keep In Mind
