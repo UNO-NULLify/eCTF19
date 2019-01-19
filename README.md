@@ -157,17 +157,8 @@ You may want to save this configuration so you don't need to set this up every t
 Once you reset the board, you should see output on the screen indicating that the board is working properly.
 
 #### Creating Your Own Fork
-Once you boot the vm for the first time, we suggest you create a fork of this repo so that you can begin to develop your solution to the ECTF.
-To do this, you must fork the repo, change your fork to the origin, and then add the MITRE repo as another remote.
-Follow these steps below.
-
-1. Change the current origin remote to another name - `git remote rename origin mitre`
-2. Fork the mitre repo on github (Note that you probably want to make the repo private for now so that other teams cannot borrow your development ideas)
-3. Add the fork as the new origin - `git remote add origin git@github...my-fork.git`
-    git@github...my-fork.git is the forked repo you made in step 2.
-
+**this is the private repository**
 You can now fetch and push as you normally would using `git fetch origin` and `git push origin`
-
 If we push out updated code, you can fetch this new code using `git fetch mitre`
 
 ## Things To Keep In Mind
