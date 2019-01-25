@@ -74,14 +74,14 @@ Wait for the vagrant process to finish before interacting with the VM.
 6. Change the .gitIgnore so that it matches this exactly:
 
 ```
-/\*
+/*
 
-/\*/
+/*/
 
 !eCTF19/InsecureCode+OurCode+HardwareStuff/OurCode/
 ```
 
-7. Follow the instruction in the **Building the Reference Design Instructions** section of [2019-ectf-insecure-example](https://github.com/mitre-cyber-academy/2019-ectf-insecure-example) to build the petalinux reference design.
+7. Follow the instructions in the InsureCode+OurCode+HardwareStuff/OurCode to build the petalinux reference design.
 
 
 ### Customizing the Provisioning System
