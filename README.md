@@ -81,7 +81,7 @@ Wait for the vagrant process to finish before interacting with the VM.
 !eCTF19/InsecureCode+OurCode+HardwareStuff/OurCode/
 ```
 
-7. Follow the instructions in the InsureCode+OurCode+HardwareStuff/OurCode to build the petalinux reference design.
+7. Follow the instructions in the [InsureCode+OurCode+HardwareStuff/OurCode](https://github.com/UNO-NULLify/eCTF19/tree/master/InsecureCode%2BOurCode%2BHardwareStuff/OurCode) to build the petalinux reference design.
 
 
 ### Customizing the Provisioning System
