@@ -72,6 +72,7 @@ Note that the GUI will appear before the vagrant provisioning process has comple
 Wait for the vagrant process to finish before interacting with the VM.
 5. Restart the VM for all changes to take place.
 6. Change the .gitIgnore so that it matches this exactly:
+
 `
 
 /\*
