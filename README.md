@@ -77,7 +77,7 @@ Wait for the vagrant process to finish before interacting with the VM.
 
 /\*/
 
-!eCTF19/InsecureCode+OurCode+HardwareStuff/OurCode/*
+!eCTF19/InsecureCode+OurCode+HardwareStuff/OurCode/
 
 7. Follow the instruction in the **Building the Reference Design Instructions** section of [2019-ectf-insecure-example](https://github.com/mitre-cyber-academy/2019-ectf-insecure-example) to build the petalinux reference design.
 
