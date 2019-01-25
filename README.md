@@ -83,11 +83,28 @@ Wait for the vagrant process to finish before interacting with the VM.
 
 7. Follow the instructions in the [InsureCode+OurCode+HardwareStuff/OurCode](https://github.com/UNO-NULLify/eCTF19/tree/master/InsecureCode%2BOurCode%2BHardwareStuff/OurCode) to build the petalinux reference design.
 
-
 ### Customizing the Provisioning System
 
 As part of the provisioning process, a script located at `team/customizations.sh` will be run on the guest vm automatically at the end of the provsioning process.
 If you want to install custom python packages or modify the environment in any way, add the commands to that bash script. Remember, if you install anything new in your environment that is required to build your submission, these need to be installed by that script.
+
+## Building the Reference Design Instructions
+
+In summary, to build the reference design for the first time, follow the steps below:
+1. Ensure that all steps to provision the development environment were completed as listed in the **Provision Instructions** section in the 2019-ectf-vagrant README
+2. Log in to the newly provisioned vagrant machine using the credentials `vagrant:vagrant`
+3. Open a terminal and cd to the MES tools directory: `cd ~/MES/tools`
+4. Provision the system: `python3 provisionSystem.py demo_files/demo_users.txt demo_files/demo_default.txt`
+5. Provision the games: `python3 provisionGames.py files/generated/FactorySecrets.txt demo_files/demo_games.txt`
+6. Package the system: `python3 packageSystem.py files/generated/SystemImage.bif`
+7. Follow the steps in section **Setting Up USB Passthrough** in the 2019-ectf-vagrant README to passthrough the SD card and Xilinx board
+8. Insert the SD card into the provided adapter
+9. Deploy the system: `python3 deploySystem.py /dev/sdX files/BOOT.bin files/generated/MES.bin files/generated/games` (replacing `/dev/sdX` with the appropriate device)
+10. Remove the SD card and place it in the board
+11. On the Arty Z7 board, move jumper JP4 to the two pins labeled 'SD'
+12. Follow the **Accessing UART From Inside the VM** section in the 2019-ectf-vagrant README to connect to the Xilinx board from within the VM
+13. Press the `POBR` button on the board to reset it. You should now see the mesh shell boot and will be greeted with the login prompt
+14. Log in with the demo credentials `demo:00000000`
 
 ### Vagrant Commands
 
