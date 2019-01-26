@@ -1,20 +1,19 @@
-# 2019 Collegiate eCTF Vagrant Setup
+# 2019 Collegiate eCTF Setup
 
-This repository contains the necessary code to create a virtual machine with all required dependencies for the 2019 Collegiate MITRE Embedded Capture the Flag event.
-This repository contains a [Vagrant](https://www.vagrantup.com/) configuration script that can be used to construct a development VM for the ECTF.
-Vagrant is a provisioning tool used to automatically build and configure consistent virtual machine-based development environments through a set of simple, revision controllable configuration scripts.
-The file `Vagrantfile` contained in this repository includes all necessary steps for constructing and provisioning the VM.
+This repository contains UNO's code for the 2019 MITRE eCTF.
+This document contains instructions to set up the development environment.
 
-## Tools
+## RequiredTools
 
 To host the VM using Vagrant you must have the following tools installed on your host machine:
 
-- [VirtualBox](https://www.virtualbox.org/)
-- [VirtualBox Extension Pack](https://www.virtualbox.org/wiki/Downloads)
-- [Vagrant](https://www.vagrantup.com/)
+- [VirtualBox](https://www.virtualbox.org/) (can be installed from distro repository)
+- [VirtualBox Extension Pack](https://www.virtualbox.org/wiki/Downloads) (this too)
+- [Vagrant](https://www.vagrantup.com/) (install specifically from this site)
+
 
 Install VirtualBox and the VirtualBox Extension Pack first.
-On Linux, you will also need to add your user to the `vboxusers` group.
+** On Linux, you will also need to add your user to the `vboxusers` group.**
 Next, install the latest version of Vagrant.
 
 ## System Requirements
@@ -23,36 +22,7 @@ Next, install the latest version of Vagrant.
 - At least **4 CPU** threads. You can operate with less but you will need to change the number of CPUs in `provision/config.rb`
 - At least **8 GB** of ram. You can operate with less but you will need to modify the amount of provisioned ram in `provision/config.rb`. We recommend using no more than half of the total amount of RAM on your system.
 
-## Provisioning the VM
-
-### How it Works
-
-Vagrant installs the system by setting up a base VM and then running scripts on the guest machine to configure it for the ECTF.
-In this case, Vagrant will load a set of configuration variables form the `provision/config.rb` file and then install a base Ubuntu 16.04 box as the VM.
-It will then run through each of the scripts in `provision/scripts` to customize the environment.
-
-**git_clone.sh**
-
-This script is a wrapper around the `git clone` command to clone a git repository into a given folder.
-This script will check to make sure that the folder does not already have a git repository and will print out an error message as appropriate.
-
-**petalinux_install**
-
-This script installs the required packages for Petalinux Tools and then installs the tools to `/opt/pkg/petalinux`.
-These tools are required to build and provision the Arty-Z7 board.
-
-**ssh_agent.sh**
-
-This script configures the ssh agent to automatically start and add the `~/.ssh/id_rsa` key.
-Note that this key does not exist by default, but can be added to be the private key for your github repositories.
-
-**system_setup.sh**
-
-This script does all general system setup.
-It installs the XFCE desktop environment, as well as minicom and the C man pages.
-It also adds environment variables to the system for the uboot and petalinux directories.
-
-### Provision Instructions
+### Development Environment Instructions
 
 Follow the below instructions to provision the development environment.
 Note, this will take a **LONG** time so be patient!
@@ -61,138 +31,32 @@ It could take over an hour depending on your system specs.
 
 To use the VM:
 
-0. Clone this repository onto your machine.
+0. Clone the [Vagrant Setup repository](https://github.com/mitre-cyber-academy/2019-ectf-vagrant) onto your machine.
 1. Navigate to the directory where this `README` is located; this should be where the `Vagrantfile` is.
-2. Modify configuration options contained in `provision/config.rb` as desired (see **Configuring The VM Installation** below).
-3. Download the Petalinux Tools from https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2017.4-final-installer.run and put it in the `downloads` folder.
-More information about the downloads can be found in `downloads/README.md`.
-Since this is a very large file we recommend having one person on your team download the file and distribute it within your team using a thumb drive.
+2. Modify configuration options contained in `provision/config.rb`, change $petalinux_git value to the URL of **this** repository.
+3. Download the Petalinux Tools from https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2017.4-final-installer.run with username and password `tworort:asdfghjk1!` and put it in the `downloads` folder.
 4. Create, boot, and provision the VM via the `vagrant up` command.
-Note that the GUI will appear before the vagrant provisioning process has completed.
+**Note that the GUI will appear before the vagrant provisioning process has completed.**
 Wait for the vagrant process to finish before interacting with the VM.
-5. Restart the VM for all changes to take place.
-6. Change the .gitIgnore so that it matches this exactly:
+5. Restart the VM for all changes to take place with `vagrant halt && vagrant up`.
+6. Login the vm with username and password `vagrant:vagrant` or ssh into VM with `vagrant ssh`
 
-```
-/*
 
-/*/
+To build the system:
 
-!eCTF19/InsecureCode+OurCode+HardwareStuff/OurCode/
-```
-
-7. Follow the instructions in the [InsureCode+OurCode+HardwareStuff/OurCode](https://github.com/UNO-NULLify/eCTF19/tree/master/InsecureCode%2BOurCode%2BHardwareStuff/OurCode) to build the petalinux reference design.
-
-### Customizing the Provisioning System
-
-As part of the provisioning process, a script located at `team/customizations.sh` will be run on the guest vm automatically at the end of the provsioning process.
-If you want to install custom python packages or modify the environment in any way, add the commands to that bash script. Remember, if you install anything new in your environment that is required to build your submission, these need to be installed by that script.
-
-## Building the Reference Design Instructions
-
-In summary, to build the reference design for the first time, follow the steps below:
-1. Ensure that all steps to provision the development environment were completed as listed in the **Provision Instructions** section in the 2019-ectf-vagrant README
-2. Log in to the newly provisioned vagrant machine using the credentials `vagrant:vagrant`
-3. Open a terminal and cd to the MES tools directory: `cd ~/MES/tools`
-4. Provision the system: `python3 provisionSystem.py demo_files/demo_users.txt demo_files/demo_default.txt`
-5. Provision the games: `python3 provisionGames.py files/generated/FactorySecrets.txt demo_files/demo_games.txt`
-6. Package the system: `python3 packageSystem.py files/generated/SystemImage.bif`
-7. Follow the steps in section **Setting Up USB Passthrough** in the 2019-ectf-vagrant README to passthrough the SD card and Xilinx board
-8. Insert the SD card into the provided adapter
-9. Deploy the system: `python3 deploySystem.py /dev/sdX files/BOOT.bin files/generated/MES.bin files/generated/games` (replacing `/dev/sdX` with the appropriate device)
-10. Remove the SD card and place it in the board
-11. On the Arty Z7 board, move jumper JP4 to the two pins labeled 'SD'
-12. Follow the **Accessing UART From Inside the VM** section in the 2019-ectf-vagrant README to connect to the Xilinx board from within the VM
-13. Press the `POBR` button on the board to reset it. You should now see the mesh shell boot and will be greeted with the login prompt
-14. Log in with the demo credentials `demo:00000000`
-
-### Vagrant Commands
-
-To shutdown the VM, execute the following command from your host machine:
-
-~~~
-vagrant halt
-~~~
-
-To boot and log back into the VM again, execute the following commands:
-
-~~~
-vagrant up
-~~~
-
-If you wish to use the virtual machine without a GUI, the following command can be used to SSH into a running machine.
-The username and password are the standard Vagrant credentials
-
-```
-username: vagrant
-password: vagrant
-```
-
-~~~
-vagrant ssh
-~~~
-
-**Warning, doing the following will remove EVERYTHING. Only use in dire circumstances.**
-
-To completely **destroy** the VM (i.e. erase the VM virtual hard drive and all of
-its contents), execute the following command: (you may need to also open virtual box
-virtual media manager and remove the vmdk downloaded for the OS)
-
-~~~
-vagrant destroy
-~~~
-
-### Configuring The VM Installation
-
-The Vagrant configuration file has a number of user-configurable parameters.
-The default values for these parameters are usually good for most users, but some may not be appropriate for all users depending on system specs.
-Any changes should typically be made to `Vagrantfile` prior to executing `vagrant up` or `vagrant provision`.
-Note that you can re-provision the system using the `vagrant up --provision` command.
-
-## Working In The VM Environment
-
-### Shared Folders from the Host
-
-As part of the provisioning process, vagrant will share a system folder with the VM.
-This is done through the virtualbox guest additions installed on the guest.
-NOTE: Vagrant shares these folders when it brings up the machine. Therefore, you must start and stop the machine using the commands listed above in **Using Vagrant**
-
-Sharing the vagrant folder with the guest, needed for installing petalinux during the installation.
-**./ -> /vagrant**
-
-### Setting Up USB Passthrough
-
-In order to program the SD card and view serial output from the Arty Z7 board, you will need to setup USB
-passthrough in Virtualbox.
-From Windows and Mac hosts you should only need to add the device in the device filters in the USB Settings. Then, 
-once the guest is booted, ensure the SD card reader and Arty-Z7 devices are check in the `Settings -> USB` menu. If
-they are not, select the appropriate devices.
-
-**For Linux hosts**, you must first add the host machine user to the group, `vboxusers`.
-
-#### Accessing UART From Inside the VM
-
-The VM comes preinstalled with `minicom`, a program that will allow you to access the UART for the device.
-First, ensure that you've added the board to the USB devices in the virtualbox VM settings.
-Next, run the following command
-```
-sudo minicom -D /dev/ttyUSB1
-```
+0. Ensure all previous steps have been completed.
+1. Go into MES tools directory `cd ~/MES/tools`
+2. Build the system: `python3 provisionSystem.py demo_files/demo_users.txt demo_files/demo_default.txt`
+3. Build the games: `python3 provisionGames.py files/generated/FactorySecrets.txt demo_files/demo_games.txt`
+4. Package the system: `python3 packageSystem.py files/generated/SystemImage.bif`
+5. Insert SD card into host computer and passthrough to VM.
+6. Identify SD card in VM `lsblk`
+7. Deploy system to SD card: `python3 deploySystem.py /dev/sdX files/BOOT.bin files/generated/MES.bin files/generated/games` (replacing `/dev/sdX` with the appropriate device)
+8. Remove SD card and place it in the board
+9. Plug in the board to the host computer and on the Arty Z7 board, move jumper JP4 to the two pins labeled 'SD'
+10. Access UART `sudo minicom -D /dev/ttyUSB1`
 You will need to disable the `hardware flow control` setting to have UART work appropriately.
 To do so, press `control A` and then `z` while running `minicom`, then hit `O`, go to `Serial port setup`, and then press `F`.
 You may want to save this configuration so you don't need to set this up every time you run `minicom`.
-Once you reset the board, you should see output on the screen indicating that the board is working properly.
-
-#### Creating Your Own Fork
-**this is the private repository**
-
-You can now fetch and push as you normally would using `git fetch origin` and `git push origin`
-
-If we push out updated code, you can fetch this new code using `git fetch mitre`
-
-## Things To Keep In Mind
-
-After the development phase of the challenge, we will provision the attack boards with your modified versions of uboot and petalinux.
-To do this, we will clone your repo and run the `Vagrantfile` provided.
-After that, running the provision scripts MUST successfully build the images and games and the SD card MUST successfully boot on the Xilinx board.
-Only then will it be considered a valid design.
+11. Press the `POBR` button on the board to reset it. You should now see the mesh shell boot and will be greeted with the login prompt
+12. Log in with the demo credentials `demo:00000000`
