@@ -1,6 +1,7 @@
 # 2019 Collegiate eCTF Setup
 
 This repository contains UNO's code for the 2019 MITRE eCTF.
+
 This document contains instructions to set up the development environment.
 
 ## RequiredTools
@@ -13,7 +14,9 @@ To host the VM using Vagrant you must have the following tools installed on your
 
 
 Install VirtualBox and the VirtualBox Extension Pack first.
-** On Linux, you will also need to add your user to the `vboxusers` group.**
+
+On Linux, you will also need to add your user to the `vboxusers` group.
+
 Next, install the latest version of Vagrant.
 
 ## System Requirements
@@ -25,8 +28,11 @@ Next, install the latest version of Vagrant.
 ### Development Environment Instructions
 
 Follow the below instructions to provision the development environment.
+
 Note, this will take a **LONG** time so be patient!
+
 When the petalinux tools are being installed, you may want to get up and do something else while it works.
+
 It could take over an hour depending on your system specs.
 
 To use the VM:
@@ -36,8 +42,11 @@ To use the VM:
 2. Modify configuration options contained in `provision/config.rb`, change $petalinux_git value to the URL of **this** repository.
 3. Download the Petalinux Tools from https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2017.4-final-installer.run with username and password `tworort:asdfghjk1!` and put it in the `downloads` folder.
 4. Create, boot, and provision the VM via the `vagrant up` command.
+
 **Note that the GUI will appear before the vagrant provisioning process has completed.**
+
 Wait for the vagrant process to finish before interacting with the VM.
+
 5. Restart the VM for all changes to take place with `vagrant halt && vagrant up`.
 6. Login the vm with username and password `vagrant:vagrant` or ssh into VM with `vagrant ssh`
 
@@ -55,8 +64,12 @@ To build the system:
 8. Remove SD card and place it in the board
 9. Plug in the board to the host computer and on the Arty Z7 board, move jumper JP4 to the two pins labeled 'SD'
 10. Access UART `sudo minicom -D /dev/ttyUSB1`
+
 You will need to disable the `hardware flow control` setting to have UART work appropriately.
+
 To do so, press `control A` and then `z` while running `minicom`, then hit `O`, go to `Serial port setup`, and then press `F`.
+
 You may want to save this configuration so you don't need to set this up every time you run `minicom`.
+
 11. Press the `POBR` button on the board to reset it. You should now see the mesh shell boot and will be greeted with the login prompt
 12. Log in with the demo credentials `demo:00000000`
