@@ -35,14 +35,14 @@ When the petalinux tools are being installed, you may want to get up and do some
 
 It could take over an hour depending on your system specs.
 
-To use the VM:
+### To use the VM:
 
 0. Clone the [Vagrant Setup repository](https://github.com/mitre-cyber-academy/2019-ectf-vagrant) onto your machine.
 1. Navigate to the directory where this `README` is located; this should be where the `Vagrantfile` is.
 2. Modify configuration options contained in `provision/config.rb`, change $petalinux_git value to the URL of **this** repository.
 3. Download the Petalinux Tools from https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2017.4-final-installer.run with username and password `tworort:asdfghjk1!` and put it in the `downloads` folder.
   - if you want to make hardware configuration changes download https://www.xilinx.com/member/forms/download/xef-vivado.html?filename=Xilinx_Vivado_SDK_Web_2017.4_1216_1_Lin64.bin using the same login information and move it to the downloads directory.
-  - if you want to wirte petalinux applications download this https://www.xilinx.com/member/forms/download/xef.html?filename=Xilinx_SDK_2017.4_1216_1_Lin64.bin using the same login information and move it to the downloads directory.
+  - if you want to wirte petalinux applications download https://www.xilinx.com/member/forms/download/xef.html?filename=Xilinx_SDK_2017.4_1216_1_Lin64.bin using the same login information and move it to the downloads directory.
 4. Create, boot, and provision the VM via the `vagrant up` command.
 
 **Note that the GUI will appear before the vagrant provisioning process has completed.**
@@ -52,8 +52,10 @@ Wait for the vagrant process to finish before interacting with the VM.
 5. Restart the VM for all changes to take place with `vagrant halt && vagrant up`.
 6. Login the vm with username and password `vagrant:vagrant` or ssh into VM with `vagrant ssh`
 
+> Note: To start the provisioning process again use `vagrant destroy` and go back to step 4.
 
-To build the system:
+
+### To build the system:
 
 0. Ensure all previous steps have been completed.
 1. Go into MES tools directory `cd ~/MES/tools`
