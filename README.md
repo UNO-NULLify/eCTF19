@@ -25,7 +25,7 @@ Next, install the latest version of Vagrant.
 - At least **4 CPU** threads. You can operate with less but you will need to change the number of CPUs in `provision/config.rb`
 - At least **8 GB** of ram. You can operate with less but you will need to modify the amount of provisioned ram in `provision/config.rb`. We recommend using no more than half of the total amount of RAM on your system.
 
-### Development Environment Instructions
+## Development Environment Instructions
 
 Follow the below instructions to provision the development environment.
 
