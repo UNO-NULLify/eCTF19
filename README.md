@@ -41,6 +41,8 @@ To use the VM:
 1. Navigate to the directory where this `README` is located; this should be where the `Vagrantfile` is.
 2. Modify configuration options contained in `provision/config.rb`, change $petalinux_git value to the URL of **this** repository.
 3. Download the Petalinux Tools from https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2017.4-final-installer.run with username and password `tworort:asdfghjk1!` and put it in the `downloads` folder.
+  - if you want to make hardware configuration changes download https://www.xilinx.com/member/forms/download/xef-vivado.html?filename=Xilinx_Vivado_SDK_Web_2017.4_1216_1_Lin64.bin using the same login information and move it to the downloads directory.
+  - if you want to wirte petalinux applications download this https://www.xilinx.com/member/forms/download/xef.html?filename=Xilinx_SDK_2017.4_1216_1_Lin64.bin using the same login information and move it to the downloads directory.
 4. Create, boot, and provision the VM via the `vagrant up` command.
 
 **Note that the GUI will appear before the vagrant provisioning process has completed.**
