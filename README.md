@@ -60,7 +60,7 @@ To build the system:
 4. Package the system: `python3 packageSystem.py files/generated/SystemImage.bif`
 5. Insert SD card into host computer and passthrough to VM.
 6. Identify SD card in VM `lsblk`
-7. Deploy system to SD card: `python3 deploySystem.py /dev/sdX files/BOOT.bin files/generated/MES.bin files/generated/games` (replacing `/dev/sdX` with the appropriate device)
+7. Deploy system to SD card: `python3 deploySystem.py /dev/sdX files/uno_BOOT.BIN files/generated/MES.bin files/generated/games` (replacing `/dev/sdX` with the appropriate device)
 8. Remove SD card and place it in the board
 9. Plug in the board to the host computer and on the Arty Z7 board, move jumper JP4 to the two pins labeled 'SD'
 10. Access UART `sudo minicom -D /dev/ttyUSB1`
