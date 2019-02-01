@@ -51,8 +51,8 @@ It could take over an hour depending on your system specs.
 ### To build the system:
 
 0. Ensure all previous steps have been completed.
-1. Go into MES tools directory `cd ~/MES/tools`
-1.1 Append /code to the environment variables ECTF_PETALINUX and ECTF_UBOOT (may change if we fix our repo)
+1. Go into MES tools directory `cd ~/MES/tools`<br>
+1.1 Append /code to the environment variables ECTF_PETALINUX and ECTF_UBOOT (may change if we fix our repo).<br>
 2. Build the system: `python3 provisionSystem.py demo_files/demo_users.txt demo_files/demo_default.txt`
 3. Build the games: `python3 provisionGames.py files/generated/FactorySecrets.txt demo_files/demo_games.txt`
 4. Package the system: `python3 packageSystem.py files/generated/SystemImage.bif`
