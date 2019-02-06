@@ -40,9 +40,7 @@ char *builtin_str[] = {
     "play",
     "query",
     "install",
-    "uninstall",
-    "dump",
-    "resetflash"
+    "uninstall"
 };
 
 int (*builtin_func[]) (char **) = {
@@ -53,9 +51,7 @@ int (*builtin_func[]) (char **) = {
     &mesh_play,
     &mesh_query,
     &mesh_install,
-    &mesh_uninstall,
-    &mesh_dump_flash,
-    &mesh_reset_flash
+    &mesh_uninstall
 };
 
 
@@ -64,8 +60,8 @@ int (*builtin_func[]) (char **) = {
 /******************************************************************************/
 
 /*
-    This function initializes the game install table. If the the sentinel is 
-    written already, then, it does nothing, otherwise, it writes the sentinel 
+    This function initializes the game install table. If the the sentinel is
+    written already, then, it does nothing, otherwise, it writes the sentinel
     and the MESH_TABLE_END flag to the beginning of the game install table.
 */
 int mesh_init_table(void)
@@ -106,10 +102,10 @@ int mesh_flash_init(void)
     toggle 1's to 0's and erase can only reset the flash to 1's on page boundaries
     and in chunks of a single page.
 
-    This is a wrapper that reads a page, updates the necessary bits, and then 
+    This is a wrapper that reads a page, updates the necessary bits, and then
     updates the entire page in flash.
 
-    It writes the byte array data of length flash_length to flash address at 
+    It writes the byte array data of length flash_length to flash address at
     flash_location.
 */
 
@@ -242,9 +238,9 @@ int mesh_flash_read(void* data, unsigned int flash_location, unsigned int flash_
 /********************************** MESH Commands *****************************/
 /******************************************************************************/
 
-/* 
+/*
     This function lists all commands available from the mesh shell. It
-    implements the help function in the mesh shell. 
+    implements the help function in the mesh shell.
 */
 int mesh_help(char **args)
 {
@@ -261,9 +257,9 @@ int mesh_help(char **args)
     return 0;
 }
 
-/* 
+/*
     This shuts down the mesh terminal. It does not shut down the board.
-    This implements the shutdown function in the mesh shell 
+    This implements the shutdown function in the mesh shell
 */
 int mesh_shutdown(char **args)
 {
@@ -272,7 +268,7 @@ int mesh_shutdown(char **args)
     return MESH_SHUTDOWN;
 }
 
-/* 
+/*
    Log the current user out of mesh. The control loop brings the user
    back to the login prompt. This implements the logout function in the mesh
    shell.
@@ -313,7 +309,7 @@ int mesh_list(char **args)
     kernel from ram address 0x10000000. This allows the linux kernel to read the
     binary and execute it to play the game..
 
-    This function implements the play function in mesh. 
+    This function implements the play function in mesh.
 */
 int mesh_play(char **args)
 {
@@ -371,7 +367,7 @@ int mesh_query(char **args)
 
 
 /*
-    This function installs the given game for the specified user. 
+    This function installs the given game for the specified user.
     It finds the next available spot in the install table.
 
     It implements the install function of the mesh shell.
@@ -496,7 +492,7 @@ int mesh_uninstall(char **args)
 }
 
 
-/* 
+/*
     This is a development utility that allows you to easily dump flash
     memory to std out.
 */
@@ -808,12 +804,12 @@ int mesh_query_ext4(const char *dirname, char *filename){
     return ret;
 }
 
-/* 
+/*
     This function gets the size of a file on a ext4 partion. It uses the
-    u-boot ext4 fs functions to determine the size. 
+    u-boot ext4 fs functions to determine the size.
 */
 loff_t mesh_size_ext4(char *fname){
-    loff_t size;    
+    loff_t size;
 
     if(fs_set_blk_dev("mmc", "0:2", FS_TYPE_EXT) < 0){
         return -1;
@@ -1207,7 +1203,7 @@ int mesh_is_first_table_write(void)
 }
 
 /*
-    This function determines if the specified user and pin is listed in the 
+    This function determines if the specified user and pin is listed in the
     mesh_users array. If it is then the user is logged in and the function
     returns 1. Otherwise, it returns 0.
 */
@@ -1238,7 +1234,7 @@ int mesh_num_builtins(void) {
 
 /*
     This function reads a line from stdin and returns a pointer to the character
-    buffer containing the null terminated line. 
+    buffer containing the null terminated line.
 
     This funciton allocates the charater buffer on the heap, therefore, the caller
     must free this buffer to avoid a memory leak.
@@ -1281,7 +1277,7 @@ char* mesh_read_line(int bufsize)
     }
 }
 
-/* 
+/*
     This function determines the number of arguments specified in args and
     returns that number..
 */
@@ -1297,7 +1293,7 @@ int mesh_get_argv(char **args){
 
 /*
     This function is used to split a single line of command line arguments
-    into an array of individual arguments. 
+    into an array of individual arguments.
 
     It returns an array of character buffers. Both this array and the character
     buffers are allocated on the heap and therefore, it is the responsibility of
