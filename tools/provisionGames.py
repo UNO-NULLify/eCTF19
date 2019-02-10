@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from Crypto.Cipher import AES
+import base64
 import os
 import argparse
 import re
@@ -9,7 +11,15 @@ import subprocess
 gen_path = "files/generated/games"
 
 
-def provision_game(line):
+def gen_cipher(content):
+    content = [x.strip() for x in content]
+    iv = base64.b64decode(content[0])
+    key = base64.b64decode(content[1])
+
+    return AES.new(key, AES.MODE_CFB, iv)
+
+
+def provision_game(line, cipher):
     """Given a line from games.txt, provision a game and write to the
     appropriate directory
 
@@ -79,6 +89,12 @@ def provision_game(line):
     f_out.close()
     f.close()
 
+    with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
+        plaintext = fo.read()
+    enc = cipher.encrypt(plaintext)
+    with open(os.path.join(gen_path, f_out_name) + ".enc", 'wb') as fo:
+        fo.write(enc)
+
     print("    %s -> %s" % (g_path, os.path.join(gen_path, f_out_name)))
 
 
@@ -95,7 +111,8 @@ def main():
 
     # open factory secrets
     try:
-        f_factory_secrets = open(args.factory_secrets, "r")
+        with open(args.factory_secrets) as f:
+            content = f.readlines()
     except Exception as e:
         print("Couldn't open file %s" % (args.factory_secrets))
         exit(2)
@@ -105,8 +122,9 @@ def main():
         f_games = open(args.games, "r")
     except Exception as e:
         print("Couldn't open file %s" % (args.games))
-        f_factory_secrets.close()
         exit(2)
+
+    cipher = gen_cipher(content)
 
     subprocess.check_call("mkdir -p %s" % (gen_path), shell=True)
 
@@ -114,7 +132,7 @@ def main():
 
     # Provision each line in the games file
     for line in f_games:
-        provision_game(line)
+        provision_game(line, cipher)
 
     print("Done Provision Games")
 
