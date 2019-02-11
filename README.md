@@ -62,7 +62,7 @@ It could take over an hour depending on your system specs.
 8. Remove SD card and place it in the board
 9. Plug in the board to the host computer and on the Arty Z7 board, move jumper JP4 to the two pins labeled 'SD'
 10. Access UART `sudo minicom -D /dev/ttyUSB1`. You will need to disable the `hardware flow control` setting to have UART work appropriately. To do so, press `control A` and then `z` while running `minicom`, then hit `O`, go to `Serial port setup`, and then press `F`. You may want to save this configuration so you don't need to set this up every time you run `minicom`.
-11. Press the `POBR` button on the board to reset it. You should now see the mesh shell boot and will be greeted with the login prompt
+11. Press the `PORB` button on the board to reset it. You should now see the mesh shell boot and will be greeted with the login prompt
 12. Log in with the demo credentials `demo:00000000`
 13. List Mesh commands with `help`
 
