@@ -40,7 +40,7 @@ It could take over an hour depending on your system specs.
 0. Clone the [Vagrant Setup repository](https://github.com/mitre-cyber-academy/2019-ectf-vagrant) onto your machine.
 1. Navigate to the directory where this `README` is located; this should be where the `Vagrantfile` is.
 2. Modify configuration options contained in `provision/config.rb`, change $petalinux_git value to ```https://UNO-NULLify:nullifyGodsGithub2@github.com/UNO-NULLify/eCTF19```.
-3. Download the [Petalinux Tools](https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2017.4-final-installer.run) with username and password `tworort:asdfghjk1!` and put it in the `downloads` folder. If you want to make hardware configuration changes download [Xilinx Vivado SDK Web](https://www.xilinx.com/member/forms/download/xef-vivado.html?filename=Xilinx_Vivado_SDK_Web_2017.4_1216_1_Lin64.bin) using the same login information and move it to the downloads directory. If you want to write petalinux applications [Xilinx SDK](https://www.xilinx.com/member/forms/download/xef.html?filename=Xilinx_SDK_2017.4_1216_1_Lin64.bin) using the same login information and move it to the downloads directory.
+3. Download the [Petalinux Tools](https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2017.4-final-installer.run) with username and password `tworort:asdfghjk1!` and put it in the `downloads` folder. 
 4. Create, boot, and provision the VM via the `vagrant up` command. The GUI will appear before the vagrant provisioning process has completed. **Wait for the vagrant process to finish before interacting with the VM.**
 5. Restart the VM for all changes to take place with `vagrant halt && vagrant up`.
 6. Login the vm with username and password `vagrant:vagrant` or ssh into VM with `vagrant ssh`
@@ -52,7 +52,6 @@ It could take over an hour depending on your system specs.
 
 0. Ensure all previous steps have been completed.
 1. Go into MES tools directory `cd ~/MES/tools`<br>
-1.1 Append /code to the environment variables ECTF_PETALINUX and ECTF_UBOOT (may change if we fix our repo).<br>
 2. Build the system: `python3 provisionSystem.py demo_files/demo_users.txt demo_files/demo_default.txt`
 3. Build the games: `python3 provisionGames.py files/generated/FactorySecrets.txt demo_files/demo_games.txt`
 4. Package the system: `python3 packageSystem.py files/generated/SystemImage.bif`
