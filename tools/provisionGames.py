@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import AES
 from Crypto.PublicKey import PKCS1_v1_5
@@ -23,6 +24,12 @@ def gen_cipher(content):
 
     return AES.new(key, AES.MODE_CFB, iv)
 
+def gen_cipher(content):
+    content = [x.strip() for x in content]
+    iv = base64.b64decode(content[0])
+    key = base64.b64decode(content[1])
+
+    return AES.new(key, AES.MODE_CFB, iv)
 
 def provision_game(line, cipher):
     """Given a line from games.txt, provision a game and write to the
@@ -126,9 +133,6 @@ def provision_game(line, cipher):
         f_hash_out.close()
 
         # sign game hash
-
-
-
         signer = PKCS1_v1_5.new(key)
         with open(os.path.join(gen_path, f_hash_out), 'rb') as to_sign:
             # all at once because signing seems to take one big digest
@@ -152,6 +156,12 @@ def provision_game(line, cipher):
         print("Error, could write OR hash binary OR write signature to source: %s" % (e))
         f_out.close()
         exit(1)
+
+    with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
+        plaintext = fo.read()
+    enc = cipher.encrypt(plaintext)
+    with open(os.path.join(gen_path, f_out_name) + ".enc", 'wb') as fo:
+        fo.write(enc)
 
     with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
         plaintext = fo.read()
