@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 
+from Crypto.PublicKey import RSA
 from Crypto.Cipher import AES
+from Crypto.PublicKey import PKCS1_v1_5
+from Crypto.Hash import SHA256
 import base64
 import os
 import argparse
+import hashlib
 import re
 import subprocess
 
 # Path to the generated games folder
 gen_path = "files/generated/games"
+
+block_size = 65536
 
 
 def gen_cipher(content):
@@ -18,6 +24,12 @@ def gen_cipher(content):
 
     return AES.new(key, AES.MODE_CFB, iv)
 
+def gen_cipher(content):
+    content = [x.strip() for x in content]
+    iv = base64.b64decode(content[0])
+    key = base64.b64decode(content[1])
+
+    return AES.new(key, AES.MODE_CFB, iv)
 
 def provision_game(line, cipher):
     """Given a line from games.txt, provision a game and write to the
@@ -32,6 +44,9 @@ def provision_game(line, cipher):
     # 3. Match the game name and capture it
     # 4. Skip over whitespace
     # 5. Match the group (major.minor)
+    key = RSA.generate(2048, e=65537)
+    pub = key.publickey()
+    priv = key.exportkey('PEM') #
 
     reg = r'^\s*([\w\/\-.\_]+)\s+([\w\-.\_]+)\s+(\d+\.\d+|\d+)((?:\s+\w+)+)'
     m = re.match(reg, line)
@@ -65,6 +80,9 @@ def provision_game(line, cipher):
         f.close()
         exit(1)
 
+
+
+
     # Write the game header to the top of the file
     # The game header takes the form of the version, name, and user information
     # one separate lines, prefaced with the information for what the data is
@@ -77,17 +95,73 @@ def provision_game(line, cipher):
     f_out.write(bytes("version:%s\n" % (version), "utf-8"))
     f_out.write(bytes("name:%s\n" % (name), "utf-8"))
     f_out.write(bytes("users:%s\n" % (" ".join(users)), "utf-8"))
+    #write pub key to header
+    f_out.write(bytes("public_key:%s\n") % (pub, "utf-8"))
 
     # Read in the binary source
-    g_src = f.read()
-    # Write the binary source
-    while g_src:
-        f_out.write(g_src)
-        g_src = f.read()
+    # block_size used as
+    # we can't be sure of the size of each game
+    # best be careful by reading a certain number of bytes each time
+    g_src = f.read(block_size)
 
-    # Close the files
-    f_out.close()
-    f.close()
+    # Write the binary source
+    f_hash_out = f_out_name + "_hash"
+    f_hash_sig_out = f_hash_out + "_sig"
+    try:
+        f_sign = open(os.path.join(gen_path, f_hash_sign_out), "wb")
+    except Exception as e:
+        print("Error, could not open signature output file: %s" % (e))
+        f_sign.close()
+        exit(1)
+    try:
+        while g_src:
+            f_out.write(g_src)
+            g_src = f.read(block_size)
+        # Close the files
+        f_out.close()
+        f_hash_out.close()
+        f.close()
+        hasher = hashlib.sha256()
+        #hash game and save to file, tested locally
+        with open(os.path.join(gen_path, f_out), 'rb') as to_hash:
+            buf = to_hash.read(block_size)
+            while len(buf) > 0:
+                    hasher.update(buf)
+                    buf = to_hash.read(block_size)
+        # to_hash/f_out closed implicitly outside of with
+        f_hash_out.write(hasher.hexdigest())
+        f_hash_out.close()
+
+        # sign game hash
+        signer = PKCS1_v1_5.new(key)
+        with open(os.path.join(gen_path, f_hash_out), 'rb') as to_sign:
+            # all at once because signing seems to take one big digest
+            buf_s = to_sign.read()
+            digest = SHA256.new()
+            digest.update(buf_s)
+            signature = signer.sign(digest)
+            f_sign.write(signature)
+            f_sign.close()
+
+
+
+
+
+        # need to verify here cuz why not
+
+    # this is all in 1 try/catch block because we cannot have one
+    # part (writing header, hashing, signing, etc) to fail whilst the others continue
+
+    except Exception as e:
+        print("Error, could write OR hash binary OR write signature to source: %s" % (e))
+        f_out.close()
+        exit(1)
+
+    with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
+        plaintext = fo.read()
+    enc = cipher.encrypt(plaintext)
+    with open(os.path.join(gen_path, f_out_name) + ".enc", 'wb') as fo:
+        fo.write(enc)
 
     with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
         plaintext = fo.read()
