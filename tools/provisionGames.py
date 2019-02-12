@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from Crypto.PublicKey import RSA
 from Crypto.Cipher import AES
 from Crypto.PublicKey import PKCS1_v1_5
 from Crypto.Hash import SHA256
@@ -39,7 +39,7 @@ def provision_game(line, cipher):
     # 5. Match the group (major.minor)
     key = RSA.generate(2048, e=65537)
     pub = key.publickey()
-    priv = key.exportkey('PEM')
+    priv = key.exportkey('PEM') #
 
     reg = r'^\s*([\w\/\-.\_]+)\s+([\w\-.\_]+)\s+(\d+\.\d+|\d+)((?:\s+\w+)+)'
     m = re.match(reg, line)
@@ -89,7 +89,7 @@ def provision_game(line, cipher):
     f_out.write(bytes("name:%s\n" % (name), "utf-8"))
     f_out.write(bytes("users:%s\n" % (" ".join(users)), "utf-8"))
     #write pub key to header
-    f_out.write(bytes("public_key:%s\n") % (pub.export('PEM'), "utf-8"))
+    f_out.write(bytes("public_key:%s\n") % (pub, "utf-8"))
 
     # Read in the binary source
     # block_size used as
@@ -126,15 +126,10 @@ def provision_game(line, cipher):
         f_hash_out.close()
 
         # sign game hash
-        '''PROBLEM:
 
-        signature = signer.sign(digest)
-  File "/usr/lib/python3.7/site-packages/Crypto/Signature/PKCS1_v1_5.py", line 106, in sign
-    modBits = Crypto.Util.number.size(self._key.n)
-AttributeError: 'bytes' object has no attribute 'n'
 
-        will fix 02\11\19 '''
-        signer = PKCS1_v1_5.new(priv)
+
+        signer = PKCS1_v1_5.new(key)
         with open(os.path.join(gen_path, f_hash_out), 'rb') as to_sign:
             # all at once because signing seems to take one big digest
             buf_s = to_sign.read()
@@ -142,7 +137,9 @@ AttributeError: 'bytes' object has no attribute 'n'
             digest.update(buf_s)
             signature = signer.sign(digest)
             f_sign.write(signature)
-        f_sign.close()
+            f_sign.close()
+
+
 
 
 
