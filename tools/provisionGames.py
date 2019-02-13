@@ -16,22 +16,14 @@ gen_path = "files/generated/games"
 
 block_size = 65536
 
-
 def gen_cipher(content):
     content = [x.strip() for x in content]
     iv = base64.b64decode(content[0])
     key = base64.b64decode(content[1])
 
-    return AES.new(key, AES.MODE_CFB, iv)
+    return AES.new(key, AES.MODE_CTR, iv)
 
-def gen_cipher(content):
-    content = [x.strip() for x in content]
-    iv = base64.b64decode(content[0])
-    key = base64.b64decode(content[1])
-
-    return AES.new(key, AES.MODE_CFB, iv)
-
-def provision_game(line, cipher):
+def provision_game(line, AEScipher):
     """Given a line from games.txt, provision a game and write to the
     appropriate directory
 
@@ -156,7 +148,7 @@ def provision_game(line, cipher):
     # encrypt games
     with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
         plaintext = fo.read()
-    enc = cipher.encrypt(plaintext)
+    enc = AEScipher.encrypt(plaintext)
     with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
         fo.write(enc)
 
@@ -189,7 +181,7 @@ def main():
         print("Couldn't open file %s" % (args.games))
         exit(2)
 
-    cipher = gen_cipher(content)
+    AEScipher = gen_cipher(content)
 
     subprocess.check_call("mkdir -p %s" % (gen_path), shell=True)
 
@@ -197,7 +189,7 @@ def main():
 
     # Provision each line in the games file
     for line in f_games:
-        provision_game(line, cipher)
+        provision_game(line, AEScipher)
 
     print("Done Provision Games")
 
