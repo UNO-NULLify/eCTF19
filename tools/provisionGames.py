@@ -80,9 +80,6 @@ def provision_game(line, cipher):
         f.close()
         exit(1)
 
-
-
-
     # Write the game header to the top of the file
     # The game header takes the form of the version, name, and user information
     # one separate lines, prefaced with the information for what the data is
@@ -105,12 +102,12 @@ def provision_game(line, cipher):
     g_src = f.read(block_size)
 
     # Write the binary source
-    f_hash_out = f_out_name + "_hash"
-    f_hash_sig_out = f_hash_out + "_sig"
+    f_hash_out = f_out_name + ".SHA256"
+    f_hash_sig_out = f_hash_out + ".SIG"
     try:
-        f_sign = open(os.path.join(gen_path, f_hash_sign_out), "wb")
+        f_sign = open(os.path.join(gen_path, f_hash_sig_out), "wb")
     except Exception as e:
-        print("Error, could not open signature output file: %s" % (e))
+        print("Error, could not open signature output file: %s" % e)
         f_sign.close()
         exit(1)
     try:
@@ -119,7 +116,6 @@ def provision_game(line, cipher):
             g_src = f.read(block_size)
         # Close the files
         f_out.close()
-        f_hash_out.close()
         f.close()
         hasher = hashlib.sha256()
         #hash game and save to file, tested locally
@@ -143,11 +139,7 @@ def provision_game(line, cipher):
             f_sign.write(signature)
             f_sign.close()
 
-
-
-
-
-        # need to verify here cuz why not
+    # need to verify here cuz why not
 
     # this is all in 1 try/catch block because we cannot have one
     # part (writing header, hashing, signing, etc) to fail whilst the others continue
@@ -157,16 +149,11 @@ def provision_game(line, cipher):
         f_out.close()
         exit(1)
 
+    # encrypt games
     with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
         plaintext = fo.read()
     enc = cipher.encrypt(plaintext)
-    with open(os.path.join(gen_path, f_out_name) + ".enc", 'wb') as fo:
-        fo.write(enc)
-
-    with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
-        plaintext = fo.read()
-    enc = cipher.encrypt(plaintext)
-    with open(os.path.join(gen_path, f_out_name) + ".enc", 'wb') as fo:
+    with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
         fo.write(enc)
 
     print("    %s -> %s" % (g_path, os.path.join(gen_path, f_out_name)))
