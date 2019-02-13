@@ -13,7 +13,6 @@
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
-#include <bits/types/FILE.h>
 #include <stdio.h>
 
 #define MESH_TOK_BUFSIZE 64
