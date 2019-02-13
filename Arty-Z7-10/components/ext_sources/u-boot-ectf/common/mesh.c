@@ -9,10 +9,12 @@
 #include <spi_flash.h>
 #include <command.h>
 #include <os.h>
-
+#include <openssl/sha.h>
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
+#include <bits/types/FILE.h>
+#include <stdio.h>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
@@ -387,7 +389,7 @@ int mesh_install(char **args)
     char* short_game_name = strtok(full_game_name, "-");
 
     // get the major and minor version of the game
-    char* major_version = strtok(NULL, ".") + 1;  // +1 becase of the "v"
+    char* major_version = strtok(NULL, ".") + 1;  // +1 because of the "v"
     char* minor_version = strtok(NULL, "\0");
 
     // Row for this game
@@ -852,6 +854,122 @@ void full_name_from_short_name(char* full_name, struct games_tbl_row* row)
 }
 
 /*
+    This function reads a hash from a hash file and stores it in the
+    games_tbl_row struct.
+ */
+int mesh_read_hash(char *game_name){
+    struct games_tbl_row row;
+    unsigned int offset = MESH_INSTALL_GAME_OFFSET;
+    loff_t hash_size;
+    int i = 0;
+
+    char* hash_fn = (char*) malloc(snprintf(NULL, 0, "%s.SHA256", game_name) + 1);
+
+    // get file size of hash file
+    hash_size = mesh_size_ext4(hash_fn);
+
+    // read the game into a buffer
+    char* hash_buffer = (char*) malloc(hash_size + 1);
+    mesh_read_ext4(hash_fn, hash_buffer, hash_size);
+
+    for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
+        row.install_flag != MESH_TABLE_END;
+        mesh_flash_read(&row, offset, sizeof(struct games_tbl_row))) {
+        // the most space that we could need to store the full game name
+        char *full_name = (char *) malloc(
+                snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
+        full_name_from_short_name(full_name, &row);
+
+        // check for game and specific user
+        if (strcmp(game_name, full_name) == 0 &&
+            strcmp(user.name, row.user_name) == 0) {
+            free(full_name);
+
+            // copy hash
+            for (i = 0; i < 32 && hash_buffer[i] != '\0'; i++) {
+                row.hash[i] = hash_buffer[i];
+            }
+            row.hash[i] = '\0';
+
+            if (strcmp(row.hash, hash_buffer) == 0)
+                return 0;
+        }
+        free(full_name);
+        offset += sizeof(struct games_tbl_row);
+    }
+
+    return 1;
+}
+
+/*
+    This function generates a SHA256 hash of the game.
+ */
+int mesh_sha256_file(char *game_name, char outputBuffer[SHA256_DIGEST_LENGTH]){
+    loff_t game_size;
+    int i = 0;
+
+    // get the size of the game
+    game_size = mesh_size_ext4(game_name);SHA256_DIGEST_LENGTH
+
+    // read the game into a buffer
+    char* game_buffer = (char*) malloc(game_size + 1);
+    mesh_read_ext4(game_name, game_buffer, game_size);
+
+    // hash the buffer
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256_CTX ctx;
+    SHA256_Init(&ctx);
+    SHA256_Update(&ctx, game_buffer, game_size);
+    SHA256_Final(hash, &ctx);
+
+    for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
+    {
+        sprintf(outputBuffer, "%02x", hash[i]);
+    }
+
+    free(game_buffer);
+
+    return 0;
+}
+
+/*
+    This function compares the SHA256 hash of the game to the pre-generated hash
+    file on the SD card. It returns 0 if it matches and 1 if it doesn't.
+ */
+int mesh_check_hash(char *game_name){
+    char gen_hash[SHA256_DIGEST_LENGTH];
+    struct games_tbl_row row;
+    unsigned int offset = MESH_INSTALL_GAME_OFFSET;
+
+    if(mesh_read_hash(game_name))
+        printf("Failed to read hash from hash file!\n");
+    mesh_sha256_file(game_name, gen_hash);
+
+    for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
+        row.install_flag != MESH_TABLE_END;
+        mesh_flash_read(&row, offset, sizeof(struct games_tbl_row)))
+    {
+        // the most space that we could need to store the full game name
+        char* full_name = (char*) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
+        full_name_from_short_name(full_name, &row);
+
+        // check for game and specific user
+        if (strcmp(game_name, full_name) == 0 &&
+            strcmp(user.name, row.user_name) == 0)
+        {
+            free(full_name);
+            // compare the actual hashes
+            if(strcmp(gen_hash, row.hash) == 0)
+                return 0;
+        }
+        free(full_name);
+        offset += sizeof(struct games_tbl_row);
+    }
+
+    return 1;
+}
+
+/*
     This function determines if the specified game is installed for the given
     user. It return 1 if it is installed and 0 if it isnt.
 */
@@ -1064,6 +1182,7 @@ void mesh_get_game_header(Game *game, char *game_name){
             2 - Error, user is not allowed
             3 - Error, downgrade not allowed
             4 - Error, game is already installed
+            5 - Error, game integrity failed
 */
 int mesh_valid_install(char *game_name){
     if (!mesh_game_exists(game_name)){
@@ -1083,13 +1202,16 @@ int mesh_valid_install(char *game_name){
     if (mesh_check_downgrade(game_name, game.major_version, game.minor_version)){
         return 3;
     }
+    if (mesh_check_hash(game_name)){
+        return 5;
+    }
 
     return 0;
 }
 
 /*
     This function validates the arguments for mesh_install. If the arguments are
-    valid it returns 1 and otherwise returns 0.
+    valid it returns 0.
 
     It implements the mesh shell install function.
 */
@@ -1133,6 +1255,9 @@ int mesh_install_validate_args(char **args){
         case 4 :
             printf("Skipping install of %s, game is already installed.\n", game_name);
             return 6;
+        case 5:
+            printf("Error installing %s, integrity check failed.\n", game_name);
+            return 7;
         default :
             printf("Unknown error installing game.\n");
             return -1;

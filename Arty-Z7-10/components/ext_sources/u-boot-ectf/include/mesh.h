@@ -18,6 +18,8 @@
 #define MESH_TABLE_INSTALLED 0x01
 #define MESH_TABLE_END 0xff
 
+#define SHA256_DIGEST_LENGTH 32
+
 // To erase (or call update) on flash, it needs to be done
 // on boundaries of size 64K
 #define FLASH_PAGE_SIZE 65536
@@ -41,6 +43,7 @@ struct games_tbl_row {
     unsigned int major_version;
     unsigned int minor_version;
     char user_name[MAX_USERNAME_LENGTH + 1];
+    char hash[32 + 1]; // sha256 is 32 bytes, one for '\0'
 };
 
 /*
@@ -64,6 +67,9 @@ char* mesh_input(char* prompt);
 int mesh_valid_install(char *game_name);
 void ptr_to_string(void* ptr, char* buf);
 void full_name_from_short_name(char* full_name, struct games_tbl_row* row);
+int mesh_read_hash(char *game_name);
+int mesh_sha256_file(char *game_name, char outputBuffer[SHA256_DIGEST_LENGTH]);
+int mesh_check_hash(char *game_name);
 
 /*
     Ext 4 functions
