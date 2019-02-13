@@ -13,8 +13,6 @@
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
-#include <bits/types/FILE.h>
-#include <stdio.h>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
@@ -909,7 +907,7 @@ int mesh_sha256_file(char *game_name, char outputBuffer[SHA256_DIGEST_LENGTH]){
     int i = 0;
 
     // get the size of the game
-    game_size = mesh_size_ext4(game_name);SHA256_DIGEST_LENGTH
+    game_size = mesh_size_ext4(game_name);
 
     // read the game into a buffer
     char* game_buffer = (char*) malloc(game_size + 1);
