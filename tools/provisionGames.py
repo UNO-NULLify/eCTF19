@@ -100,6 +100,13 @@ def provision_game(line, cipher):
     # we can't be sure of the size of each game
     # best be careful by reading a certain number of bytes each time
     g_src = f.read(block_size)
+    while g_src:
+        f_out.write(g_src)
+        g_src = f.read(block_size)
+
+    # Close the files
+    f_out.close()
+    f.close()
 
     # Write the binary source
     f_hash_out = f_out_name + ".SHA256"
@@ -111,12 +118,6 @@ def provision_game(line, cipher):
         f_sign.close()
         exit(1)
     try:
-        while g_src:
-            f_out.write(g_src)
-            g_src = f.read(block_size)
-        # Close the files
-        f_out.close()
-        f.close()
         hasher = hashlib.sha256()
         #hash game and save to file, tested locally
         with open(os.path.join(gen_path, f_out), 'rb') as to_hash:
@@ -124,9 +125,12 @@ def provision_game(line, cipher):
             while len(buf) > 0:
                     hasher.update(buf)
                     buf = to_hash.read(block_size)
+
         # to_hash/f_out closed implicitly outside of with
-        f_hash_out.write(hasher.hexdigest())
+        with open(f_hash_out, "w") as h:
+            h.write(hasher.hexdigest())
         f_hash_out.close()
+        f_out.close()
 
         # sign game hash
         signer = PKCS1_v1_5.new(key)
