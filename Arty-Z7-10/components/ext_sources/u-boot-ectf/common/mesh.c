@@ -902,7 +902,7 @@ int mesh_read_hash(char *game_name){
 /*
     This function generates a SHA256 hash of the game.
  */
-int mesh_sha256_file(char *game_name, char outputBuffer[SHA256_DIGEST_LENGTH]){
+int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]){
     loff_t game_size;
     int i = 0;
 
@@ -910,7 +910,7 @@ int mesh_sha256_file(char *game_name, char outputBuffer[SHA256_DIGEST_LENGTH]){
     game_size = mesh_size_ext4(game_name);
 
     // read the game into a buffer
-    char* game_buffer = (char*) malloc(game_size + 1);
+    uint8_t game_buffer = (uint8_t*)malloc(game_size + 1);
     mesh_read_ext4(game_name, game_buffer, game_size);
 
     // hash the buffer
