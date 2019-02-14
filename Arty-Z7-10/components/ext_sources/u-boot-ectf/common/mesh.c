@@ -9,7 +9,7 @@
 #include <spi_flash.h>
 #include <command.h>
 #include <os.h>
-#include <openssl/sha.h>
+#include "../lib/sha256.c"
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
@@ -915,10 +915,10 @@ int mesh_sha256_file(char *game_name, char outputBuffer[SHA256_DIGEST_LENGTH]){
 
     // hash the buffer
     unsigned char hash[SHA256_DIGEST_LENGTH];
-    SHA256_CTX ctx;
-    SHA256_Init(&ctx);
-    SHA256_Update(&ctx, game_buffer, game_size);
-    SHA256_Final(hash, &ctx);
+    sha256_context ctx;
+    sha256_starts(&ctx);
+    sha256_update(&ctx, game_buffer, game_size);
+    sha256_finish(&ctx, hash);
 
     for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
     {
