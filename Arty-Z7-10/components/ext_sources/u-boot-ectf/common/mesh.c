@@ -867,7 +867,7 @@ int mesh_read_hash(char *game_name){
     hash_size = mesh_size_ext4(hash_fn);
 
     // read the game into a buffer
-    char* hash_buffer = (char*) malloc(hash_size + 1);
+    char* hash_buffer = (char*) malloc((size_t) (hash_size + 1));
     mesh_read_ext4(hash_fn, hash_buffer, hash_size);
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
@@ -910,19 +910,20 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     game_size = mesh_size_ext4(game_name);
 
     // read the game into a buffer
-    uint8_t game_buffer = (uint8_t*)malloc(game_size + 1);
-    mesh_read_ext4(game_name, game_buffer, game_size);
+    uint8_t * game_buffer;
+    game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
+    mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
     // hash the buffer
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256_context ctx;
     sha256_starts(&ctx);
-    sha256_update(&ctx, game_buffer, game_size);
+    sha256_update(&ctx, game_buffer, (uint32_t) game_size);
     sha256_finish(&ctx, hash);
 
     for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
     {
-        sprintf(outputBuffer, "%02x", hash[i]);
+        sprintf( (char *) outputBuffer, "%02x", hash[i]);
     }
 
     free(game_buffer);
@@ -941,7 +942,7 @@ int mesh_check_hash(char *game_name){
 
     if(mesh_read_hash(game_name))
         printf("Failed to read hash from hash file!\n");
-    mesh_sha256_file(game_name, gen_hash);
+    mesh_sha256_file(game_name, (uint8_t *) gen_hash);
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
