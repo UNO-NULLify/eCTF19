@@ -9,7 +9,7 @@
 #include <spi_flash.h>
 #include <command.h>
 #include <os.h>
-#include "../lib/sha256.c"
+#include <u-boot/sha256.h>
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
