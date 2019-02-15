@@ -862,6 +862,7 @@ int mesh_read_hash(char *game_name){
     int i = 0;
 
     char* hash_fn = (char*) malloc(snprintf(NULL, 0, "%s.SHA256", game_name) + 1);
+    sprintf(hash_fn, "%s.SHA256", game_name);
 
     // get file size of hash file
     hash_size = mesh_size_ext4(hash_fn);
@@ -896,6 +897,7 @@ int mesh_read_hash(char *game_name){
         offset += sizeof(struct games_tbl_row);
     }
 
+    printf("Failed to read %s.SHA256 file", hash_fn);
     return 1;
 }
 
