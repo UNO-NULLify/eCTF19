@@ -888,8 +888,9 @@ int mesh_read_hash(char *game_name){
             for (i = 0; i < 64 && hash_buffer[i] != '\0'; i++) {
                 row.hash[i] = hash_buffer[i];
             }
-            printf("Hash copied from buffer into row: %s\nHash buffer: %s\n", row.hash, hash_buffer);
             row.hash[i] = '\0';
+            printf("Hash copied from buffer into row: %s\nHash buffer: %s\n", row.hash, hash_buffer);
+
 
             if (strcmp(row.hash, hash_buffer) == 0) {
                 printf("Hash successfully read and stored!\n");
@@ -930,9 +931,11 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     {
         sprintf( (char *) outputBuffer, "%02x", hash[i]);
     }
+    outputBuffer[i] = '\0';
 
     free(game_buffer);
 
+    printf("Generated hash: %s\n", outputBuffer);
     return 0;
 }
 
