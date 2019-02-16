@@ -931,15 +931,15 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     printf("mesh_sha256_file: sha256 generated\n");
 
 
-    printf("Generated hash: %s");
+    printf("Generated hash:");
     for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
     {
         printf("%02x", hash[i]);
     }
 
-    memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH - 1);
+    memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
 
-    outputBuffer[SHA256_DIGEST_LENGTH] = '\0';
+    //outputBuffer[SHA256_DIGEST_LENGTH] = '\0';
 
     free(game_buffer);
 
