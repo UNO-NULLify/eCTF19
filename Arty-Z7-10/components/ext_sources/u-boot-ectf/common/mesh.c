@@ -890,7 +890,7 @@ int mesh_read_hash(char *game_name){
             }
             printf("Hash copied from buffer into row: %s\n", row.hash);
 
-            row.hash[i] = '\0';
+            //row.hash[i] = '\0';
 
             if (strcmp(row.hash, hash_buffer) == 0) {
                 printf("Hash successfully read and stored!\n");
