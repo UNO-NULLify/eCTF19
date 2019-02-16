@@ -980,9 +980,10 @@ int mesh_check_hash(char *game_name){
             free(full_name);
             // compare the actual hashes
             printf("Correct game and user\n");
-            if(strcmp(gen_hash, row.hash) == 0)
-                printf("Hashes did match");
+            if(strcmp(gen_hash, row.hash) == 0) {
+                printf("Hashes did match\n");
                 return 0;
+            }
         }
         free(full_name);
         offset += sizeof(struct games_tbl_row);
