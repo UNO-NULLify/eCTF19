@@ -888,8 +888,7 @@ int mesh_read_hash(char *game_name){
             for (i = 0; i < 32 && hash_buffer[i] != '\0'; i++) {
                 row.hash[i] = hash_buffer[i];
             }
-            printf("Hash copied from buffer into row: %s\n", row.hash);
-
+            printf("Hash copied from buffer into row: %s\nHash buffer: %s", row.hash, hash_buffer);
             //row.hash[i] = '\0';
 
             if (strcmp(row.hash, hash_buffer) == 0) {
