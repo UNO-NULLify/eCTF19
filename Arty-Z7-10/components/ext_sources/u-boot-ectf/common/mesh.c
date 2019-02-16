@@ -979,7 +979,7 @@ int mesh_check_hash(char *game_name){
         {
             free(full_name);
             // compare the actual hashes
-            printf("Correct game and user");
+            printf("Correct game and user\n");
             if(strcmp(gen_hash, row.hash) == 0)
                 printf("Hashes did match");
                 return 0;
