@@ -910,7 +910,7 @@ int mesh_read_hash(char *game_name){
 /*
     This function generates a SHA256 hash of the game.
  */
-int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]){
+int mesh_sha256_file(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_LENGTH]){
     loff_t game_size;
     int i = 0;
 
@@ -918,7 +918,7 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     game_size = mesh_size_ext4(game_name);
 
     // read the game into a buffer
-    uint8_t * game_buffer;
+    uint8_t* game_buffer;
     game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
     mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
@@ -957,24 +957,25 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     file on the SD card. It returns 0 if it matches and 1 if it doesn't.
  */
 int mesh_check_hash(char *game_name){
-    char* outputBuffer[SHA256_DIGEST_LENGTH];
+    unsigned char* gen_hash[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
     int i = 0;
 
     if(mesh_read_hash(game_name))
         printf("Failed to read hash from hash file!\n");
-    mesh_sha256_file(game_name, (uint8_t) outputBuffer);
+    mesh_sha256_file(game_name, gen_hash);
+
      printf("\ngen_hash with hex: ");
      for(i = 0; i < 32; i++)
      {
-        printf("%02x", outputBuffer[i]);
+        printf("%02x", gen_hash[i]);
      }
 
 //     printf("\ngen_hash with string: ");
 //     for(i = 0; i < 32; i++)
 //     {
-//        printf("%s", outputBuffer[i]);
+//        printf("%s", gen_hash[i]);
 //     }
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
@@ -996,7 +997,7 @@ int mesh_check_hash(char *game_name){
             {
                 printf("%02x", row.hash[i]);
             }
-            if(strcmp(outputBuffer, row.hash) == 0) {
+            if(strcmp(gen_hash, row.hash) == 0) {
                 printf("\nHashes did match\n");
                 return 0;
             }
