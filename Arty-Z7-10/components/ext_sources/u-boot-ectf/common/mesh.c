@@ -935,7 +935,6 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     {
         printf("%02x", hash[i]);
     }
-    hash[i] = '\0';
 
     memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
 
@@ -972,11 +971,11 @@ int mesh_check_hash(char *game_name){
         printf("%02x", gen_hash[i]);
      }
 
-     printf("\ngen_hash with string: ");
-     for(i = 0; i < 32; i++)
-     {
-        printf("%s", gen_hash[i]);
-     }
+//     printf("\ngen_hash with string: ");
+//     for(i = 0; i < 32; i++)
+//     {
+//        printf("%s", gen_hash[i]);
+//     }
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
@@ -992,11 +991,6 @@ int mesh_check_hash(char *game_name){
         {
             free(full_name);
             // compare the actual hashes
-            printf("\ngen_hash: ");
-            for(i = 0; i < 32; i++)
-            {
-                printf("%02x", gen_hash[i]);
-            }
             printf("\nrow.hash: ");
             for(i = 0; i < 32; i++)
             {
