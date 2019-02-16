@@ -933,14 +933,19 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
 
     for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
     {
-        printf("%d: %s", i,hash[i]);
         sprintf( (char *) outputBuffer, "%02x", hash[i]);
     }
     outputBuffer[i] = '\0';
 
     free(game_buffer);
 
-    printf("\nGenerated hash: %s\n", outputBuffer);
+    printf("\nGenerated hash: %s", outputBuffer);
+    for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
+    {
+        printf("%s", outputBuffer[i]);
+    }
+    printf("\n");
+
     return 0;
 }
 
@@ -955,7 +960,6 @@ int mesh_check_hash(char *game_name){
 
     if(mesh_read_hash(game_name))
         printf("Failed to read hash from hash file!\n");
-    printf("WE HERE\n");
     mesh_sha256_file(game_name, (uint8_t) gen_hash);
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
