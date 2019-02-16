@@ -931,9 +931,9 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
 
 
     printf("Generated hash: ");
-    for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
+    for(i = 0; i < 32; i++)
     {
-        printf("%c", hash[i]);
+        printf("%02x", hash[i]);
     }
 
     memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
@@ -943,9 +943,9 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     free(game_buffer);
 
     printf("\noutputBuffer: ");
-    for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
+    for(i = 0; i < 32; i++)
     {
-        printf("%c", outputBuffer[i]);
+        printf("%02x", outputBuffer[i]);
     }
     printf("\n");
 
@@ -979,13 +979,16 @@ int mesh_check_hash(char *game_name){
         {
             free(full_name);
             // compare the actual hashes
+            printf("Correct game and user");
             if(strcmp(gen_hash, row.hash) == 0)
+                printf("Hashes did match");
                 return 0;
         }
         free(full_name);
         offset += sizeof(struct games_tbl_row);
     }
 
+    printf("Hashes did not match.");
     return 1;
 }
 
