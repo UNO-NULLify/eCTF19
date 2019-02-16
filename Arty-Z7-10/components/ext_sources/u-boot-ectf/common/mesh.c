@@ -979,9 +979,18 @@ int mesh_check_hash(char *game_name){
         {
             free(full_name);
             // compare the actual hashes
-            printf("Correct game and user\n");
+            printf("\ngen_hash: ");
+            for(i = 0; i < 32; i++)
+            {
+                printf("%02x", outputBuffer[i]);
+            }
+            printf("\nrow.hash: ");
+            for(i = 0; i < 32; i++)
+            {
+                printf("%02x", row.hash[i]);
+            }
             if(strcmp(gen_hash, row.hash) == 0) {
-                printf("Hashes did match\n");
+                printf("\nHashes did match\n");
                 return 0;
             }
         }
@@ -989,7 +998,7 @@ int mesh_check_hash(char *game_name){
         offset += sizeof(struct games_tbl_row);
     }
 
-    printf("Hashes did not match.");
+    printf("\nHashes did not match.\n");
     return 1;
 }
 
