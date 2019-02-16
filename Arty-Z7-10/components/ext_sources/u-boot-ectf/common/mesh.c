@@ -935,6 +935,7 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     {
         printf("%02x", hash[i]);
     }
+    hash[i] = '\0';
 
     memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
 
