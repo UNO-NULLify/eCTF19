@@ -885,11 +885,11 @@ int mesh_read_hash(char *game_name){
             free(full_name);
 
             // copy hash
-            for (i = 0; i < 32 && hash_buffer[i] != '\0'; i++) {
+            for (i = 0; i < 64 && hash_buffer[i] != '\0'; i++) {
                 row.hash[i] = hash_buffer[i];
             }
-            printf("Hash copied from buffer into row: %s\nHash buffer: %s", row.hash, hash_buffer);
-            //row.hash[i] = '\0';
+            printf("Hash copied from buffer into row: %s\nHash buffer: %s\n", row.hash, hash_buffer);
+            row.hash[i] = '\0';
 
             if (strcmp(row.hash, hash_buffer) == 0) {
                 printf("Hash successfully read and stored!\n");
