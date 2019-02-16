@@ -889,6 +889,8 @@ int mesh_read_hash(char *game_name){
                 row.hash[i] = hash_buffer[i];
             }
             row.hash[i] = '\0';
+            hash_buffer[i] = '\0';
+
             printf("Hash copied from buffer into row: %s\nHash buffer: %s\n", row.hash, hash_buffer);
 
 
@@ -931,7 +933,7 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     printf("Generated hash: ");
     for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
     {
-        printf("%02x", hash[i]);
+        printf("%c", hash[i]);
     }
 
     memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
@@ -943,7 +945,7 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     printf("\noutputBuffer: ");
     for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
     {
-        printf("%02x", outputBuffer[i]);
+        printf("%c", outputBuffer[i]);
     }
     printf("\n");
 
