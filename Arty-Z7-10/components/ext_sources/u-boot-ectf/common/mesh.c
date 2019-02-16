@@ -980,12 +980,12 @@ int mesh_check_hash(char *game_name){
             free(full_name);
             // compare the actual hashes
             printf("\ngen_hash: ");
-            for(i = 0; i < 32; i++)
+            for(int i = 0; i < 32; i++)
             {
                 printf("%02x", outputBuffer[i]);
             }
             printf("\nrow.hash: ");
-            for(i = 0; i < 32; i++)
+            for(int i = 0; i < 32; i++)
             {
                 printf("%02x", row.hash[i]);
             }
