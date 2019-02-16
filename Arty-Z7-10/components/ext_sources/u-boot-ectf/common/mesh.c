@@ -960,6 +960,7 @@ int mesh_check_hash(char *game_name){
     char* gen_hash[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
+    int i = 0;
 
     if(mesh_read_hash(game_name))
         printf("Failed to read hash from hash file!\n");
@@ -980,12 +981,12 @@ int mesh_check_hash(char *game_name){
             free(full_name);
             // compare the actual hashes
             printf("\ngen_hash: ");
-            for(int i = 0; i < 32; i++)
+            for(i = 0; i < 32; i++)
             {
-                printf("%02x", outputBuffer[i]);
+                printf("%02x", gen_hash[i]);
             }
             printf("\nrow.hash: ");
-            for(int i = 0; i < 32; i++)
+            for(i = 0; i < 32; i++)
             {
                 printf("%02x", row.hash[i]);
             }
