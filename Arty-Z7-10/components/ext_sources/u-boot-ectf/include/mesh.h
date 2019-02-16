@@ -43,7 +43,7 @@ struct games_tbl_row {
     unsigned int major_version;
     unsigned int minor_version;
     char user_name[MAX_USERNAME_LENGTH + 1];
-    char hash[64+1]; // sha256 is 32 bytes, one for '\0'
+    char hash[SHA256_DIGEST_LENGTH+1]; // sha256 is 32 bytes, one for '\0'
 };
 
 /*

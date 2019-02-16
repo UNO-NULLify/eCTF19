@@ -885,7 +885,7 @@ int mesh_read_hash(char *game_name){
             free(full_name);
 
             // copy hash
-            for (i = 0; i < 64 && hash_buffer[i] != '\0'; i++) {
+            for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
                 row.hash[i] = hash_buffer[i];
             }
             row.hash[i] = '\0';
@@ -909,7 +909,6 @@ int mesh_read_hash(char *game_name){
     This function generates a SHA256 hash of the game.
  */
 int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]){
-    printf("mesh_sha256_file: running...\n");
     loff_t game_size;
     int i = 0;
 
@@ -921,17 +920,15 @@ int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]
     game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
     mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
-    printf("mesh_sha256_file: read game success\n");
     // hash the buffer
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256_context ctx;
     sha256_starts(&ctx);
     sha256_update(&ctx, game_buffer, (uint32_t) game_size);
     sha256_finish(&ctx, hash);
-    printf("mesh_sha256_file: sha256 generated\n");
 
 
-    printf("Generated hash:");
+    printf("Generated hash: ");
     for(i = 0; i < SHA256_DIGEST_LENGTH; i++)
     {
         printf("%02x", hash[i]);
