@@ -887,18 +887,21 @@ int mesh_read_hash(char *game_name){
             // copy hash
             for (i = 0; i < 32 && hash_buffer[i] != '\0'; i++) {
                 row.hash[i] = hash_buffer[i];
-                printf("Hash copied from buffer into row: %s", row.hash);
             }
+            printf("Hash copied from buffer into row: %s\n", row.hash);
+
             row.hash[i] = '\0';
 
-            if (strcmp(row.hash, hash_buffer) == 0)
+            if (strcmp(row.hash, hash_buffer) == 0) {
+                printf("Hash successfully read and stored!\n");
                 return 0;
+            }
         }
         free(full_name);
         offset += sizeof(struct games_tbl_row);
     }
 
-    printf("Failed to read %s", hash_fn);
+    printf("Failed to read %s\n", hash_fn);
     return 1;
 }
 
