@@ -910,7 +910,7 @@ int mesh_read_hash(char *game_name){
 /*
     This function generates a SHA256 hash of the game.
  */
-int mesh_sha256_file(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_LENGTH]){
+int mesh_sha256_file(char *game_name, uint8_t outputBuffer[SHA256_DIGEST_LENGTH]){
     loff_t game_size;
     int i = 0;
 
@@ -918,7 +918,7 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_L
     game_size = mesh_size_ext4(game_name);
 
     // read the game into a buffer
-    uint8_t* game_buffer;
+    uint8_t * game_buffer;
     game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
     mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
@@ -935,6 +935,7 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_L
     {
         printf("%02x", hash[i]);
     }
+    hash[i] = '\0';
 
     memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
 
@@ -957,26 +958,25 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_L
     file on the SD card. It returns 0 if it matches and 1 if it doesn't.
  */
 int mesh_check_hash(char *game_name){
-    unsigned char* gen_hash[SHA256_DIGEST_LENGTH];
+    char* gen_hash[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
     int i = 0;
 
     if(mesh_read_hash(game_name))
         printf("Failed to read hash from hash file!\n");
-    mesh_sha256_file(game_name, gen_hash);
-
+    mesh_sha256_file(game_name, (uint8_t) gen_hash);
      printf("\ngen_hash with hex: ");
      for(i = 0; i < 32; i++)
      {
         printf("%02x", gen_hash[i]);
      }
 
-//     printf("\ngen_hash with string: ");
-//     for(i = 0; i < 32; i++)
-//     {
-//        printf("%s", gen_hash[i]);
-//     }
+     printf("\ngen_hash with string: ");
+     for(i = 0; i < 32; i++)
+     {
+        printf("%s", gen_hash[i]);
+     }
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
@@ -992,6 +992,11 @@ int mesh_check_hash(char *game_name){
         {
             free(full_name);
             // compare the actual hashes
+            printf("\ngen_hash: ");
+            for(i = 0; i < 32; i++)
+            {
+                printf("%02x", gen_hash[i]);
+            }
             printf("\nrow.hash: ");
             for(i = 0; i < 32; i++)
             {
