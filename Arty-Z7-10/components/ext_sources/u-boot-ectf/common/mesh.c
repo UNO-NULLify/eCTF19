@@ -955,6 +955,7 @@ int mesh_check_hash(char *game_name){
 
     if(mesh_read_hash(game_name))
         printf("Failed to read hash from hash file!\n");
+    printf("WE HERE\n");
     mesh_sha256_file(game_name, (uint8_t) gen_hash);
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
