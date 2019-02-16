@@ -897,7 +897,7 @@ int mesh_read_hash(char *game_name){
         offset += sizeof(struct games_tbl_row);
     }
 
-    printf("Failed to read %s.SHA256 file", hash_fn);
+    printf("Failed to read %s", hash_fn);
     return 1;
 }
 
