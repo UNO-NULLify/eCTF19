@@ -18,7 +18,7 @@
 #define MESH_TABLE_INSTALLED 0x01
 #define MESH_TABLE_END 0xff
 
-#define SHA256_DIGEST_LENGTH 32
+#define SHA256_DIGEST_LENGTH 64
 
 // To erase (or call update) on flash, it needs to be done
 // on boundaries of size 64K
