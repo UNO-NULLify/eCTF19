@@ -910,7 +910,7 @@ int mesh_read_hash(char *game_name){
 /*
     This function generates a SHA256 hash of the game.
  */
-int mesh_sha256_file(char *game_name, unsigned char *gen_hash[SHA256_DIGEST_LENGTH]){
+int mesh_sha256_file(char *game_name, unsigned char gen_hash[SHA256_DIGEST_LENGTH]){
     loff_t game_size;
     int i = 0;
 
