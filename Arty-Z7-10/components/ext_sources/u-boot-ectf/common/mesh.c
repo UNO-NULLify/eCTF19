@@ -972,11 +972,11 @@ int mesh_check_hash(char *game_name){
         printf("%02x", gen_hash[i]);
      }
 
-     printf("\ngen_hash with string: ");
-     for(i = 0; i < 32; i++)
-     {
-        printf("%s", gen_hash[i]);
-     }
+//     printf("\ngen_hash with string: ");
+//     for(i = 0; i < 32; i++)
+//     {
+//        printf("%s", gen_hash[i]);
+//     }
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
