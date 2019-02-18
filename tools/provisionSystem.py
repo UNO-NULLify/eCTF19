@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-from Crypto.Cipher import AES
-from Crypto import Random
+#from Crypto.Cipher import AES
+#from Crypto import Random
 import os
 import base64
 import subprocess
@@ -19,13 +19,13 @@ system_image_fn = "SystemImage.bif"
 # File name for the factory secrets
 factory_secrets_fn = "FactorySecrets.txt"
 # Path where board cipher will go
-app_path = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files"
+#app_path = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files"
 # File name for the board cipher
-board_cipher_fn = "cipher.txt"
+#board_cipher_fn = "cipher.txt"
 # IV
-iv = base64.b64encode(Random.new().read(AES.block_size))
+#iv = base64.b64encode(Random.new().read(AES.block_size))
 # Key
-key = base64.b64encode(os.urandom(32))
+#key = base64.b64encode(os.urandom(32))
 
 
 def validate_users(lines):
@@ -164,14 +164,14 @@ MITRE_Entertainment_System: {{
     """.format(path=os.environ["ECTF_PETALINUX"]))
 
 
-def write_board_cipher(f):
-    """Write any factory secrets. The reference implementation has none
-
-    f: open file to write the factory secrets to
-    """
-
-    f.write(iv.decode('ascii')+"\n")
-    f.write(key.decode('ascii'))
+#def write_board_cipher(f):
+#    """Write any factory secrets. The reference implementation has none
+#
+#    f: open file to write the factory secrets to
+#    """
+#
+#    f.write(iv.decode('ascii')+"\n")
+#    f.write(key.decode('ascii'))
 
 
 def write_factory_secrets(f):
@@ -179,8 +179,8 @@ def write_factory_secrets(f):
 
     f: open file to write the factory secrets to
     """
-    f.write(iv.decode('ascii')+"\n")
-    f.write(key.decode('ascii'))
+#    f.write(iv.decode('ascii')+"\n")
+#    f.write(key.decode('ascii'))
 
 
 def main():
@@ -230,11 +230,11 @@ def main():
     except Exception as e:
         print("Unable to open %s: %s" % (factory_secrets_fn, e,))
         exit(2)
-    try:
-        f_board_cipher = open(os.path.join(app_path, board_cipher_fn), "w+")
-    except Exception as e:
-        print("Unable to open %s: %s" % (board_cipher_fn, e,))
-        exit(2)
+#    try:
+#        f_board_cipher = open(os.path.join(app_path, board_cipher_fn), "w+")
+#    except Exception as e:
+#        print("Unable to open %s: %s" % (board_cipher_fn, e,))
+#        exit(2)
 
     # write board cipher
     write_board_cipher(f_board_cipher)
