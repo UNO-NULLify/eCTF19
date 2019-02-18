@@ -890,6 +890,7 @@ int mesh_read_hash(char *game_name){
             row.hash[i] = '\0';
             hash_buffer[i] = '\0';
 
+            printf("offset: %s\n", offset);
             printf("%s Hash row: %s\nHash buffer: %s\n", row.user_name, row.hash, hash_buffer);
 
 
@@ -958,6 +959,8 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_L
  */
 int mesh_check_hash(char *game_name){
     unsigned char gen_hash[SHA256_DIGEST_LENGTH];
+    unsigned char ascii_hash[SHA256_DIGEST_LENGTH];
+    char tmp[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
     int i = 0;
@@ -965,22 +968,18 @@ int mesh_check_hash(char *game_name){
     if(mesh_read_hash(game_name))
         printf("Failed to read hash from hash file!\n");
     mesh_sha256_file(game_name, gen_hash);
-     printf("\ngen_hash with hex: ");
-     for(i = 0; i < 32; i++)
-     {
-        printf("%02x", gen_hash[i]);
-     }
 
-//     printf("\ngen_hash with string: ");
-//     for(i = 0; i < 32; i++)
-//     {
-//        printf("%s", gen_hash[i]);
-//     }
+    for(i = 0; i < 32; i++)
+    {
+        sprintf(&ascii_hash[i*2],"%02x", gen_hash[i]);
+    }
+    ascii_hash[i] = '\0';
+
+    printf("ascii_hash: %s", ascii_hash);
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
-        mesh_flash_read(&row, offset, sizeof(struct games_tbl_row)))
-    {
+        mesh_flash_read(&row, offset, sizeof(struct games_tbl_row))) {
         // the most space that we could need to store the full game name
         char* full_name = (char*) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
         full_name_from_short_name(full_name, &row);
@@ -990,6 +989,7 @@ int mesh_check_hash(char *game_name){
             strcmp(user.name, row.user_name) == 0) {
             free(full_name);
 
+            printf("offset: %s\n", offset);
             printf("\n%s row.hash: %s", row.user_name, row.hash);
 
             if(strcmp(gen_hash, row.hash) == 0) {
