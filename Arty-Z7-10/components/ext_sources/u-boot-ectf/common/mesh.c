@@ -958,7 +958,7 @@ int mesh_sha256_file(char *game_name, unsigned char gen_hash[SHA256_DIGEST_LENGT
     file on the SD card. It returns 0 if it matches and 1 if it doesn't.
  */
 int mesh_check_hash(char *game_name){
-    unsigned char* gen_hash[SHA256_DIGEST_LENGTH];
+    unsigned char gen_hash[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
     int i = 0;
