@@ -891,7 +891,7 @@ int mesh_read_hash(char *game_name){
             row.hash[i] = '\0';
             hash_buffer[i] = '\0';
 
-            printf("Hash copied from buffer into row: %s\nHash buffer: %s\n", row.hash, hash_buffer);
+            printf("Hash row: %s\nHash buffer: %s\n", row.hash, hash_buffer);
 
 
             if (strcmp(row.hash, hash_buffer) == 0) {
@@ -992,11 +992,8 @@ int mesh_check_hash(char *game_name){
         {
             free(full_name);
 
-            printf("\nrow.hash: ");
-            for(i = 0; i < 32; i++)
-            {
-                printf("%02x", row.hash[i]);
-            }
+            printf("\nrow.hash: %s", row.hash);
+            
             if(strcmp(gen_hash, row.hash) == 0) {
                 printf("\nHashes did match\n");
                 return 0;
