@@ -959,6 +959,8 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_L
  */
 int mesh_check_hash(char *game_name){
     unsigned char gen_hash[SHA256_DIGEST_LENGTH];
+    unsigned char ascii_hash[SHA256_DIGEST_LENGTH];
+    char tmp[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
     int i = 0;
@@ -966,13 +968,14 @@ int mesh_check_hash(char *game_name){
     if(mesh_read_hash(game_name))
         printf("Failed to read hash from hash file!\n");
     mesh_sha256_file(game_name, gen_hash);
-     printf("\ngen_hash with hex: ");
-     for(i = 0; i < 32; i++)
-     {
-         gen_hash[i] = (char)gen_hash[i];
 
-     }
-     sprintf(gen_hash, "%s", gen_hash);
+    for(i = 0; i < 32; i++)
+    {
+        sprintf(&ascii_hash[i*2],"%02x", gen_hash[i]);
+    }
+    ascii_hash[i] = '\0';
+
+    printf("ascii_hash: %s", ascii_hash);
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
