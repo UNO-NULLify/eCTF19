@@ -875,8 +875,7 @@ int mesh_read_hash(char *game_name){
         row.install_flag != MESH_TABLE_END;
         mesh_flash_read(&row, offset, sizeof(struct games_tbl_row))) {
         // the most space that we could need to store the full game name
-        char *full_name = (char *) malloc(
-                snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
+        char *full_name = (char *) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
         full_name_from_short_name(full_name, &row);
 
         // check for game and specific user
@@ -891,7 +890,7 @@ int mesh_read_hash(char *game_name){
             row.hash[i] = '\0';
             hash_buffer[i] = '\0';
 
-            printf("Hash row: %s\nHash buffer: %s\n", row.hash, hash_buffer);
+            printf("%s Hash row: %s\nHash buffer: %s\n", row.user_name, row.hash, hash_buffer);
 
 
             if (strcmp(row.hash, hash_buffer) == 0) {
@@ -988,12 +987,11 @@ int mesh_check_hash(char *game_name){
 
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
-            strcmp(user.name, row.user_name) == 0)
-        {
+            strcmp(user.name, row.user_name) == 0) {
             free(full_name);
 
-            printf("\nrow.hash: %s", row.hash);
-            
+            printf("\n%s row.hash: %s", row.user_name, row.hash);
+
             if(strcmp(gen_hash, row.hash) == 0) {
                 printf("\nHashes did match\n");
                 return 0;
