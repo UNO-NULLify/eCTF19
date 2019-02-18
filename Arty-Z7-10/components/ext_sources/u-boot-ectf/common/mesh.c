@@ -910,7 +910,7 @@ int mesh_read_hash(char *game_name){
 /*
     This function generates a SHA256 hash of the game.
  */
-int mesh_sha256_file(char *game_name, unsigned char gen_hash[SHA256_DIGEST_LENGTH]){
+int mesh_sha256_file(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_LENGTH]){
     loff_t game_size;
     int i = 0;
 
@@ -937,7 +937,7 @@ int mesh_sha256_file(char *game_name, unsigned char gen_hash[SHA256_DIGEST_LENGT
     }
     hash[i] = '\0';
 
-    memcpy(gen_hash, hash, SHA256_DIGEST_LENGTH);
+    memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
 
     //outputBuffer[SHA256_DIGEST_LENGTH] = '\0';
 
@@ -946,7 +946,7 @@ int mesh_sha256_file(char *game_name, unsigned char gen_hash[SHA256_DIGEST_LENGT
     printf("\noutputBuffer: ");
     for(i = 0; i < 32; i++)
     {
-        printf("%02x", gen_hash[i]);
+        printf("%02x", outputBuffer[i]);
     }
     printf("\n");
 
