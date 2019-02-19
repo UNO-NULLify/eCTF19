@@ -2,6 +2,7 @@
 
 #from Crypto.Cipher import AES
 #from Crypto import Random
+from Crypto.Hash import SHA256
 import os
 import base64
 import subprocess
@@ -19,13 +20,23 @@ system_image_fn = "SystemImage.bif"
 # File name for the factory secrets
 factory_secrets_fn = "FactorySecrets.txt"
 # Path where board cipher will go
-#app_path = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files"
-# File name for the board cipher
-#board_cipher_fn = "cipher.txt"
+app_path = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files"
+# File name for the board resources
+board_resources_fn = "resources.txt"
 # IV
 #iv = base64.b64encode(Random.new().read(AES.block_size))
 # Key
 #key = base64.b64encode(os.urandom(32))
+# Salt
+salt = base64.b64encode(os.urandom(16))
+
+def hash_pins(users):
+    for (user, pin) in users:
+        hasher = hashlib.sha256()
+        hasher.update(pin + user + salt)
+        hashed_users = (user, hasher.digest())
+
+    return hashed_users
 
 
 def validate_users(lines):
@@ -43,7 +54,7 @@ def validate_users(lines):
     return lines
 
 
-def write_mesh_users_h(users, f):
+def write_mesh_users_h(h_users, f):
     """Write user inforation to a header file
 
     users: list of tuples of (username, pin)
@@ -68,9 +79,9 @@ struct MeshUser {{
 }};
 
 static struct MeshUser mesh_users[] = {{
-""".format(num_users=len(users)))
+""".format(num_users=len(h_users)))
 
-    for (user, pin) in users:
+    for (user, pin) in h_users:
         data = '    {.username="%s", .pin="%s"},\n' % (user, pin)
         f.write(data)
 
@@ -164,12 +175,12 @@ MITRE_Entertainment_System: {{
     """.format(path=os.environ["ECTF_PETALINUX"]))
 
 
-#def write_board_cipher(f):
-#    """Write any factory secrets. The reference implementation has none
-#
-#    f: open file to write the factory secrets to
-#    """
-#
+def write_board_cipher(f):
+    """Write any factory secrets. The reference implementation has none
+
+    f: open file to write the factory secrets to
+    """
+    f.write(salt.decode('ascii'))
 #    f.write(iv.decode('ascii')+"\n")
 #    f.write(key.decode('ascii'))
 
@@ -230,16 +241,16 @@ def main():
     except Exception as e:
         print("Unable to open %s: %s" % (factory_secrets_fn, e,))
         exit(2)
-#    try:
-#        f_board_cipher = open(os.path.join(app_path, board_cipher_fn), "w+")
-#    except Exception as e:
-#        print("Unable to open %s: %s" % (board_cipher_fn, e,))
-#        exit(2)
+    try:
+        f_board_resources = open(os.path.join(app_path, board_resources_fn), "w+")
+    except Exception as e:
+        print("Unable to open %s: %s" % (board_resources_fn, e,))
+        exit(2)
 
     # write board cipher
-#    write_board_cipher(f_board_cipher)
-#    f_board_cipher.close()
-#    print("Generated Board Cipher file: %s" % (os.path.join(app_path, board_cipher_fn)))
+    write_board_cipher(f_board_resources)
+    f_board_resources.close()
+    print("Generated Board Cipher file: %s" % (os.path.join(app_path, board_resources_fn)))
 
     # Read in all of the user information into a list and strip newlines
     lines = [line.rstrip('\n') for line in f_mesh_users_in]
@@ -253,8 +264,12 @@ def main():
 
     # Add the demo user, which must always exist, per the rules
     users.append(("demo", "00000000"))
+
+    # hash user pins
+    hashed_users = hash_pins(users)
+
     # write mesh users to uboot header
-    write_mesh_users_h(users, f_mesh_users_out)
+    write_mesh_users_h(hashed_users, f_mesh_users_out)
     f_mesh_users_out.close()
     print("Generated mesh_users.h file: %s" % (mesh_users_fn))
 
