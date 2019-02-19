@@ -890,6 +890,8 @@ int mesh_read_hash(char *game_name){
             row.hash[i] = '\0';
             hash_buffer[i] = '\0';
 
+            mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
+
             printf("offset: %d\n", offset);
             printf("%s Hash row: %s\nHash buffer: %s\n", row.user_name, row.hash, hash_buffer);
 
@@ -989,7 +991,7 @@ int mesh_check_hash(char *game_name){
             strcmp(user.name, row.user_name) == 0) {
             free(full_name);
 
-            printf("offset: %d\n", offset);
+            printf("\noffset: %d\n", offset);
             printf("\n%s row.hash: %s", row.user_name, row.hash);
 
             if(strcmp(gen_hash, row.hash) == 0) {
