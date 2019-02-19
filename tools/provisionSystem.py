@@ -237,9 +237,9 @@ def main():
 #        exit(2)
 
     # write board cipher
-    write_board_cipher(f_board_cipher)
-    f_board_cipher.close()
-    print("Generated Board Cipher file: %s" % (os.path.join(app_path, board_cipher_fn)))
+#    write_board_cipher(f_board_cipher)
+#    f_board_cipher.close()
+#    print("Generated Board Cipher file: %s" % (os.path.join(app_path, board_cipher_fn)))
 
     # Read in all of the user information into a list and strip newlines
     lines = [line.rstrip('\n') for line in f_mesh_users_in]
