@@ -975,8 +975,6 @@ int mesh_check_hash(char *game_name){
     }
     ascii_hash[SHA256_DIGEST_LENGTH] = '\0';
 
-    printf("ascii_hash: %s", ascii_hash);
-
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
         mesh_flash_read(&row, offset, sizeof(struct games_tbl_row))) {
@@ -989,7 +987,7 @@ int mesh_check_hash(char *game_name){
             strcmp(user.name, row.user_name) == 0) {
             free(full_name);
 
-            printf("%s row.hash: %s", row.user_name, row.hash);
+            printf("%s row.hash: %s\nascii_hash: %s\n", row.user_name, row.hash, ascii_hash);
 
             if(strcmp(ascii_hash, row.hash) == 0) {
                 printf("\nHashes did match\n");
