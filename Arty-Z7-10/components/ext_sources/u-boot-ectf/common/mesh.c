@@ -973,7 +973,7 @@ int mesh_check_hash(char *game_name){
     {
         sprintf(&ascii_hash[i*2],"%02x", gen_hash[i]);
     }
-    ascii_hash[i] = '\0';
+    ascii_hash[SHA256_DIGEST_LENGTH] = '\0';
 
     printf("ascii_hash: %s", ascii_hash);
 
