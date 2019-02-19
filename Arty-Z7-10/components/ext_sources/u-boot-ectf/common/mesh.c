@@ -973,7 +973,7 @@ int mesh_check_hash(char *game_name){
     {
         sprintf(&ascii_hash[i*2],"%02x", gen_hash[i]);
     }
-    ascii_hash[SHA256_DIGEST_LENGTH] = '\0';
+    ascii_hash[SHA256_DIGEST_LENGTH - 1] = '\0';
 
     printf("ascii_hash: %s", ascii_hash);
 
@@ -989,7 +989,7 @@ int mesh_check_hash(char *game_name){
             strcmp(user.name, row.user_name) == 0) {
             free(full_name);
 
-            printf("offset: %s\n", offset);
+            printf("offset: %d\n", offset);
             printf("\n%s row.hash: %s", row.user_name, row.hash);
 
             if(strcmp(gen_hash, row.hash) == 0) {
