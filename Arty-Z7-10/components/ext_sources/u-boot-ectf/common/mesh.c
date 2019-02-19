@@ -890,7 +890,7 @@ int mesh_read_hash(char *game_name){
             row.hash[i] = '\0';
             hash_buffer[i] = '\0';
 
-            printf("offset: %s\n", offset);
+            printf("offset: %d\n", offset);
             printf("%s Hash row: %s\nHash buffer: %s\n", row.user_name, row.hash, hash_buffer);
 
 
@@ -973,7 +973,7 @@ int mesh_check_hash(char *game_name){
     {
         sprintf(&ascii_hash[i*2],"%02x", gen_hash[i]);
     }
-    ascii_hash[SHA256_DIGEST_LENGTH - 1] = '\0';
+    ascii_hash[SHA256_DIGEST_LENGTH] = '\0';
 
     printf("ascii_hash: %s", ascii_hash);
 
