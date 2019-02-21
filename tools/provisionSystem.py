@@ -8,6 +8,7 @@ import base64
 import subprocess
 import re
 import argparse
+import binascii
 
 # Path to the mesh_users header file
 mesh_users_fn = os.environ["ECTF_UBOOT"] + "/include/mesh_users.h"
@@ -30,11 +31,13 @@ board_resources_fn = "resources.txt"
 # Salt
 salt = base64.b64encode(os.urandom(16))
 
+
 def hash_pins(users):
+    hashed_users = []
     for (user, pin) in users:
-        hasher = hashlib.sha256()
-        hasher.update(pin + user + salt)
-        hashed_users = (user, hasher.digest())
+        hasher = SHA256.new()
+        hasher.update(binascii.a2b_base64(pin + user + str(salt.decode('ascii'))))
+        hashed_users.append((user, hasher.hexdigest(), str(salt.decode('ascii'))))
 
     return hashed_users
 
@@ -75,14 +78,15 @@ def write_mesh_users_h(h_users, f):
 
 struct MeshUser {{
     char username[16];
-    char pin[9];
+    char pin[64];
+    char salt[24];
 }};
 
 static struct MeshUser mesh_users[] = {{
 """.format(num_users=len(h_users)))
 
-    for (user, pin) in h_users:
-        data = '    {.username="%s", .pin="%s"},\n' % (user, pin)
+    for (user, pin, salt) in h_users:
+        data = '    {.username="%s", .pin="%s", .salt="%s"},\n' % (user, pin, salt)
         f.write(data)
 
     f.write("""
@@ -154,7 +158,8 @@ def build_images():
     # Clean the project (since petalinux doesn't always build correctly
     # depending on what files you have modified; for example configs)
     # then build everything
-    subprocess.check_call(["/bin/bash", "-i", "-c", "petalinuxenv > /dev/null && cd $ECTF_PETALINUX/Arty-Z7-10/ && petalinux-build -x distclean && petalinux-build"])
+    subprocess.check_call(
+        ["/bin/bash", "-i", "-c", "petalinuxenv > /dev/null && cd $ECTF_PETALINUX/Arty-Z7-10/ && petalinux-build -x distclean && petalinux-build"])
     print("Done Building Images to %s" % (os.environ["ECTF_PETALINUX"] + '/Arty-Z7-10/images'))
 
 
@@ -259,8 +264,8 @@ def main():
     try:
         users = validate_users(lines)
     except Exception as e:
-            print("Users text file is misformated.")
-            exit(2)
+        print("Users text file is misformated.")
+        exit(2)
 
     # Add the demo user, which must always exist, per the rules
     users.append(("demo", "00000000"))
