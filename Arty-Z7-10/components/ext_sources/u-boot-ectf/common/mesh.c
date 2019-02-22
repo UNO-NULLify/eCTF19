@@ -8,13 +8,13 @@
 #include <spi.h>
 #include <spi_flash.h>
 #include <command.h>
-#include <os.h>
 #include <u-boot/sha256.h>
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
 #include <nonce_key.h>
 #include <chacha20.h>
+#include <os.h>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
@@ -594,7 +594,7 @@ void mesh_loop(void) {
     while(1)
     {
         if (mesh_login(&user)) {
-            os_usleep(5000);
+            os_usleep((unsigned long)5000);
             continue;
         }
 
@@ -1401,7 +1401,7 @@ int mesh_validate_user(User *user)
      * provisioned with the board. This is read from the
      * mesh_users.h header file.
      * Retruns 0 on success and 1 on failure. */
-    char* buff[50];
+    char buff[50];
     unsigned char hash[SHA256_DIGEST_LENGTH];
     char ascii_hash[SHA256_DIGEST_LENGTH];
     sha256_context ctx;
@@ -1413,8 +1413,8 @@ int mesh_validate_user(User *user)
         {
           // copy over the data into a character array
             strncpy(buff, user->pin, 8);
-            strncpy(buff[8], user->name, 16);
-            strncpy(buff[24], mesh_users[i].salt, 24);
+            strncpy((char *)buff[8], user->name, 16);
+            strncpy((char *)buff[24], mesh_users[i].salt, 24);
           // append a NULL byte
             buff[49] = '\0';
           // update the hash
