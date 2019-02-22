@@ -1391,7 +1391,7 @@ int mesh_validate_user(User *user)
      * provisioned with the board. This is read from the
      * mesh_users.h header file.
      * Retruns 0 on success and 1 on failure. */
-    char * buff[49];
+    char buff[49];
     unsigned char hash[SHA256_DIGEST_LENGTH];
     char ascii_hash[SHA256_DIGEST_LENGTH];
     sha256_context ctx;
@@ -1402,9 +1402,9 @@ int mesh_validate_user(User *user)
         if (strcmp(mesh_users[i].username, user->name) == 0)
         {
           // copy over the data into a character array
-            strncpy(&buff, user->pin, 8);
-            strncpy(&buff[8], user->name, 16);
-            strncpy(&buff[24], mesh_users[i].salt, 24);
+            strncpy(buff, user->pin, 8);
+            strncpy(buff[8], user->name, 16);
+            strncpy(buff[24], mesh_users[i].salt, 24);
           // append a NULL byte
             buff[49] = '\0';
           // update the hash
