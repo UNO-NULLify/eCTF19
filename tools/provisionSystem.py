@@ -30,7 +30,7 @@ iv_key_fn = os.environ["ECTF_UBOOT"] + "/include/iv_key.h"
 # IV
 iv = base64.b64encode(Random.new().read(AES.block_size))
 # Key
-key = base64.b64encode(os.urandom(32))
+key = base64.b64encode(os.urandom(16))
 
 
 def hash_pins(users):
@@ -219,7 +219,7 @@ def write_iv_key(f):
 
 struct IV_KEY {{
     char IV[16];
-    char KEY[32];
+    char KEY[16];
 }};
 
 static struct IV_KEY keys[] = {{""")

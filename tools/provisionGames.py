@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from Crypto.PublicKey import RSA
-#from Crypto.Cipher import AES
+from Crypto.Cipher import AES
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 import base64
@@ -115,7 +115,7 @@ def provision_game(line):
         #print(str(f_out.name))
         #path = str(os.path.join(gen_path, f_out.name))
         #print(path)
-	#hash game and save to file, tested locally
+	    #hash game and save to file, tested locally
         with open(f_out.name, 'rb') as to_hash:
             buf = to_hash.read(block_size)
             while len(buf) > 0:
@@ -153,7 +153,7 @@ def provision_game(line):
     #    plaintext = fo.read()
     #enc = AEScipher.encrypt(plaintext)
     #with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
-    #    fo.write(enc)
+        #fo.write(enc)
 
     print("    %s -> %s" % (g_path, os.path.join(gen_path, f_out_name)))
 
@@ -184,7 +184,7 @@ def main():
         print("Couldn't open file %s" % (args.games))
         exit(2)
 
-    #AEScipher = gen_cipher(content)
+    AEScipher = gen_cipher(content)
 
     subprocess.check_call("mkdir -p %s" % (gen_path), shell=True)
 
