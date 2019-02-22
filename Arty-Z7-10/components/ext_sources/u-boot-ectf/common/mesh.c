@@ -848,7 +848,9 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /************************************* Helpers ********************************/
 /******************************************************************************/
 
-/* Skeleton for now */
+/*
+Skeleton for now
+*/
 int mesh_decrypt_game(char *game_name){
   loff_t game_size;
   // int i = 0;
@@ -871,7 +873,7 @@ int mesh_decrypt_game(char *game_name){
 /*
     This function reads a hash from a hash file and stores it in the
     games_tbl_row struct.
- */
+*/
 int mesh_read_hash(char *game_name){
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
@@ -973,7 +975,7 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
 /*
     This function compares the SHA256 hash of the game to the pre-generated hash
     file on the SD card. It returns 0 if it matches and 1 if it doesn't.
- */
+*/
 int mesh_check_hash(char *game_name){
     unsigned char gen_hash[32];
     char ascii_hash[SHA256_DIGEST_LENGTH];
@@ -1018,6 +1020,9 @@ int mesh_check_hash(char *game_name){
     return 1;
 }
 
+/*
+Converts a short name into a full_name based on the games table values for that game
+*/
 void full_name_from_short_name(char* full_name, struct games_tbl_row* row)
 {
     sprintf(full_name, "%s-v%d.%d", row->game_name, row->major_version, row->minor_version);
@@ -1224,6 +1229,7 @@ void mesh_get_game_header(Game *game, char *game_name){
 
     free(game_buffer);
 }
+
 /*
     This function reads in the specified game and ensures that the user is
     in the allowed users section of the game and that you are not downgrading
