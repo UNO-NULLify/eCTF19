@@ -1,7 +1,8 @@
 #include "chacha20.h"
+#include <assert.h>
 
 
-static uint32_t rotl32(uint32_t x, int n) 
+static uint32_t rotl32(uint32_t x, int n)
 {
 	return (x << n) | (x >> (32 - n));
 }
@@ -67,7 +68,7 @@ static void chacha20_block_next(struct chacha20_context *ctx) {
     x[a] += x[b]; x[d] = rotl32(x[d] ^ x[a], 8); \
     x[c] += x[d]; x[b] = rotl32(x[b] ^ x[c], 7);
 
-	for (int i = 0; i < 10; i++) 
+	for (int i = 0; i < 10; i++)
 	{
 		CHACHA20_QUARTERROUND(ctx->keystream32, 0, 4, 8, 12)
 		CHACHA20_QUARTERROUND(ctx->keystream32, 1, 5, 9, 13)
@@ -84,7 +85,7 @@ static void chacha20_block_next(struct chacha20_context *ctx) {
 	uint32_t *counter = ctx->state + 12;
 	// increment counter
 	counter[0]++;
-	if (0 == counter[0]) 
+	if (0 == counter[0])
 	{
 		// wrap around occured, increment higher 32 bits of counter
 		counter[1]++;
@@ -111,9 +112,9 @@ void chacha20_init_context(struct chacha20_context *ctx, uint8_t key[], uint8_t 
 void chacha20_xor(struct chacha20_context *ctx, uint8_t *bytes, size_t n_bytes)
 {
 	uint8_t *keystream8 = (uint8_t*)ctx->keystream32;
-	for (size_t i = 0; i < n_bytes; i++) 
+	for (size_t i = 0; i < n_bytes; i++)
 	{
-		if (ctx->position >= 64) 
+		if (ctx->position >= 64)
 		{
 			chacha20_block_next(ctx);
 			ctx->position = 0;

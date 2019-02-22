@@ -1,11 +1,10 @@
 #pragma once
 
-#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 
-#ifdef __cplusplus 
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -25,6 +24,6 @@ void chacha20_init_context(struct chacha20_context *ctx, uint8_t key[], uint8_t 
 
 void chacha20_xor(struct chacha20_context *ctx, uint8_t *bytes, size_t n_bytes);
 
-#ifdef __cplusplus 
+#ifdef __cplusplus
 }
-#endif 
+#endif
