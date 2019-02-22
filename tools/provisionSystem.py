@@ -188,8 +188,7 @@ def write_board_cipher(f):
 
     f: open file to write the factory secrets to
     """
-#    f.write(salt.decode('ascii'))
-    f.write(iv.decode('ascii')+"\n")
+    f.write(nonce.decode('ascii')+"\n")
     f.write(key.decode('ascii'))
 
 
@@ -198,7 +197,7 @@ def write_factory_secrets(f):
 
     f: open file to write the factory secrets to
     """
-    f.write(iv.decode('ascii')+"\n")
+    f.write(nonce_rfc7539.decode('ascii')+"\n")
     f.write(key.decode('ascii'))
 
 def write_nonce_key(f):
