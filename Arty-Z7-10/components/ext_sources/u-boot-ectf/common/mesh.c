@@ -15,6 +15,7 @@
 #include <default_games.h>
 #include <nonce_key.h>
 #include <chacha20.h>
+#include <unistd.h>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
@@ -593,9 +594,10 @@ void mesh_loop(void) {
 
     while(1)
     {
-        if (mesh_login(&user))
-	    sleep(5);
+        if (mesh_login(&user)) {
+            sleep(5);
             continue;
+        }
 
         while(*(user.name)) {
             line = mesh_input(CONFIG_SYS_PROMPT);
