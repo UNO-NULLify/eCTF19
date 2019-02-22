@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 from Crypto.PublicKey import RSA
-from Crypto.Cipher import AES
-from Crypto.Cipher import Counter
+from Crypto.Cipher import ChaCha20
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 import base64
