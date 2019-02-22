@@ -594,6 +594,7 @@ void mesh_loop(void) {
     while(1)
     {
         if (mesh_login(&user))
+	    sleep(5);
             continue;
 
         while(*(user.name)) {
