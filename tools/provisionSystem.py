@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-from Crypto.Cipher import AES
-from Crypto import Random
+from Crypto.Cipher import ChaCha20
+from Crypto.Random import get_random_bytes
 from Crypto.Hash import SHA256
 import os
 import base64
@@ -24,9 +24,10 @@ factory_secrets_fn = "FactorySecrets.txt"
 app_path = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files"
 # File name for the board resources
 board_resources_fn = "resources.txt"
-# File name for the iv+key
-iv_key_fn = os.environ["ECTF_UBOOT"] + "/include/iv_key.h"
-
+# File name for the nonce+key
+nonce_key_fn = os.environ["ECTF_UBOOT"] + "/include/nonce_key.h"
+# Nonce
+nonce_rfc7539 = base64.b64encode(get_random_bytes(12))
 # Key
 key = base64.b64encode(os.urandom(32))
 
@@ -187,8 +188,7 @@ def write_board_cipher(f):
 
     f: open file to write the factory secrets to
     """
-#    f.write(salt.decode('ascii'))
-    f.write(iv.decode('ascii')+"\n")
+    f.write(nonce_rfc7539.decode('ascii')+"\n")
     f.write(key.decode('ascii'))
 
 
@@ -197,11 +197,11 @@ def write_factory_secrets(f):
 
     f: open file to write the factory secrets to
     """
-    f.write(iv.decode('ascii')+"\n")
+    f.write(nonce_rfc7539.decode('ascii')+"\n")
     f.write(key.decode('ascii'))
 
-def write_iv_key(f):
-    """Write the iv+key file
+def write_nonce_key(f):
+    """Write the nonce+key file
 
     f: open file to write the bif to
     """
@@ -215,12 +215,13 @@ def write_iv_key(f):
 #ifndef __MESH_IVKEY_H__
 #define __MESH_IVKEY_H__
 
-struct IV_KEY {{
+struct nonce_key {{
+    char NONCE[12];
     char KEY[32];
 }};
 
-static struct IV_KEY keys[] = {{""")
-    data = '    {.IV="%s", .KEY="%s"},\n' % (iv, key)
+static struct nonce_key keys[] = {{""")
+    data = '    {.NONCE="%s", .KEY="%s"},\n' % (nonce_rfc7539, key)
     f.write(data)
     f.write("""
 };
@@ -281,9 +282,9 @@ def main():
         print("Unable to open %s: %s" % (board_resources_fn, e,))
         exit(2)
     try:
-        f_iv_key = open(iv_key_fn, "w+")
+        f_nonce_key = open(nonce_key_fn, "w+")
     except Exception as e:
-        print("Unable to open generated IV_KEY header file: %s" % (e,))
+        print("Unable to open generated NONCE_KEY header file: %s" % (e,))
         exit(2)
 
     # write board cipher
@@ -329,10 +330,10 @@ def main():
     f_factory_secrets.close()
     print("Generated FactorySecrets file: %s" % (os.path.join(gen_path, factory_secrets_fn)))
 
-    #write iv+key
-    write_iv_key(f_iv_key)
-    f_iv_key.close
-    print("Generated IV_KEY file: %s" % iv_key_fn)
+    #write nonce+key
+    write_nonce_key(f_nonce_key)
+    f_nonce_key.close
+    print("Generated NONCE_KEY file: %s" % nonce_key_fn)
 
     exit(0)
 
