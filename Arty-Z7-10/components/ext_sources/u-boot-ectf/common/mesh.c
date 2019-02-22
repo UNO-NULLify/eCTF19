@@ -856,7 +856,7 @@ int mesh_decrypt_game(char *game_name){
   // Key and IV can be accessed via keys.KEY and keys.IV
 
   // get the size of the game
-  game_size = mesh_size_ext4(game_name)
+  game_size = mesh_size_ext4(game_name);
 
   uint8_t * game_buffer;
   game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
