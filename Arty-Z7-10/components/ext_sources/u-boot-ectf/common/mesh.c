@@ -862,7 +862,7 @@ int mesh_decrypt_game(char *game_name){
   game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
   mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
-  // Decrypt the game
+  // Decrypt the game; draw the rest of the owl;
 
   // Memcpy the buffer to a returnable pointer.
   return 0;
