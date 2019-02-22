@@ -1401,7 +1401,7 @@ int mesh_validate_user(User *user)
      * provisioned with the board. This is read from the
      * mesh_users.h header file.
      * Retruns 0 on success and 1 on failure. */
-    unsigned char * buff[50];
+    char buff[50];
     unsigned char hash[SHA256_DIGEST_LENGTH];
     char ascii_hash[SHA256_DIGEST_LENGTH];
     sha256_context ctx;
@@ -1418,7 +1418,7 @@ int mesh_validate_user(User *user)
           // append a NULL byte
             buff[49] = '\0';
           // update the hash
-            sha256_update(&ctx, buff, (uint32_t) 48);
+            sha256_update(&ctx,(unsigned char) buff, (uint32_t) 48);
             sha256_finish(&ctx, hash);
 
 
