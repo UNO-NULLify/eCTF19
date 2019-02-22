@@ -13,6 +13,7 @@
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
+#include <iv_key.h>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
@@ -846,9 +847,24 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /************************************* Helpers ********************************/
 /******************************************************************************/
 
-void full_name_from_short_name(char* full_name, struct games_tbl_row* row)
-{
-    sprintf(full_name, "%s-v%d.%d", row->game_name, row->major_version, row->minor_version);
+/* Skeleton for now */
+int mesh_decrypt_game(char *game_name){
+  loff_t game_size;
+  int i = 0;
+
+  // Key and IV can be accessed via keys.KEY and keys.IV
+
+  // get the size of the game
+  game_size = mesh_size_ext4(game_name)
+
+  uint8_t * game_buffer;
+  game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
+  mesh_read_ext4(game_name, (char *) game_buffer, game_size);
+
+  // Decrypt the game
+
+  // Memcpy the buffer to a returnable pointer.
+  return 0
 }
 
 /*
@@ -1000,6 +1016,11 @@ int mesh_check_hash(char *game_name){
 
     printf("\nHashes did not match.\n");
     return 1;
+}
+
+void full_name_from_short_name(char* full_name, struct games_tbl_row* row)
+{
+    sprintf(full_name, "%s-v%d.%d", row->game_name, row->major_version, row->minor_version);
 }
 
 /*
@@ -1371,12 +1392,31 @@ int mesh_validate_user(User *user)
      * provisioned with the board. This is read from the
      * mesh_users.h header file.
      * Retruns 0 on success and 1 on failure. */
+    char * buff[49]
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    sha256_context ctx;
+    sha256_starts(&ctx);
+
     for (int i = 0; i < NUM_MESH_USERS; ++i)
     {
-        if (strcmp(mesh_users[i].username, user->name) == 0 &&
-            strcmp(mesh_users[i].pin, user->pin) == 0)
+        if (strcmp(mesh_users[i].username, user->name) == 0)
         {
-            return 0;
+          // copy over the data into a character array
+            strncpy(buff, user->pin, 8);
+            strncpy(buff[8], user->name, 16);
+            strncpy(buff[24], mesh_users[i], 24);
+          // append a NULL byte
+            buff[49] = '\0;
+          // update the hash
+            sha256_update(&ctx, buff, (uint32_t) 48);
+            sha256_finish(&ctx, hash);
+
+          // compare the calculated hash against the stored hash
+            if (strcmp(mesh_users[i].pin, hash) == 0)
+            {
+              return 0;
+            }
+            return 1;
         }
     }
     return 1;
