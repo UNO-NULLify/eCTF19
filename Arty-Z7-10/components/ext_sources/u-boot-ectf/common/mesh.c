@@ -1406,7 +1406,7 @@ int mesh_validate_user(User *user)
             strncpy(buff[8], user->name, 16);
             strncpy(buff[24], mesh_users[i], 24);
           // append a NULL byte
-            buff[49] = '\0;
+            buff[49] = '\0';
           // update the hash
             sha256_update(&ctx, buff, (uint32_t) 48);
             sha256_finish(&ctx, hash);
