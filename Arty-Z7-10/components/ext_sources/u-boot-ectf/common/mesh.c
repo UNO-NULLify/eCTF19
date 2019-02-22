@@ -851,7 +851,7 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /* Skeleton for now */
 int mesh_decrypt_game(char *game_name){
   loff_t game_size;
-  int i = 0;
+  // int i = 0;
 
   // Key and IV can be accessed via keys.KEY and keys.IV
 
@@ -900,7 +900,7 @@ int mesh_read_hash(char *game_name){
             free(full_name);
 
             // copy hash
-            for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
+            for (int i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
                 row.hash[i] = hash_buffer[i];
             }
             row.hash[i] = '\0';
@@ -1402,9 +1402,9 @@ int mesh_validate_user(User *user)
         if (strcmp(mesh_users[i].username, user->name) == 0)
         {
           // copy over the data into a character array
-            strncpy(buff, user->pin, 8);
-            strncpy(buff[8], user->name, 16);
-            strncpy(buff[24], mesh_users[i].salt, 24);
+            strncpy(&buff, user->pin, 8);
+            strncpy(&buff[8], user->name, 16);
+            strncpy(&buff[24], mesh_users[i].salt, 24);
           // append a NULL byte
             buff[49] = '\0';
           // update the hash
