@@ -190,8 +190,8 @@ def write_board_cipher(f):
     f: open file to write the factory secrets to
     """
 #    f.write(salt.decode('ascii'))
-#    f.write(iv.decode('ascii')+"\n")
-#    f.write(key.decode('ascii'))
+    f.write(iv.decode('ascii')+"\n")
+    f.write(key.decode('ascii'))
 
 
 def write_factory_secrets(f):
