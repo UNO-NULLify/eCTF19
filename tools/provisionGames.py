@@ -2,6 +2,7 @@
 
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import AES
+from Crypto.Cipher import Counter
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 import base64
@@ -20,8 +21,8 @@ def gen_cipher(content):
     content = [x.strip() for x in content]
     iv = base64.b64decode(content[0])
     key = base64.b64decode(content[1])
-
-    return AES.new(key, AES.MODE_CTR, iv)
+    ctr = Counter.new(128)
+    return AES.new(key, AES.MODE_CTR, counter=ctr)
 
 def provision_game(line):
     """Given a line from games.txt, provision a game and write to the

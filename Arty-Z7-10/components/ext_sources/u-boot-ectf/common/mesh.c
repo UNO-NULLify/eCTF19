@@ -14,7 +14,7 @@
 #include <mesh_users.h>
 #include <default_games.h>
 #include <iv_key.h>
-#include <aes.h>
+#include <chacha20.h>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"

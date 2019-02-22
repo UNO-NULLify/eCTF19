@@ -27,10 +27,8 @@ board_resources_fn = "resources.txt"
 # File name for the iv+key
 iv_key_fn = os.environ["ECTF_UBOOT"] + "/include/iv_key.h"
 
-# IV
-iv = base64.b64encode(Random.new().read(AES.block_size))
 # Key
-key = base64.b64encode(os.urandom(16))
+key = base64.b64encode(os.urandom(32))
 
 
 def hash_pins(users):
@@ -199,8 +197,8 @@ def write_factory_secrets(f):
 
     f: open file to write the factory secrets to
     """
-#    f.write(iv.decode('ascii')+"\n")
-#    f.write(key.decode('ascii'))
+    f.write(iv.decode('ascii')+"\n")
+    f.write(key.decode('ascii'))
 
 def write_iv_key(f):
     """Write the iv+key file
@@ -218,8 +216,7 @@ def write_iv_key(f):
 #define __MESH_IVKEY_H__
 
 struct IV_KEY {{
-    char IV[16];
-    char KEY[16];
+    char KEY[32];
 }};
 
 static struct IV_KEY keys[] = {{""")
