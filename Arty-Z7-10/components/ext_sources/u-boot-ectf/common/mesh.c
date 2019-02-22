@@ -876,6 +876,7 @@ int mesh_read_hash(char *game_name){
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
     loff_t hash_size;
+    int i;
 
     char* hash_fn = (char*) malloc(snprintf(NULL, 0, "%s.SHA256", game_name) + 1);
     sprintf(hash_fn, "%s.SHA256", game_name);
@@ -900,7 +901,7 @@ int mesh_read_hash(char *game_name){
             free(full_name);
 
             // copy hash
-            for (int i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
+            for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
                 row.hash[i] = hash_buffer[i];
             }
             row.hash[i] = '\0';
