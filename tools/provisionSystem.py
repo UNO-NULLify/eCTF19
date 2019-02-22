@@ -24,17 +24,21 @@ factory_secrets_fn = "FactorySecrets.txt"
 app_path = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files"
 # File name for the board resources
 board_resources_fn = "resources.txt"
+# File name for the iv+key
+iv_key_fn = os.environ["ECTF_UBOOT"] + "/include/iv_key.h"
+
 # IV
-#iv = base64.b64encode(Random.new().read(AES.block_size))
+iv = base64.b64encode(Random.new().read(AES.block_size))
 # Key
-#key = base64.b64encode(os.urandom(32))
-# Salt
-salt = base64.b64encode(os.urandom(16))
+key = base64.b64encode(os.urandom(32))
 
 
 def hash_pins(users):
     hashed_users = []
     for (user, pin) in users:
+        # Salt
+        salt = base64.b64encode(os.urandom(16))
+        # Hasher
         hasher = SHA256.new()
         hasher.update(binascii.a2b_base64(pin + user + str(salt.decode('ascii'))))
         hashed_users.append((user, hasher.hexdigest(), str(salt.decode('ascii'))))
@@ -185,7 +189,7 @@ def write_board_cipher(f):
 
     f: open file to write the factory secrets to
     """
-    f.write(salt.decode('ascii'))
+#    f.write(salt.decode('ascii'))
 #    f.write(iv.decode('ascii')+"\n")
 #    f.write(key.decode('ascii'))
 
@@ -198,6 +202,34 @@ def write_factory_secrets(f):
 #    f.write(iv.decode('ascii')+"\n")
 #    f.write(key.decode('ascii'))
 
+def write_iv_key(f):
+    """Write the iv+key file
+
+    f: open file to write the bif to
+    """
+    f.write("""
+/*
+* This is an automatically generated file by provisionSystem.py
+*
+*
+*/
+
+#ifndef __MESH_IVKEY_H__
+#define __MESH_IVKEY_H__
+
+struct IV_KEY {{
+    char IV[16];
+    char KEY[32];
+}};
+
+static struct IV_KEY keys[] = {{""")
+    data = '    {.IV="%s", .KEY="%s"},\n' % (IV, KEY)
+    f.write(data)
+    f.write("""
+};
+
+#endif /* __MESH_IVKEY_H__ */
+""")
 
 def main():
     # Argument parsing
@@ -294,6 +326,11 @@ def main():
     write_factory_secrets(f_factory_secrets)
     f_factory_secrets.close()
     print("Generated FactorySecrets file: %s" % (os.path.join(gen_path, factory_secrets_fn)))
+
+    #write iv+key
+    write_iv_key(iv_key_fn)
+    iv_key_fn.close
+    print("Generated IV_KEY file: %s" % (os.path.join(gen_path, iv_key_fn)))
 
     exit(0)
 
