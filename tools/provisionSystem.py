@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-#from Crypto.Cipher import AES
+from Crypto.Cipher import AES
 from Crypto import Random
 from Crypto.Hash import SHA256
 import os
