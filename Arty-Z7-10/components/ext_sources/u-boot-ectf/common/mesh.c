@@ -1418,7 +1418,7 @@ int mesh_validate_user(User *user)
           // append a NULL byte
             buff[49] = '\0';
           // update the hash
-            sha256_update(&ctx,(unsigned char) buff, (uint32_t) 48);
+            sha256_update(&ctx,(const unsigned char) buff, (uint32_t) 48);
             sha256_finish(&ctx, hash);
 
 
