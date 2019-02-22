@@ -212,8 +212,8 @@ def write_nonce_key(f):
 *
 */
 
-#ifndef __MESH_IVKEY_H__
-#define __MESH_IVKEY_H__
+#ifndef __MESH_NONCEKEY_H__
+#define __MESH_NONCEKEY_H__
 
 struct nonce_key {{
     char NONCE[12];
@@ -226,7 +226,7 @@ static struct nonce_key keys[] = {{""")
     f.write("""
 };
 
-#endif /* __MESH_IVKEY_H__ */
+#endif /* __MESH_NONCEKEY_H__ */
 """)
 
 def main():
