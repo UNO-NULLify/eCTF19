@@ -223,7 +223,7 @@ struct IV_KEY {{
 }};
 
 static struct IV_KEY keys[] = {{""")
-    data = '    {.IV="%s", .KEY="%s"},\n' % (IV, KEY)
+    data = '    {.IV="%s", .KEY="%s"},\n' % (iv, key)
     f.write(data)
     f.write("""
 };
@@ -283,6 +283,11 @@ def main():
     except Exception as e:
         print("Unable to open %s: %s" % (board_resources_fn, e,))
         exit(2)
+    try:
+        f_iv_key = open(iv_key_fn, "w+")
+    except Exception as e:
+        print("Unable to open generated IV_KEY header file: %s" % (e,))
+        exit(2)
 
     # write board cipher
     write_board_cipher(f_board_resources)
@@ -328,9 +333,9 @@ def main():
     print("Generated FactorySecrets file: %s" % (os.path.join(gen_path, factory_secrets_fn)))
 
     #write iv+key
-    write_iv_key(iv_key_fn)
-    iv_key_fn.close
-    print("Generated IV_KEY file: %s" % (os.path.join(gen_path, iv_key_fn)))
+    write_iv_key(f_iv_key)
+    f_iv_key.close
+    print("Generated IV_KEY file: %s" % iv_key_fn)
 
     exit(0)
 
