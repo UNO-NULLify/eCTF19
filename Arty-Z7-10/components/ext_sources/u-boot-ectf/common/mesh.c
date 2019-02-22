@@ -14,6 +14,7 @@
 #include <mesh_users.h>
 #include <default_games.h>
 #include <iv_key.h>
+#include <aes.h>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
@@ -976,7 +977,6 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
 int mesh_check_hash(char *game_name){
     unsigned char gen_hash[32];
     char ascii_hash[SHA256_DIGEST_LENGTH];
-    char tmp[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
     int i = 0;
@@ -1392,8 +1392,9 @@ int mesh_validate_user(User *user)
      * provisioned with the board. This is read from the
      * mesh_users.h header file.
      * Retruns 0 on success and 1 on failure. */
-    char * buff[49]
+    char * buff[49];
     unsigned char hash[SHA256_DIGEST_LENGTH];
+    char ascii_hash[SHA256_DIGEST_LENGTH];
     sha256_context ctx;
     sha256_starts(&ctx);
 
@@ -1404,15 +1405,21 @@ int mesh_validate_user(User *user)
           // copy over the data into a character array
             strncpy(buff, user->pin, 8);
             strncpy(buff[8], user->name, 16);
-            strncpy(buff[24], mesh_users[i], 24);
+            strncpy(buff[24], mesh_users[i].salt, 24);
           // append a NULL byte
             buff[49] = '\0';
           // update the hash
             sha256_update(&ctx, buff, (uint32_t) 48);
             sha256_finish(&ctx, hash);
 
+
+            for(i = 0; i < 32; i++)
+            {
+                sprintf(&ascii_hash[i*2],"%02x", hash[i]);
+            }
+
           // compare the calculated hash against the stored hash
-            if (strcmp(mesh_users[i].pin, hash) == 0)
+            if (strcmp(mesh_users[i].pin, ascii_hash) == 0)
             {
               return 0;
             }
