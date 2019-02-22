@@ -1422,9 +1422,9 @@ int mesh_validate_user(User *user)
             sha256_finish(&ctx, hash);
 
 
-            for(i = 0; i < 32; i++)
+            for(int y = 0; y < 32; y++)
             {
-                sprintf(&ascii_hash[i*2],"%02x", hash[i]);
+                sprintf(&ascii_hash[y*2],"%02x", hash[y]);
             }
 
           // compare the calculated hash against the stored hash
