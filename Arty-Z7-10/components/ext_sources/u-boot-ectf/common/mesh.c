@@ -14,7 +14,7 @@
 #include <mesh_users.h>
 #include <default_games.h>
 #include <iv_key.h>
-#include <aes.h>
+#include <../common/aes.c>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
@@ -865,6 +865,7 @@ int mesh_decrypt_game(char *game_name){
   mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
   // Decrypt the game; draw the rest of the owl;
+
 
   // Memcpy the buffer to a returnable pointer.
   return 0;
