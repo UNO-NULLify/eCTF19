@@ -1421,7 +1421,7 @@ int mesh_validate_user(User *user)
             // append a NULL byte
             printf("mesh_user.salt: %s\nBuff: %s\n", mesh_users[i].salt, buff);
             // update the hash
-            sha256_update(&ctx,(uint8_t *) buff, (uint32_t) strlen(buff);
+            sha256_update(&ctx,(uint8_t *) buff, (uint32_t) strlen(buff));
             sha256_finish(&ctx, hash);
 
             for(int y = 0; y < 32; y++)
