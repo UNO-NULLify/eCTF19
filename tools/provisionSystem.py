@@ -22,16 +22,12 @@ gen_path = "files/generated"
 system_image_fn = "SystemImage.bif"
 # File name for the factory secrets
 factory_secrets_fn = "FactorySecrets.txt"
-# Path where board cipher will go
-#app_path = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files"
-# File name for the board resources
-#board_resources_fn = "resources.txt"
 # File name for the nonce+key
-#nonce_key_fn = os.environ["ECTF_UBOOT"] + "/include/nonce_key.h"
+nonce_key_fn = os.environ["ECTF_UBOOT"] + "/include/nonce_key.h"
 # Nonce
-#nonce_rfc7539 = base64.b64encode(get_random_bytes(12))
+nonce_rfc7539 = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(12)])
 # Key
-#key = base64.b64encode(os.urandom(32))
+key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
 
 
 def hash_pins(users):
@@ -189,52 +185,43 @@ MITRE_Entertainment_System: {{
     """.format(path=os.environ["ECTF_PETALINUX"]))
 
 
-#def write_board_cipher(f):
-#    """Write any factory secrets. The reference implementation has none
-#
-#    f: open file to write the factory secrets to
-#    """
-#    f.write(nonce_rfc7539.decode('ascii')+"\n")
-#    f.write(key.decode('ascii'))
-
-
 def write_factory_secrets(f):
     """Write any factory secrets. The reference implementation has none
 
     f: open file to write the factory secrets to
     """
-#    f.write(nonce_rfc7539.decode('ascii')+"\n")
-#    f.write(key.decode('ascii'))
+    f.write(nonce_rfc7539+"\n")
+    f.write(key)
 
 
-#def write_nonce_key(f):
-#    """Write the nonce+key file
-#
-#    f: open file to write the bif to
-#    """
-#    f.write("""
-#/*
-#* This is an automatically generated file by provisionSystem.py
-#*
-#*
-#*/
+def write_nonce_key(f):
+    """Write the nonce+key file
 
-##ifndef __MESH_NONCEKEY_H__
-##define __MESH_NONCEKEY_H__
+    f: open file to write the bif to
+    """
+    f.write("""
+/*
+* This is an automatically generated file by provisionSystem.py
+*
+*
+*/
 
-#struct nonce_key {{
-#    char NONCE[12];
-#    char KEY[32];
-#}};
+#ifndef __MESH_NONCEKEY_H__
+#define __MESH_NONCEKEY_H__
 
-#static struct nonce_key keys[] = {{""")
-#    data = '    {.NONCE="%s", .KEY="%s"},\n' % (nonce_rfc7539, key)
-#    f.write(data)
-#    f.write("""
-#};
+struct nonce_key {{
+    char NONCE[12];
+    char KEY[32];
+}};
 
-##endif /* __MESH_NONCEKEY_H__ */
-#""")
+static struct nonce_key keys[] = {{""")
+    data = '    {.NONCE="%s", .KEY="%s"},\n' % (nonce_rfc7539, key)
+    f.write(data)
+    f.write("""
+};
+
+#endif /* __MESH_NONCEKEY_H__ */
+""")
 
 
 def main():
@@ -284,21 +271,11 @@ def main():
     except Exception as e:
         print("Unable to open %s: %s" % (factory_secrets_fn, e,))
         exit(2)
-#    try:
-#        f_board_resources = open(os.path.join(app_path, board_resources_fn), "w+")
-#    except Exception as e:
-#        print("Unable to open %s: %s" % (board_resources_fn, e,))
-#        exit(2)
-#    try:
-#        f_nonce_key = open(nonce_key_fn, "w+")
-#    except Exception as e:
-#        print("Unable to open generated NONCE_KEY header file: %s" % (e,))
-#        exit(2)
-
-    # write board cipher
-#    write_board_cipher(f_board_resources)
-#    f_board_resources.close()
-#    print("Generated Board Cipher file: %s" % (os.path.join(app_path, board_resources_fn)))
+    try:
+        f_nonce_key = open(nonce_key_fn, "w+")
+    except Exception as e:
+       print("Unable to open generated NONCE_KEY header file: %s" % (e,))
+       exit(2)
 
     # Read in all of the user information into a list and strip newlines
     lines = [line.rstrip('\n') for line in f_mesh_users_in]
@@ -339,9 +316,9 @@ def main():
     print("Generated FactorySecrets file: %s" % (os.path.join(gen_path, factory_secrets_fn)))
 
     # write nonce+key
-#    write_nonce_key(f_nonce_key)
-#    f_nonce_key.close
-#    print("Generated NONCE_KEY file: %s" % nonce_key_fn)
+    write_nonce_key(f_nonce_key)
+    f_nonce_key.close
+    print("Generated NONCE_KEY file: %s" % nonce_key_fn)
 
     exit(0)
 

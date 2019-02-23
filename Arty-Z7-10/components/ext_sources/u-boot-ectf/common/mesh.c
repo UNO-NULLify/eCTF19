@@ -852,24 +852,34 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /*
 Skeleton for now
 */
-int mesh_decrypt_game(char *game_name){
-  loff_t game_size;
-  // int i = 0;
+int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
+    struct chacha20_context ctx;
+    uint8_t* game_buffer;
+    loff_t game_size;
+    uint8_t nonce;
+    uint8_t key;
 
-  // Key and IV can be accessed via keys.KEY and keys.IV
+    // get the size of the game
+    game_size = mesh_size_ext4(game_name);
 
-  // get the size of the game
-  game_size = mesh_size_ext4(game_name);
+    game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
+    mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
-  uint8_t * game_buffer;
-  game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
-  mesh_read_ext4(game_name, (char *) game_buffer, game_size);
+    // Key and Nonce can be accessed via keys.KEY and keys.Nonce
+    nonce = nonce_key.NONCE;
+    key = nonce_key.KEY;
 
-  // Decrypt the game; draw the rest of the owl;
+    // Decrypt the game
+    // What is the counter?
+    chacha20_init_context(&ctx, key, nonce, counter);
+    chacha20_xor(&ctx, game_buffer, game_size);
 
+    // Memcpy the buffer to a returnable pointer.
+    memcpy(outputBuffer, game_buffer, game_size);
 
-  // Memcpy the buffer to a returnable pointer.
-  return 0;
+    // Free up some memory
+    free(game_buffer);
+    return 0;
 }
 
 /*
@@ -913,10 +923,7 @@ int mesh_read_hash(char *game_name){
 
             mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
 
-            printf("%s Hash row: %s\nHash buffer: %s\n", row.user_name, row.hash, hash_buffer);
-
             if (strcmp(row.hash, hash_buffer) == 0) {
-                printf("Hash successfully read and stored!\n");
                 return 0;
             }
         }
@@ -950,12 +957,6 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     sha256_update(&ctx, game_buffer, (uint32_t) game_size);
     sha256_finish(&ctx, hash);
 
-
-    printf("Generated hash: ");
-    for(i = 0; i < 32; i++)
-    {
-        printf("%02x", hash[i]);
-    }
     hash[i] = '\0';
 
     memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
@@ -963,13 +964,6 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     //outputBuffer[SHA256_DIGEST_LENGTH] = '\0';
 
     free(game_buffer);
-
-    printf("\noutputBuffer: ");
-    for(i = 0; i < 32; i++)
-    {
-        printf("%02x", outputBuffer[i]);
-    }
-    printf("\n");
 
     return 0;
 }
@@ -1007,10 +1001,7 @@ int mesh_check_hash(char *game_name){
             strcmp(user.name, row.user_name) == 0) {
             free(full_name);
 
-            printf("%s row.hash: %s\nascii_hash: %s\n", row.user_name, row.hash, ascii_hash);
-
             if(strcmp(ascii_hash, row.hash) == 0) {
-                printf("\nHashes did match\n");
                 return 0;
             }
         }
@@ -1410,7 +1401,6 @@ int mesh_validate_user(User *user)
 
     for (int i = 0; i < NUM_MESH_USERS; ++i)
     {
-	printf("\nUser: %s\n", mesh_users[i].username);
         if (strcmp(mesh_users[i].username, user->name) == 0)
         {
             // copy over the data into a character array
@@ -1418,8 +1408,6 @@ int mesh_validate_user(User *user)
             buff[0] = '\0';
             strcat(buff,user->pin);
             strcat(buff,mesh_users[i].salt);
-            // append a NULL byte
-            printf("mesh_user.salt: %s\nBuff: %s\n", mesh_users[i].salt, buff);
             // update the hash
             sha256_update(&ctx,(uint8_t *) buff, (uint32_t) strlen(buff));
             sha256_finish(&ctx, hash);
@@ -1428,15 +1416,13 @@ int mesh_validate_user(User *user)
             {
                 sprintf(&ascii_hash[y*2],"%02x", hash[y]);
             }
-	        printf("ascii_hash: %s\nmesh_user.pin: %s\n", ascii_hash, mesh_users[i].pin);
             // compare the calculated hash against the stored hash
             if (strcmp(mesh_users[i].pin, ascii_hash) == 0)
             {
-	            printf("Hashes matched\n");
 	            free(buff);
                 return 0;
             }
-	        printf("Hashes did not match\n");
+	        printf("Pin hashes did not match\n");
 	        free(buff);
             return 1;
         }
