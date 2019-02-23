@@ -12,7 +12,6 @@
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
-#include <nonce_key.h>
 #include <chacha20.h>
 #include <os.h>
 
@@ -594,7 +593,7 @@ void mesh_loop(void) {
     while(1)
     {
         if (mesh_login(&user)) {
-            os_usleep((unsigned long)5000);
+            udelay(5000);
             continue;
         }
 
@@ -1409,15 +1408,16 @@ int mesh_validate_user(User *user)
 
     for (int i = 0; i < NUM_MESH_USERS; ++i)
     {
+	printf("\nUser: %s\n", mesh_users[i].username);
         if (strcmp(mesh_users[i].username, user->name) == 0)
         {
-          // copy over the data into a character array
+	    // copy over the data into a character array
             strncpy(buff, user->pin, 8);
             strncpy((char *)buff[8], user->name, 16);
             strncpy((char *)buff[24], mesh_users[i].salt, 24);
-          // append a NULL byte
+            // append a NULL byte
             buff[49] = '\0';
-          // update the hash
+            // update the hash
             sha256_update(&ctx,(uint8_t *) buff, (uint32_t) 48);
             sha256_finish(&ctx, hash);
 
@@ -1426,15 +1426,18 @@ int mesh_validate_user(User *user)
             {
                 sprintf(&ascii_hash[y*2],"%02x", hash[y]);
             }
-
-          // compare the calculated hash against the stored hash
+	    printf("Generated hash: %s\nSaved hash: %s\n", ascii_hash, mesh_users[i].pin);
+            // compare the calculated hash against the stored hash
             if (strcmp(mesh_users[i].pin, ascii_hash) == 0)
             {
+	      printf("Hashes matched\n");
               return 0;
             }
+	    printf("Hashes did not match\n");
             return 1;
         }
     }
+    printf("User does not exist\n");
     return 1;
 }
 
