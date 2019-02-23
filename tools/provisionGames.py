@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from Crypto.PublicKey import RSA
-from Crypto.Cipher import ChaCha20
+#from Crypto.Cipher import ChaCha20
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 import base64
@@ -16,13 +16,13 @@ gen_path = "files/generated/games"
 
 block_size = 65536
 
-def gen_cipher(content):
-    content = [x.strip() for x in content]
-    nonce = base64.b64decode(content[0])
-    key = base64.b64decode(content[1])
-    return ChaCha20.new(key=key, nonce=nonce)
+#def gen_cipher(content):
+#    content = [x.strip() for x in content]
+#    nonce = base64.b64decode(content[0])
+#    key = base64.b64decode(content[1])
+#    return ChaCha20.new(key=key, nonce=nonce)
 
-def provision_game(line, cipher):
+def provision_game(line):
     """Given a line from games.txt, provision a game and write to the
     appropriate directory
 
@@ -148,11 +148,11 @@ def provision_game(line, cipher):
         #exit(1)
 
     # encrypt games
-    with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
-        plaintext = fo.read()
-    enc = cipher.encrypt(plaintext)
-    with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
-        fo.write(enc)
+#    with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
+#        plaintext = fo.read()
+#    enc = cipher.encrypt(plaintext)
+#    with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
+#        fo.write(enc)
 
     print("    %s -> %s" % (g_path, os.path.join(gen_path, f_out_name)))
 
@@ -183,7 +183,7 @@ def main():
         print("Couldn't open file %s" % (args.games))
         exit(2)
 
-    cipher = gen_cipher(content)
+#    cipher = gen_cipher(content)
 
     subprocess.check_call("mkdir -p %s" % (gen_path), shell=True)
 
@@ -191,7 +191,7 @@ def main():
 
     # Provision each line in the games file
     for line in f_games:
-        provision_game(line, cipher)
+        provision_game(line)
 
     print("Done Provision Games")
 
