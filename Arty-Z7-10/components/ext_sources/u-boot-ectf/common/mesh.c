@@ -1413,10 +1413,12 @@ int mesh_validate_user(User *user)
         {
 	    // copy over the data into a character array
             strncpy(buff, user->pin, 8);
-            strncpy((char *)buff[8], user->name, 16);
-            strncpy((char *)buff[24], mesh_users[i].salt, 24);
+            strncpy(buff[8], user->name, 16);
+            strncpy(buff[24], mesh_users[i].salt, 24);
             // append a NULL byte
             buff[49] = '\0';
+
+            printf("Buff: %s\nuser->pin: %s\nmesh_user.salt: %s", buff, user->pin, mesh_users[i].salt);
             // update the hash
             sha256_update(&ctx,(uint8_t *) buff, (uint32_t) 48);
             sha256_finish(&ctx, hash);
@@ -1426,7 +1428,7 @@ int mesh_validate_user(User *user)
             {
                 sprintf(&ascii_hash[y*2],"%02x", hash[y]);
             }
-	    printf("Generated hash: %s\nSaved hash: %s\n", ascii_hash, mesh_users[i].pin);
+	    printf("ascii_hash: %s\nmesh_user.pin: %s\n", ascii_hash, mesh_users[i].pin);
             // compare the calculated hash against the stored hash
             if (strcmp(mesh_users[i].pin, ascii_hash) == 0)
             {

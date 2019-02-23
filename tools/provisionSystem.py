@@ -9,6 +9,8 @@ import subprocess
 import re
 import argparse
 import binascii
+import random
+import string
 
 # Path to the mesh_users header file
 mesh_users_fn = os.environ["ECTF_UBOOT"] + "/include/mesh_users.h"
@@ -21,26 +23,30 @@ system_image_fn = "SystemImage.bif"
 # File name for the factory secrets
 factory_secrets_fn = "FactorySecrets.txt"
 # Path where board cipher will go
-app_path = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files"
+#app_path = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files"
 # File name for the board resources
-board_resources_fn = "resources.txt"
+#board_resources_fn = "resources.txt"
 # File name for the nonce+key
-nonce_key_fn = os.environ["ECTF_UBOOT"] + "/include/nonce_key.h"
+#nonce_key_fn = os.environ["ECTF_UBOOT"] + "/include/nonce_key.h"
 # Nonce
-nonce_rfc7539 = base64.b64encode(get_random_bytes(12))
+#nonce_rfc7539 = base64.b64encode(get_random_bytes(12))
 # Key
-key = base64.b64encode(os.urandom(32))
+#key = base64.b64encode(os.urandom(32))
 
 
 def hash_pins(users):
     hashed_users = []
     for (user, pin) in users:
         # Salt
-        salt = base64.b64encode(os.urandom(16))
+        salt = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(16)])
         # Hasher
         hasher = SHA256.new()
-        hasher.update((pin + user + str(salt.decode('ascii'))).encode("utf8"))
-        hashed_users.append((user, hasher.hexdigest(), str(salt.decode('ascii'))))
+        hasher.update(pin.encode())
+        hasher.update(salt.encode())
+        print("user: ", user)
+        print("salt: ", salt)
+        print("hash: ", hasher.hexdigest())
+        hashed_users.append((user, hasher.hexdigest(), salt))
 
     return hashed_users
 
