@@ -39,7 +39,7 @@ def hash_pins(users):
         salt = base64.b64encode(os.urandom(16))
         # Hasher
         hasher = SHA256.new()
-        hasher.update(binascii.a2b_base64(pin + user + str(salt.decode('ascii'))))
+        hasher.update((pin + user + str(salt.decode('ascii'))).encode("utf8"))
         hashed_users.append((user, hasher.hexdigest(), str(salt.decode('ascii'))))
 
     return hashed_users
@@ -200,6 +200,7 @@ def write_factory_secrets(f):
     f.write(nonce_rfc7539.decode('ascii')+"\n")
     f.write(key.decode('ascii'))
 
+
 def write_nonce_key(f):
     """Write the nonce+key file
 
@@ -228,6 +229,7 @@ static struct nonce_key keys[] = {{""")
 
 #endif /* __MESH_NONCEKEY_H__ */
 """)
+
 
 def main():
     # Argument parsing
@@ -330,7 +332,7 @@ def main():
     f_factory_secrets.close()
     print("Generated FactorySecrets file: %s" % (os.path.join(gen_path, factory_secrets_fn)))
 
-    #write nonce+key
+    # write nonce+key
     write_nonce_key(f_nonce_key)
     f_nonce_key.close
     print("Generated NONCE_KEY file: %s" % nonce_key_fn)
