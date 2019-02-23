@@ -87,8 +87,8 @@ def write_mesh_users_h(h_users, f):
 
 struct MeshUser {{
     char username[16];
-    char pin[64];
-    char salt[24];
+    char pin[64+1];
+    char salt[16+1];
 }};
 
 static struct MeshUser mesh_users[] = {{
