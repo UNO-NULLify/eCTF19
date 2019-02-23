@@ -1400,7 +1400,9 @@ int mesh_validate_user(User *user)
      * provisioned with the board. This is read from the
      * mesh_users.h header file.
      * Retruns 0 on success and 1 on failure. */
-    char buff[50];
+    uint8_t* buff;
+
+
     unsigned char hash[SHA256_DIGEST_LENGTH];
     char ascii_hash[SHA256_DIGEST_LENGTH];
     sha256_context ctx;
@@ -1411,31 +1413,31 @@ int mesh_validate_user(User *user)
 	printf("\nUser: %s\n", mesh_users[i].username);
         if (strcmp(mesh_users[i].username, user->name) == 0)
         {
-	    // copy over the data into a character array
-            strncpy(buff, user->pin, 8);
-            strncpy(buff[8], user->name, 16);
-            strncpy(buff[24], mesh_users[i].salt, 24);
+            // copy over the data into a character array
+            buff = malloc(strlen(user->pin)+strlen(mesh_users[i].salt)+1);
+            buff[0] = '\0';
+            strcat(buff,user->pin);
+            strcat(buff,mesh_users[i].salt);
             // append a NULL byte
-            buff[49] = '\0';
-
-            printf("Buff: %s\nuser->pin: %s\nmesh_user.salt: %s", buff, user->pin, mesh_users[i].salt);
+            printf("mesh_user.salt: %s\nBuff: %s\n", mesh_users[i].salt, buff);
             // update the hash
             sha256_update(&ctx,(uint8_t *) buff, (uint32_t) 48);
             sha256_finish(&ctx, hash);
-
 
             for(int y = 0; y < 32; y++)
             {
                 sprintf(&ascii_hash[y*2],"%02x", hash[y]);
             }
-	    printf("ascii_hash: %s\nmesh_user.pin: %s\n", ascii_hash, mesh_users[i].pin);
+	        printf("ascii_hash: %s\nmesh_user.pin: %s\n", ascii_hash, mesh_users[i].pin);
             // compare the calculated hash against the stored hash
             if (strcmp(mesh_users[i].pin, ascii_hash) == 0)
             {
-	      printf("Hashes matched\n");
-              return 0;
+	            printf("Hashes matched\n");
+	            free(buff);
+                return 0;
             }
-	    printf("Hashes did not match\n");
+	        printf("Hashes did not match\n");
+	        free(buff);
             return 1;
         }
     }
