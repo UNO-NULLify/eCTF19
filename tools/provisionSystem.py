@@ -26,10 +26,10 @@ factory_secrets_fn = "FactorySecrets.txt"
 nonce_key_fn = os.environ["ECTF_UBOOT"] + "/include/nonce_key.h"
 # Nonce
 nonce_rfc7539 = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(12)])
-print("HERE IS YOUR NONCE_RFC7539: %s\n", nonce_rfc7539)
+print("HERE IS YOUR NONCE_RFC7539: ", nonce_rfc7539)
 # Key
 key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
-print("HERE IS YOUR KEY: %s\n", key)
+print("HERE IS YOUR KEY:", key)
 
 
 def hash_pins(users):

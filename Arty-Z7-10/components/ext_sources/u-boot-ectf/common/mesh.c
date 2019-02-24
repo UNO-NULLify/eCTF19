@@ -857,8 +857,8 @@ int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     struct chacha20_context ctx;
     uint8_t* game_buffer;
     loff_t game_size;
-    uint8_t nonce;
-    uint8_t key;
+    uint8_t * nonce;
+    uint8_t * key;
 
     // get the size of the game
     game_size = mesh_size_ext4(game_name);
