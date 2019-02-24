@@ -875,13 +875,13 @@ int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     // Decrypt the game
     // What is the counter?
     chacha20_init_context(&ctx, key, nonce, 32);
-    chacha20_xor(&ctx, game_buffer, game_size);
+    chacha20_xor(&ctx, outputBuffer, game_size);
 
     // Memcpy the buffer to a returnable pointer.
-    memcpy(outputBuffer, game_buffer, game_size);
+    //memcpy(outputBuffer, outputBuffer, game_size);
 
     // Free up some memory
-    free(game_buffer);
+    free(outputBuffer);
     return 0;
 }
 
