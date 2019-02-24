@@ -304,6 +304,11 @@ def main():
     write_mesh_default_h(args.DEFAULT_FILE, default_games_hpath)
     print("Generated default_games.h file")
 
+    # write nonce+key
+    write_nonce_key(f_nonce_key)
+    f_nonce_key.close
+    print("Generated NONCE_KEY file: %s" % nonce_key_fn)
+
     # build MES.bin
     build_images()
 
@@ -316,11 +321,6 @@ def main():
     write_factory_secrets(f_factory_secrets)
     f_factory_secrets.close()
     print("Generated FactorySecrets file: %s" % (os.path.join(gen_path, factory_secrets_fn)))
-
-    # write nonce+key
-    write_nonce_key(f_nonce_key)
-    f_nonce_key.close
-    print("Generated NONCE_KEY file: %s" % nonce_key_fn)
 
     exit(0)
 
