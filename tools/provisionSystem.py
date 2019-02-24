@@ -211,12 +211,13 @@ def write_nonce_key(f):
 #ifndef __MESH_NONCEKEY_H__
 #define __MESH_NONCEKEY_H__
 
-struct nonce_key {{
-    char NONCE[12];
-    char KEY[32];
-}};
+struct nonce_key {
+    char NONCE[12+1];
+    char KEY[32+1];
+};
 
-static struct nonce_key keys[] = {{""")
+static struct nonce_key keys = {
+""")
     data = '    {.NONCE="%s", .KEY="%s"},\n' % (nonce_rfc7539, key)
     f.write(data)
     f.write("""
