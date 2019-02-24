@@ -12,7 +12,7 @@
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
-#include <chacha20.h>
+#include <chacha20.c>
 #include <nonce_key.h>
 #include <os.h>
 
@@ -856,8 +856,8 @@ Skeleton for now
 int mesh_decrypt_game(char *game_name, char *outputBuffer){
     struct chacha20_context ctx;
     loff_t game_size;
-    uint8_t * nonce;
-    uint8_t * key;
+    char * nonce;
+    char * key;
 
     // get the size of the game
     game_size = mesh_size_ext4(game_name);
@@ -875,7 +875,7 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     // Decrypt the game
     // What is the counter?
     chacha20_init_context(&ctx, key, nonce, 32);
-    chacha20_xor(&ctx, outputBuffer, game_size);
+    chacha20_xor(&ctx, (uint8_t *) outputBuffer, game_size);
 
     // Memcpy the buffer to a returnable pointer.
     //memcpy(outputBuffer, outputBuffer, game_size);
