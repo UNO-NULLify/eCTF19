@@ -870,6 +870,9 @@ int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     nonce = keys.NONCE;
     key = keys.KEY;
 
+    printf("Here is your key, %s\n", key);
+    printf("Here is your nonce, %s\n", nonce);
+
     // Decrypt the game
     // What is the counter?
     chacha20_init_context(&ctx, key, nonce, 32);

@@ -26,8 +26,10 @@ factory_secrets_fn = "FactorySecrets.txt"
 nonce_key_fn = os.environ["ECTF_UBOOT"] + "/include/nonce_key.h"
 # Nonce
 nonce_rfc7539 = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(12)])
+print("HERE IS YOUR NONCE_RFC7539: %s\n", nonce_rfc7539)
 # Key
 key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+print("HERE IS YOUR KEY: %s\n", key)
 
 
 def hash_pins(users):
@@ -274,8 +276,8 @@ def main():
     try:
         f_nonce_key = open(nonce_key_fn, "w+")
     except Exception as e:
-       print("Unable to open generated NONCE_KEY header file: %s" % (e,))
-       exit(2)
+        print("Unable to open generated NONCE_KEY header file: %s" % (e,))
+        exit(2)
 
     # Read in all of the user information into a list and strip newlines
     lines = [line.rstrip('\n') for line in f_mesh_users_in]
