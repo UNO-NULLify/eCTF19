@@ -881,7 +881,7 @@ int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     //memcpy(outputBuffer, outputBuffer, game_size);
 
     // Free up some memory
-    free(outputBuffer);
+    free((char *)outputBuffer);
     return 0;
 }
 
