@@ -855,7 +855,6 @@ Skeleton for now
 */
 int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     struct chacha20_context ctx;
-    uint8_t* game_buffer;
     loff_t game_size;
     uint8_t * nonce;
     uint8_t * key;
@@ -863,8 +862,8 @@ int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     // get the size of the game
     game_size = mesh_size_ext4(game_name);
 
-    game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
-    mesh_read_ext4(game_name, (char *) game_buffer, game_size);
+    //game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
+    mesh_read_ext4(game_name, (char *) outputBuffer, game_size);
 
     // Key and Nonce can be accessed via keys.KEY and keys.Nonce
     nonce = NONCE;
@@ -904,7 +903,8 @@ int mesh_read_hash(char *game_name){
 
     // read the game into a buffer
     char* hash_buffer = (char*) malloc((size_t) (hash_size + 1));
-    mesh_read_ext4(hash_fn, hash_buffer, hash_size);
+    mesh_decrypt_game(hash_fn, hash_buffer);
+    //mesh_read_ext4(hash_fn, hash_buffer, hash_size);
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
@@ -952,7 +952,8 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     // read the game into a buffer
     uint8_t * game_buffer;
     game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
-    mesh_read_ext4(game_name, (char *) game_buffer, game_size);
+    mesh_decrypt_game(game_name, (char *) game_buffer);
+    //mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
     // hash the buffer
     unsigned char hash[SHA256_DIGEST_LENGTH];
@@ -1178,8 +1179,9 @@ void mesh_get_game_header(Game *game, char *game_name){
 
     // read the game into a buffer
     char* game_buffer = (char*) malloc(game_size + 1);
-    mesh_read_ext4(game_name, game_buffer, game_size);
-
+    mesh_decrypt_game(game_name, game_buffer);
+    //mesh_read_ext4(game_name, game_buffer, game_size);
+    mesh_decrypt_game(game_name, game_buffer);
     // get the version, located on the first line. will always be major.minor
 
     // remove the string "version"
