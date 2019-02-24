@@ -950,7 +950,7 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     game_size = mesh_size_ext4(game_name);
 
     // read the game into a buffer
-    uint8_t * game_buffer;
+    char * game_buffer;
     game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
     mesh_decrypt_game(game_name, (char *) game_buffer);
     //mesh_read_ext4(game_name, (char *) game_buffer, game_size);
