@@ -853,7 +853,7 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /*
 Skeleton for now
 */
-int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
+int mesh_decrypt_game(char *game_name, char *outputBuffer){
     struct chacha20_context ctx;
     loff_t game_size;
     uint8_t * nonce;
@@ -863,7 +863,7 @@ int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     game_size = mesh_size_ext4(game_name);
 
     //game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
-    mesh_read_ext4(game_name, (char *) outputBuffer, game_size);
+    mesh_read_ext4(game_name, outputBuffer, game_size);
 
     // Key and Nonce can be accessed via keys.KEY and keys.Nonce
     nonce = NONCE;
@@ -875,13 +875,13 @@ int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     // Decrypt the game
     // What is the counter?
     chacha20_init_context(&ctx, key, nonce, 32);
-    chacha20_xor(&ctx, (char *) outputBuffer, game_size);
+    chacha20_xor(&ctx, outputBuffer, game_size);
 
     // Memcpy the buffer to a returnable pointer.
     //memcpy(outputBuffer, outputBuffer, game_size);
 
     // Free up some memory
-    free((char *)outputBuffer);
+    free(outputBuffer);
     return 0;
 }
 
@@ -1181,7 +1181,7 @@ void mesh_get_game_header(Game *game, char *game_name){
     char* game_buffer = (char*) malloc(game_size + 1);
     mesh_decrypt_game(game_name, game_buffer);
     //mesh_read_ext4(game_name, game_buffer, game_size);
-    mesh_decrypt_game(game_name, game_buffer);
+
     // get the version, located on the first line. will always be major.minor
 
     // remove the string "version"
