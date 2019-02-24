@@ -594,7 +594,7 @@ void mesh_loop(void) {
     while(1)
     {
         if (mesh_login(&user)) {
-            udelay(5000);
+            udelay(500000);
             continue;
         }
 
