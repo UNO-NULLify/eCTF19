@@ -13,6 +13,7 @@
 #include <mesh_users.h>
 #include <default_games.h>
 #include <chacha20.h>
+#include <nonce_key.h>
 #include <os.h>
 
 #define MESH_TOK_BUFSIZE 64
@@ -866,12 +867,12 @@ int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
     // Key and Nonce can be accessed via keys.KEY and keys.Nonce
-    nonce = nonce_key.NONCE;
-    key = nonce_key.KEY;
+    nonce = keys.NONCE;
+    key = keys.KEY;
 
     // Decrypt the game
     // What is the counter?
-    chacha20_init_context(&ctx, key, nonce, counter);
+    chacha20_init_context(&ctx, key, nonce, 32);
     chacha20_xor(&ctx, game_buffer, game_size);
 
     // Memcpy the buffer to a returnable pointer.
