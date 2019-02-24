@@ -78,10 +78,10 @@ def write_mesh_users_h(h_users, f):
 *
 */
 
-#ifndef __MESH_USERS_H__
-#define __MESH_USERS_H__
+# ifndef __MESH_USERS_H__
+# define __MESH_USERS_H__
 
-#define NUM_MESH_USERS {num_users}
+# define NUM_MESH_USERS {num_users}
 
 struct MeshUser {{
     char username[16];
@@ -89,6 +89,10 @@ struct MeshUser {{
     char salt[16+1];
 }};
 
+struct nonce_key {
+    char nonce[12+1];
+    char key[32+1];
+};
 static struct MeshUser mesh_users[] = {{
 """.format(num_users=len(h_users)))
 
@@ -98,9 +102,13 @@ static struct MeshUser mesh_users[] = {{
 
     f.write("""
 };
-
-#endif /* __MESH_USERS_H__ */
+static struct nonce_key nonce_keys;
 """)
+    data = 'nonce_keys.nonce="%s";\nnonce_keys.key="%s";\n' % (nonce_rfc7539, key)
+    f.write(data)
+    f.write("""
+# endif /* __MESH_USERS_H__ */
+"""")
 
 
 def write_mesh_default_h(default_txt_path, header_path):
@@ -116,14 +124,14 @@ def write_mesh_default_h(default_txt_path, header_path):
 
     # Base string to write
     s = """
-/*
+/ *
 * This is an automatically generated file by provisionSystem.py
 *
 *
-*/
+* /
 
-#ifndef __MESH_DEFAULT_TXT_H__
-#define __MESH_DEFAULT_TXT_H__
+# ifndef __MESH_DEFAULT_TXT_H__
+# define __MESH_DEFAULT_TXT_H__
 
 """
 
@@ -131,7 +139,7 @@ def write_mesh_default_h(default_txt_path, header_path):
     s += "#define NUM_DEFAULT_GAMES %s\n" % sum(1 for line in lines if line)
     # For each line, write the game information
     s += """
-static char* default_games[] = {
+static char * default_games[] = {
 """
     for line in lines:
         # Ignore blank lines
@@ -152,7 +160,7 @@ static char* default_games[] = {
     s += """
 };
 
-#endif /* __MESH_DEFAULT_TXT_H__ */
+# endif /* __MESH_DEFAULT_TXT_H__ */
 """
     with open(header_path, 'w') as f:
         f.write(s)
@@ -177,12 +185,12 @@ def write_system_image_bif(f):
     """
     f.write("""
 MITRE_Entertainment_System: {{
-    [bootloader] /home/vagrant/MES/tools/files/zynq_fsbl.elf
+    [bootloader] / home/vagrant/MES/tools/files/zynq_fsbl.elf
     // Participants Bitstream
     {path}/Arty-Z7-10/images/linux/Arty_Z7_10_wrapper.bit
     // Paritcipants Images
     {path}/Arty-Z7-10/images/linux/u-boot.elf
-    [load=0x10000000] {path}/Arty-Z7-10/images/linux/image.ub
+    [load= 0x10000000] {path}/Arty-Z7-10/images/linux/image.ub
 }}
     """.format(path=os.environ["ECTF_PETALINUX"]))
 
@@ -202,19 +210,18 @@ def write_nonce_key(f):
     f: open file to write the bif to
     """
     f.write("""
-/*
+/ *
 * This is an automatically generated file by provisionSystem.py
 *
 *
-*/
+* /
 
-#ifndef __MESH_NONCEKEY_H__
-#define __MESH_NONCEKEY_H__
+# ifndef __MESH_NONCEKEY_H__
+# define __MESH_NONCEKEY_H__
 
 struct nonce_key {
     char nonce[12+1];
-    char key[32+1];
-};
+    char key[32+1]; };
 
 static struct nonce_key nonce_keys;
 """)
@@ -222,7 +229,7 @@ static struct nonce_key nonce_keys;
     f.write(data)
     f.write("""
 
-#endif /* __MESH_NONCEKEY_H__ */
+# endif /* __MESH_NONCEKEY_H__ */
 """)
 
 
