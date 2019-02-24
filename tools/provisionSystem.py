@@ -108,7 +108,7 @@ static struct nonce_key nonce_keys;
     f.write(data)
     f.write("""
 # endif /* __MESH_USERS_H__ */
-"""")
+""")
 
 
 def write_mesh_default_h(default_txt_path, header_path):
