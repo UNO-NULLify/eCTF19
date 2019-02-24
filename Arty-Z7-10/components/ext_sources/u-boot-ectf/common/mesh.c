@@ -867,8 +867,8 @@ int mesh_decrypt_game(char *game_name, uint8_t outputBuffer){
     mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
     // Key and Nonce can be accessed via keys.KEY and keys.Nonce
-    nonce = nonce_keys.nonce;
-    key = nonce_keys.key;
+    nonce = NONCE;
+    key = KEY;
 
     printf("Here is your key, %s\n", key);
     printf("Here is your nonce, %s\n", nonce);
