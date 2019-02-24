@@ -207,23 +207,11 @@ def write_nonce_key(f):
 *
 *
 */
-
-#ifndef __MESH_NONCEKEY_H__
-#define __MESH_NONCEKEY_H__
-
-struct nonce_key {
-    char nonce[12+1];
-    char key[32+1];
-};
-
-static struct nonce_key nonce_keys;
 """)
-    data = 'nonce_keys.nonce="%s";\nnonce_keys.key="%s";\n' % (nonce_rfc7539, key)
+    data = '#define NONCE="%s";\n' % (nonce_rfc7539)
     f.write(data)
-    f.write("""
-
-#endif /* __MESH_NONCEKEY_H__ */
-""")
+    data = '#define KEY="%s";\n' % (key)
+    f.write(data)
 
 
 def main():
