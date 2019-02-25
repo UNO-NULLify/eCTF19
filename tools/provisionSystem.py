@@ -100,9 +100,9 @@ static struct MeshUser mesh_users[] = {{
 
 #endif /* __MESH_USERS_H__ */
 """)
-    data = '#define NONCE "%s";\n' % nonce
+    data = '#define NONCE "%s"\n' % nonce
     f.write(data)
-    data = '#define KEY "%s";\n' % key
+    data = '#define KEY "%s"\n' % key
     f.write(data)
 
 
