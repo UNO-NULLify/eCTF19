@@ -12,7 +12,7 @@
 #include <mesh.h>
 #include <mesh_users.h>
 #include <default_games.h>
-#include <aes.h>
+#include <aes.c>
 #include <nonce_key.h>
 #include <os.h>
 
