@@ -19,8 +19,8 @@ block_size = 65536
 
 def gen_cipher(content):
     content = [x.strip() for x in content]
-    nonce = content[0]
-    key = content[1]
+    nonce = content[0].encode()
+    key = content[1].encode()
     return AES.new(key, AES.MODE_CTR, nonce=nonce)
 
 
