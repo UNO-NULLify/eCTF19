@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-from Crypto.Cipher import ChaCha20
-from Crypto.Random import get_random_bytes
 from Crypto.Hash import SHA256
 import os
 import base64
@@ -25,10 +23,11 @@ factory_secrets_fn = "FactorySecrets.txt"
 # File name for the nonce+key
 nonce_key_fn = os.environ["ECTF_UBOOT"] + "/include/nonce_key.h"
 # Nonce
-nonce_rfc7539 = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(12)])
-print("HERE IS YOUR NONCE_RFC7539: ", nonce_rfc7539)
+nonce = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(8)])
 # Key
 key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+
+print("HERE IS YOUR nonce: ", nonce)
 print("HERE IS YOUR KEY:", key)
 
 
@@ -101,9 +100,9 @@ static struct MeshUser mesh_users[] = {{
 
 #endif /* __MESH_USERS_H__ */
 """)
-    data = '#define NONCE "%s";\n' % (nonce_rfc7539)
+    data = '#define NONCE "%s";\n' % nonce
     f.write(data)
-    data = '#define KEY "%s";\n' % (key)
+    data = '#define KEY "%s";\n' % key
     f.write(data)
 
 
@@ -196,7 +195,7 @@ def write_factory_secrets(f):
 
     f: open file to write the factory secrets to
     """
-    f.write(nonce_rfc7539+"\n")
+    f.write(nonce+"\n")
     f.write(key)
 
 
@@ -212,7 +211,7 @@ def write_nonce_key(f):
 *
 */
 """)
-    data = '#define NONCE="%s";\n' % (nonce_rfc7539)
+    data = '#define NONCE="%s";\n' % (nonce)
     f.write(data)
     data = '#define KEY="%s";\n' % (key)
     f.write(data)

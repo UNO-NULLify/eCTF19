@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from Crypto.PublicKey import RSA
-from Crypto.Cipher import ChaCha20
+from Crypto.Cipher import AES
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 import base64
@@ -21,7 +21,7 @@ def gen_cipher(content):
     content = [x.strip() for x in content]
     nonce = content[0]
     key = content[1]
-    return ChaCha20.new(key=key, nonce=nonce)
+    return AES.new(key, AES.MODE_CTR, nonce=nonce)
 
 
 def provision_game(line, cipher):
