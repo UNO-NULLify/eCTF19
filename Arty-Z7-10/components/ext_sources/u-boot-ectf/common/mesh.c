@@ -856,7 +856,7 @@ Skeleton for now
 int mesh_decrypt_game(char *game_name, char *outputBuffer){
     struct AES_ctx ctx;
     loff_t game_size;
-    uint8_t* nonce = calloc(16,sizeof(unit8_t));
+    uint8_t* nonce = calloc(16,sizeof(uint8_t));
     char * key;
 
     // get the size of the game
