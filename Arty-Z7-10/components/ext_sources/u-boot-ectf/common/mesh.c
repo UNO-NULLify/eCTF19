@@ -854,7 +854,7 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 Skeleton for now
 */
 int mesh_decrypt_game(char *game_name, char *outputBuffer){
-    struct chacha20_context ctx;
+    struct AES_ctx ctx;
     loff_t game_size;
     char * nonce;
     char * key;
@@ -874,14 +874,11 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
 
     // Decrypt the game
     // What is the counter?
-    chacha20_init_context(&ctx, key, nonce, 32);
-    chacha20_xor(&ctx, (uint8_t *) outputBuffer, game_size);
+    AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
+    AES_CTR_xcrypt_buffer(&ctx, (uint8_t *) outputBuffer, game_size);
 
     // Memcpy the buffer to a returnable pointer.
     //memcpy(outputBuffer, outputBuffer, game_size);
-
-    // Free up some memory
-    free(outputBuffer);
     return 0;
 }
 
