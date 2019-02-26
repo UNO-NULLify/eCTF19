@@ -16,7 +16,7 @@ void main(int argc, char *const argv[])
   //Grab the arguments
   path_to_game = argv[1];
   key = argv[2];
-  nonce = argv[3];
+  pre_nonce = argv[3];
 
   FILE * game = fopen(path_to_game, "rb");
   // get the size of the game
@@ -25,12 +25,12 @@ void main(int argc, char *const argv[])
   // Use ftell to grab the size of the game file at the end
   game_size = ftell(game);
   // set the buffer to correct size
-  buffer = (char *) calloc(game_size, sizeof(char));
+  game_buffer = (char *) calloc(game_size, sizeof(char));
   // reset the file pointer
   fseek(game, 0L, SEEK_SET);
 
   // Insert the NONCE into the nonce buffer that is 16 bytes and keeps the last 8 bytes NULL <-- we should change this
-  strncat(nonce, NONCE, 8);
+  strncat(nonce, pre_nonce, 8);
 
   printf("Here is your key, %s\n", key);
   printf("Here is your nonce, %s\n", nonce);
