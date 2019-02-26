@@ -13,9 +13,9 @@ void main(int argc, char *const argv[])
 
 
   //Grab the arguments
-  path_to_game = argv[1]
-  key = argv[2]
-  nonce = argv[3]
+  path_to_game = argv[1];
+  key = argv[2];
+  nonce = argv[3];
 
   FILE * game = fopen(path_to_game, "rb");
   // get the size of the game
