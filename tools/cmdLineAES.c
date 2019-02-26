@@ -8,16 +8,17 @@ int main(int argc, char *const argv[])
   struct AES_ctx ctx;
   uint32_t  game_size;
   char * path_to_game;
-  char * key;
-  char * pre_nonce;
-  uint8_t* nonce = calloc(16,sizeof(uint8_t));
+  char * key = calloc(32, sizeof(char));
+  char * pre_nonce = calloc(8, sizeof(char));
+  uint8_t * nonce = calloc(16,sizeof(uint8_t));
   char * game_buffer;
 
 
   //Grab the arguments
   path_to_game = argv[1];
-  key = argv[2];
-  pre_nonce = argv[3];
+  memcpy(key, arg[2], 32);
+  memcpy(pre_nonce, argv[3], 8);
+
 
   FILE * game = fopen(path_to_game, "rb");
   // get the size of the game
@@ -35,13 +36,14 @@ int main(int argc, char *const argv[])
 
   printf("Here is your key, %s\n", key);
   printf("Here is your nonce, %s\n", nonce);
+  printf("Here is the path to the game, %s\n", path_to_game);
 
   // Initialize the ctx
   AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
   // Decrypt the game
   AES_CTR_xcrypt_buffer(&ctx, (uint8_t *) game_buffer, game_size);
 
-  // write the game buffer out to a file.  File name ends in _enc for now.
+  // write the game buffer out to a file.  File name is _enc for now.
 
   // create a string of size path_to_game + 5 to include "_enc" and null terminator
   char * encrypted_game = calloc(strlen(path_to_game+5), sizeof(char));
