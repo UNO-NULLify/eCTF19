@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void main(int argc, char *const argv[])
+int main(int argc, char *const argv[])
 {
   // do the AES
   struct AES_ctx ctx;
   uint32_t  game_size;
   char * path_to_game;
   char * key;
+  char * pre_nonce;
   uint8_t* nonce = calloc(16,sizeof(uint8_t));
-  char * buffer;
+  char * game_buffer;
 
 
   //Grab the arguments
