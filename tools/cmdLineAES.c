@@ -1,4 +1,4 @@
-#include <aes.c>
+#include "./aes.c"
 #include <stdlib.h>
 
 void main(int argc, char *const argv[])
