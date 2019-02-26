@@ -1,4 +1,3 @@
--*- coding: utf-8 -*-
 #!/usr/bin/env python3
 
 from Crypto.PublicKey import RSA
@@ -162,7 +161,7 @@ def provision_game(line, cipher):
 
     except Exception as e:
         print("NOPENOPE: ", e)
-    
+
     #with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
     #    plaintext = fo.read()
     #enc = cipher.encrypt(plaintext)
