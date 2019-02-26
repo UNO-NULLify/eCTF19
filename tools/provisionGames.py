@@ -152,12 +152,12 @@ def provision_game(line):
     # encrypt games
     # 1. GCC the cmdLineAES.c with
     try:
-        subprocess.check_call("ls -al")
+        subprocess.check_call("gcc -o cmdAES cmdLineAES.c", shell=True)
     except Exception as e:
         print("NOPE: ", e)
     # 2. Create Subprocess with arguments
     try:
-        subprocess.check_call("./cmdAES %s %s %s" % (gen_path, "6B1H8Cpvshruje16iaTThvkqFb2seX8D", "tadUrdLIwuBQ"), shell=False)
+        subprocess.check_call("./cmdAES %s %s %s" % (gen_path, "6B1H8Cpvshruje16iaTThvkqFb2seX8D", "tadUrdLIwuBQ"), shell=True)
 
     except Exception as e:
         print("NOPENOPE: ", e)
