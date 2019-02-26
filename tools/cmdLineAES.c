@@ -40,7 +40,7 @@ int main(int argc, char *const argv[])
 
   //read the file  into the buffer
   fread(game_buffer, sizeof(char), game_size, game);
-  flcose(game);
+  fclose(game);
 
   // Initialize the ctx
   AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
