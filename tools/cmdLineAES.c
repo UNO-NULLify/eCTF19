@@ -16,7 +16,7 @@ int main(int argc, char *const argv[])
 
   //Grab the arguments
   path_to_game = argv[1];
-  memcpy(key, arg[2], 32);
+  memcpy(key, argv[2], 32);
   memcpy(pre_nonce, argv[3], 8);
 
 
