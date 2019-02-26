@@ -24,7 +24,7 @@ def gen_cipher(content):
     return AES.new(key, AES.MODE_CTR, nonce=nonce)
 
 
-def provision_game(line, cipher):
+def provision_game(line):
     """Given a line from games.txt, provision a game and write to the
     appropriate directory
 
@@ -197,7 +197,7 @@ def main():
         print("Couldn't open file %s" % (args.games))
         exit(2)
 
-    cipher = gen_cipher(content)
+#    cipher = gen_cipher(content)
 
     subprocess.check_call("mkdir -p %s" % (gen_path), shell=True)
 
@@ -205,7 +205,7 @@ def main():
 
     # Provision each line in the games file
     for line in f_games:
-        provision_game(line, cipher)
+        provision_game(line)
 
     print("Done Provision Games")
 
