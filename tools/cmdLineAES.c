@@ -38,6 +38,10 @@ int main(int argc, char *const argv[])
   printf("Here is your nonce, %s\n", nonce);
   printf("Here is the path to the game, %s\n", path_to_game);
 
+  //read the file  into the buffer
+  fread(game_buffer, sizeof(char), game_size, game);
+  flcose(game);
+
   // Initialize the ctx
   AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
   // Decrypt the game
@@ -53,6 +57,8 @@ int main(int argc, char *const argv[])
   FILE * enc_game = fopen(encrypted_game, "wb");
   // Write to the file
   fwrite(game_buffer, game_size, sizeof(char), enc_game);
+  // Close file
+  fclose(enc_game);
   // End of function
   return 0;
 }
