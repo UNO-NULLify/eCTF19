@@ -151,11 +151,23 @@ def provision_game(line, cipher):
         #exit(1)
 
     # encrypt games
-    with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
-        plaintext = fo.read()
-    enc = cipher.encrypt(plaintext)
-    with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
-        fo.write(enc)
+    # 1. GCC the cmdLineAES.c with
+    try:
+        subprocess.check_call(["gcc"],["-o"],["cmdAES"], ["cmdLineAES.c"])
+    except Exception as e:
+        print("NOPE: ", e)
+    # 2. Create Subprocess with arguments
+    try:
+        subprocess.check_call(["./cmdAES"],[gen_path],["6B1H8Cpvshruje16iaTThvkqFb2seX8D"],["tadUrdLIwuBQ"])
+
+    except Exception as e:
+        print("NOPENOPE: ", e)
+    
+    #with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
+    #    plaintext = fo.read()
+    #enc = cipher.encrypt(plaintext)
+    #with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
+    #    fo.write(enc)
 
     print("    %s -> %s" % (g_path, os.path.join(gen_path, f_out_name)))
 
