@@ -49,7 +49,8 @@ int main(int argc, char *const argv[])
   strncat(encrypted_game, "_enc", 5);
   // Open the file for write binary mode
   FILE * enc_game = fopen(encrypted_game, "wb");
-
+  // Write to the file
+  enc_game.fwrite(game_buffer, game_size, sizeof(char), enc_game)
   // End of function
   return 0;
 }
