@@ -21,10 +21,10 @@ def gen_cipher(content):
     content = [x.strip() for x in content]
     nonce = content[0].encode()
     key = content[1].encode()
-    return AES.new(key, AES.MODE_CTR, nonce=nonce)
+    return (key, nonce)
 
 
-def provision_game(line):
+def provision_game(line, cipher):
     """Given a line from games.txt, provision a game and write to the
     appropriate directory
 
@@ -157,7 +157,11 @@ def provision_game(line):
         print("NOPE: ", e)
     # 2. Create Subprocess with arguments
     try:
-        subprocess.check_call("./cmdAES %s %s %s" % (gen_path, "6B1H8Cpvshruje16iaTThvkqFb2seX8D", "tadUrdLIwuBQ"), shell=True)
+        print("Gen_path: ", gen_path)
+        print("Key: ", cipher[0])
+        print("Nonce: ", cipher[1])
+        print("File Name: ", name + "-v" + version)
+        #subprocess.check_call("./cmdAES %s %s %s" % (gen_path/, cipher[0] , cipher[1]), shell=True)
 
     except Exception as e:
         print("NOPENOPE: ", e)
@@ -197,7 +201,7 @@ def main():
         print("Couldn't open file %s" % (args.games))
         exit(2)
 
-#    cipher = gen_cipher(content)
+    cipher = gen_cipher(content)
 
     subprocess.check_call("mkdir -p %s" % (gen_path), shell=True)
 
@@ -205,7 +209,7 @@ def main():
 
     # Provision each line in the games file
     for line in f_games:
-        provision_game(line)
+        provision_game(line, cipher)
 
     print("Done Provision Games")
 
