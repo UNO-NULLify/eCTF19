@@ -50,10 +50,9 @@ int main(int argc, char *const argv[])
   // write the game buffer out to a file.  File name is _enc for now.
 
   // create a string of size path_to_game + 5 to include "_enc" and null terminator
-  char * encrypted_game = calloc(strlen(path_to_game+5), sizeof(char));
-  // append the _enc to the end of the file_name
+  char * encrypted_game = calloc(strlen(path_to_game), sizeof(char));
+  // append to the end the file_name
   strncat(encrypted_game, path_to_game, strlen(path_to_game));
-  strncat(encrypted_game, "_enc", 5);
   // Open the file for write binary mode
   FILE * enc_game = fopen(encrypted_game, "wb");
   // Write to the file
