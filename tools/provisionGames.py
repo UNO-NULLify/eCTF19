@@ -160,8 +160,8 @@ def provision_game(line, cipher):
         print("Gen_path: ", gen_path)
         print("Key: ", cipher[0])
         print("Nonce: ", cipher[1])
-        print("File Name: ", name + "-v" + version)
-        #subprocess.check_call("./cmdAES %s %s %s" % (gen_path/, cipher[0] , cipher[1]), shell=True)
+        print("File Name: ", f_out_name)
+        subprocess.check_call("./cmdAES %s %s %s" % (gen_path+"/"+f_out_name, cipher[0] , cipher[1]), shell=True)
 
     except Exception as e:
         print("NOPENOPE: ", e)
