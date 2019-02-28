@@ -1460,7 +1460,7 @@ char* mesh_read_line(int bufsize)
         // Read a character
         c = getc();
 
-        printf("I got the char: %s\n", c);
+        printf("I got the char: %c\n", c);
 
         if (position == bufsize - 1) {
             printf("\b");
