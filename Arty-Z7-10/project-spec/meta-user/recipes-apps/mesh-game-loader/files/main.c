@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include "./aes.c"
+#include "./mesh_users.h"
 
 // this is the path where the game will be written to
 #define GAMEPATH "/usr/bin/game"
