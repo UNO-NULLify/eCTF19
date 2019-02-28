@@ -39,7 +39,7 @@ def provision_game(line, cipher):
     # 5. Match the group (major.minor)
     key = RSA.generate(2048, e=65537)
     pub = key.publickey()
-    priv = key.exportKey('PEM') #
+    priv = key.exportKey('PEM')
 
     reg = r'^\s*([\w\/\-.\_]+)\s+([\w\-.\_]+)\s+(\d+\.\d+|\d+)((?:\s+\w+)+)'
     m = re.match(reg, line)
@@ -86,7 +86,7 @@ def provision_game(line, cipher):
     f_out.write(bytes("version:%s\n" % (version), "utf-8"))
     f_out.write(bytes("name:%s\n" % (name), "utf-8"))
     f_out.write(bytes("users:%s\n" % (" ".join(users)), "utf-8"))
-    #write pub key to header
+    # write pub key to header
     f_out.write(bytes("public_key:%s\n" % (pub), "utf-8"))
 
     # Read in the binary source
@@ -113,10 +113,10 @@ def provision_game(line, cipher):
         exit(1)
     try:
         hasher = hashlib.sha256()
-        #print(str(f_out.name))
+        # print(str(f_out.name))
         #path = str(os.path.join(gen_path, f_out.name))
-        #print(path)
-	    #hash game and save to file, tested locally
+        # print(path)
+        # hash game and save to file, tested locally
         with open(f_out.name, 'rb') as to_hash:
             buf = to_hash.read(block_size)
             while len(buf) > 0:
@@ -146,8 +146,8 @@ def provision_game(line, cipher):
 
     except Exception as e:
         print("Error, could write OR hash binary OR write signature to source: %s" % (e))
-        #f_out.close()
-        #exit(1)
+        # f_out.close()
+        # exit(1)
 
     # encrypt games
     # 1. GCC the cmdLineAES.c with
@@ -161,15 +161,16 @@ def provision_game(line, cipher):
         print("Key: ", cipher[0])
         print("Nonce: ", cipher[1])
         print("File Name: ", f_out_name)
-        subprocess.check_call("./cmdAES %s %s %s" % (gen_path+"/"+f_out_name, cipher[0] , cipher[1]), shell=True)
+        subprocess.check_call("./cmdAES %s %s %s" % (gen_path+"/"+f_out_name,
+                                                     cipher[0].decode('utf8'), cipher[1]).decode('utf8'), shell=True)
 
     except Exception as e:
         print("NOPENOPE: ", e)
 
-    #with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
+    # with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
     #    plaintext = fo.read()
     #enc = cipher.encrypt(plaintext)
-    #with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
+    # with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
     #    fo.write(enc)
 
     print("    %s -> %s" % (g_path, os.path.join(gen_path, f_out_name)))
