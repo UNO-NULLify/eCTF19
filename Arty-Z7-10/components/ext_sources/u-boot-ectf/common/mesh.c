@@ -893,7 +893,7 @@ int mesh_read_hash(char *game_name){
     int i;
 
     char* hash_fn = (char*) malloc(snprintf(NULL, 0, "%s.SHA256", game_name) + 1);
-    sprintf(hash_fn, "%s.SHA256", game_name);
+    sprintf(hash_fn, "%s.SHA256\0", game_name);
 
     // get file size of hash file
     hash_size = mesh_size_ext4(hash_fn);
@@ -922,13 +922,13 @@ int mesh_read_hash(char *game_name){
             }
             row.hash[i] = '\0';
             hash_buffer[i] = '\0';
-            printf("Here is my row.hash: %s", row.hash);
-            printf("Here is my hash_buffer: %s", hash_buffer);
+            printf("Here is my row.hash: %s\n", row.hash);
+            printf("Here is my hash_buffer: %s\n", hash_buffer);
             for(i = 0; i < 32; i++)
             {
                 sprintf(&hash_buffer[i*2],"%02x", row.hash[i]);
             }
-            printf("Here is my new hash_buffer: %s", hash_buffer);
+            printf("Here is my new hash_buffer: %s\n", hash_buffer);
             mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
 
             if (strcmp(row.hash, hash_buffer) == 0) {
@@ -949,13 +949,13 @@ int mesh_read_hash(char *game_name){
 int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     loff_t game_size;
     int i = 0;
+    char * game_buffer;
 
     // get the size of the game
     game_size = mesh_size_ext4(game_name);
-
     // read the game into a buffer
-    char * game_buffer;
     game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
+    //
     mesh_decrypt_game(game_name, (char *) game_buffer);
     //mesh_read_ext4(game_name, (char *) game_buffer, game_size);
 
@@ -1216,8 +1216,8 @@ void mesh_get_game_header(Game *game, char *game_name){
     users = strtok(NULL, "\n");
 
 
-    printf("got Major version %s", major_version_str);
-    printf("got Minor version %s", minor_version_str);
+    printf("got Major version %s\n", major_version_str);
+    printf("got Minor version %s\n", minor_version_str);
     // copy major and minor version into struct
     game->major_version = simple_strtoul(major_version_str, NULL, 10);
     game->minor_version = simple_strtoul(minor_version_str, NULL, 10);
