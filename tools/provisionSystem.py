@@ -13,7 +13,7 @@ import string
 # Path to the mesh_users header file
 mesh_users_fn = os.environ["ECTF_UBOOT"] + "/include/mesh_users.h"
 # Path to Petalinux mesh_users header file
-mesh_users_fn2 = "home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files/mesh_users.h"
+mesh_users_fn2 = "/home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files/mesh_users.h"
 # Path to the default_games header file
 default_games_hpath = os.environ["ECTF_UBOOT"] + "/include/default_games.h"
 # Path where generated files will go
