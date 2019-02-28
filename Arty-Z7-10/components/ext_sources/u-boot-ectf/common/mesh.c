@@ -922,12 +922,8 @@ int mesh_read_hash(char *game_name){
             }
             row.hash[i] = '\0';
             hash_buffer[i] = '\0';
-<<<<<<< HEAD
             printf("Here is my row.hash: %s", row.hash);
             printf("Here is my hash_buffer: %s", hash_buffer);
-=======
-            print("row.hash in mesh_read_hash: %s", row.hash);
->>>>>>> 3282be6c9450d9c3382cdda74317411238eafaaf
             mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
 
             if (strcmp(row.hash, hash_buffer) == 0) {
@@ -1007,11 +1003,7 @@ int mesh_check_hash(char *game_name){
         //checking shit
         printf("Ascii_hash: %s\n", ascii_hash);
         printf("Row.hash:  %s\n", row.hash);
-<<<<<<< HEAD
         puts("checking row.hash&ascii hash # 1\n");
-=======
-        puts("checking row.hash&ascii hash # 1");
->>>>>>> 3282be6c9450d9c3382cdda74317411238eafaaf
 
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
