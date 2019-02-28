@@ -1419,6 +1419,8 @@ int mesh_validate_user(User *user)
             {
                 sprintf(&ascii_hash[y*2],"%02x", hash[y]);
             }
+            printf("Ascii_hash: %s", ascii_hash);
+            printf("Mesh_users[%d]: %s", i, mesh_users[i].pin);
             // compare the calculated hash against the stored hash
             if (strcmp(mesh_users[i].pin, ascii_hash) == 0)
             {
