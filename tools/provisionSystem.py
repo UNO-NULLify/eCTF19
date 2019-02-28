@@ -258,17 +258,17 @@ def main():
         exit(2)
 
     try:
-        try:
-            f_mesh_users_out2 = open(mesh_users_fn2, "w+")
-        except Exception as e:
-            print("Unable to open generated users header file: %s" % (e,))
-            exit(2)
+        f_mesh_users_out2 = open(mesh_users_fn2, "w+")
+    except Exception as e:
+        print("Unable to open generated users header file: %s" % (e,))
+        exit(2)
 
     try:
         f_system_image = open(os.path.join(gen_path, system_image_fn), "w+")
     except Exception as e:
         print("Unable to open %s: %s" % (system_image_fn, e,))
         exit(2)
+        
     try:
         f_factory_secrets = open(os.path.join(gen_path, factory_secrets_fn), "w+")
     except Exception as e:
