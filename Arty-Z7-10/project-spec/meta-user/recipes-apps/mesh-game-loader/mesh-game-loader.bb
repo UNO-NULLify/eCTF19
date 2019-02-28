@@ -10,6 +10,9 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI = "file://main.c \
     	     file://Makefile \
            file://startup.sh \
+           file://aes.c \
+           file://aes.h \
+           file://mesh_users.h \
         "
 INITSCRIPT_NAME = "startup"
 INITSCRIPT_PARAMS = "defaults"

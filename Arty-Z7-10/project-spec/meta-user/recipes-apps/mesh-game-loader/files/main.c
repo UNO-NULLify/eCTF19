@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+#include "./aes.c"
 
 // this is the path where the game will be written to
 #define GAMEPATH "/usr/bin/game"
@@ -21,7 +22,7 @@
 // the size of the reserved memory in ram where uboot writes the game to
 #define MAPSIZE 0x400000
 
-// this funciton advances the 
+// this funciton advances the
 unsigned char *skip_line(unsigned char *buf){
     int i=0;
 
@@ -76,7 +77,7 @@ int main(int argc, char **argv)
     // dump first 3 header lines of the game so it is executable
     map_tmp = map;
     for (int i=0; i < 3; i++){
-        map_tmp = skip_line(map_tmp);   
+        map_tmp = skip_line(map_tmp);
     }
 
     // write the game
@@ -85,12 +86,11 @@ int main(int argc, char **argv)
     if (ferror(gameFp)) {
         printf("fwrite error.\r\n");
     }
-    
+
     printf("%d bytes written\r\n", written);
-    
+
 
     fclose(gameFp);
 
     return 1;
 }
-

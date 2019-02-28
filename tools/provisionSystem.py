@@ -12,6 +12,8 @@ import string
 
 # Path to the mesh_users header file
 mesh_users_fn = os.environ["ECTF_UBOOT"] + "/include/mesh_users.h"
+# Path to Petalinux mesh_users header file
+mesh_users_fn2 = "home/vagrant/MES/Arty-Z7-10/project-spec/meta-user/recipes-apps/mesh-game-loader/files/mesh_users.h"
 # Path to the default_games header file
 default_games_hpath = os.environ["ECTF_UBOOT"] + "/include/default_games.h"
 # Path where generated files will go
@@ -254,6 +256,14 @@ def main():
     except Exception as e:
         print("Unable to open generated users header file: %s" % (e,))
         exit(2)
+
+    try:
+        try:
+            f_mesh_users_out2 = open(mesh_users_fn2, "w+")
+        except Exception as e:
+            print("Unable to open generated users header file: %s" % (e,))
+            exit(2)
+
     try:
         f_system_image = open(os.path.join(gen_path, system_image_fn), "w+")
     except Exception as e:
@@ -290,6 +300,10 @@ def main():
     write_mesh_users_h(hashed_users, f_mesh_users_out)
     f_mesh_users_out.close()
     print("Generated mesh_users.h file: %s" % (mesh_users_fn))
+
+    write_mesh_users_h(hashed_users, f_mesh_users_out2)
+    f_mesh_users_out2.close()
+    print("Generated mesh_users.h file: %s" % (mesh_users_fn2))
 
     # Write the default games file
     write_mesh_default_h(args.DEFAULT_FILE, default_games_hpath)
