@@ -68,7 +68,8 @@ int main(int argc, char **argv)
         printf("Error opening game file\r\n");
         return 1;
     }
-
+    printf("Here is the NONCE: %s", NONCE);
+    printf("Here is the KEY: %s", KEY);
     printf("Launching game from reserved ddr. Game Size: %d\r\n", gameSize);
 
     // jump ahead to the reserved region for the game binary

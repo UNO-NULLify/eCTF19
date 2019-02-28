@@ -909,7 +909,8 @@ int mesh_read_hash(char *game_name){
         // the most space that we could need to store the full game name
         char *full_name = (char *) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
         full_name_from_short_name(full_name, &row);
-
+        printf("Game name: %s, full_name %s\n", game_name, full_name);
+        printf("User.name %s, row.user_name %s\n", user.name, row.user_name);
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
             strcmp(user.name, row.user_name) == 0) {
@@ -960,7 +961,7 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     sha256_finish(&ctx, hash);
 
     hash[i] = '\0';
-
+    printf("Here is the hash %s calcudated for the game %s\n", hash, game_name);
     memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
 
     //outputBuffer[SHA256_DIGEST_LENGTH] = '\0';
@@ -1002,6 +1003,9 @@ int mesh_check_hash(char *game_name){
         if (strcmp(game_name, full_name) == 0 &&
             strcmp(user.name, row.user_name) == 0) {
             free(full_name);
+
+            printf("ascii_hash: %s\n", ascii_hash);
+            printf("row.hash: %s\n", row.hash);
 
             if(strcmp(ascii_hash, row.hash) == 0) {
                 return 0;
@@ -1196,6 +1200,9 @@ void mesh_get_game_header(Game *game, char *game_name){
     char* users = strtok(NULL, ":");
     users = strtok(NULL, "\n");
 
+
+    printf("got Major version %s", major_version_str);
+    printf("got Minor version %s", minor_version_str);
     // copy major and minor version into struct
     game->major_version = simple_strtoul(major_version_str, NULL, 10);
     game->minor_version = simple_strtoul(minor_version_str, NULL, 10);
@@ -1419,8 +1426,6 @@ int mesh_validate_user(User *user)
             {
                 sprintf(&ascii_hash[y*2],"%02x", hash[y]);
             }
-            printf("Ascii_hash: %s", ascii_hash);
-            printf("Mesh_users[%d]: %s", i, mesh_users[i].pin);
             // compare the calculated hash against the stored hash
             if (strcmp(mesh_users[i].pin, ascii_hash) == 0)
             {
