@@ -1456,11 +1456,11 @@ char* mesh_read_line(int bufsize)
     int c;
 
     while (1) {
-        print("i'm in the while loop");
+        printf("i'm in the while loop");
         // Read a character
         c = getc();
 
-        print("I got the char: %s\n", c);
+        printf("I got the char: %s\n", c);
 
         if (position == bufsize - 1) {
             printf("\b");
@@ -1563,7 +1563,7 @@ int mesh_login(User *user) {
 
     do {
         tmp_name = mesh_input("Enter your username: ");
-        print("SDFSDFSDFSDF");
+        printf("SDFSDFSDFSDF");
     } while (!strlen(tmp_name));
 
     do {
