@@ -924,6 +924,11 @@ int mesh_read_hash(char *game_name){
             hash_buffer[i] = '\0';
             printf("Here is my row.hash: %s", row.hash);
             printf("Here is my hash_buffer: %s", hash_buffer);
+            for(i = 0; i < 32; i++)
+            {
+                sprintf(&hash_buffer[i*2],"%02x", row.hash[i]);
+            }
+            printf("Here is my new hash_buffer: %s", hash_buffer);
             mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
 
             if (strcmp(row.hash, hash_buffer) == 0) {
