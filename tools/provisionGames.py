@@ -162,7 +162,7 @@ def provision_game(line, cipher):
         print("Nonce: ", cipher[1])
         print("File Name: ", f_out_name)
         subprocess.check_call("./cmdAES %s %s %s" % (gen_path+"/"+f_out_name,
-                                                     cipher[0].decode('utf8'), cipher[1].decode('utf8')), shell=True)
+                                                     cipher[0].decode('utf-8'), cipher[1].decode('utf-8')), shell=True)
 
     except Exception as e:
         print("NOPENOPE: ", e)
