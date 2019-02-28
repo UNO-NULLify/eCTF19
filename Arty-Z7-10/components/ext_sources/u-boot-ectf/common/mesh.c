@@ -35,25 +35,25 @@ User user;
     List of builtin commands, followed by their corresponding functions.
  */
 char *builtin_str[] = {
-    "help",
-    "shutdown",
-    "logout",
-    "list",
-    "play",
-    "query",
-    "install",
-    "uninstall"
+        "help",
+        "shutdown",
+        "logout",
+        "list",
+        "play",
+        "query",
+        "install",
+        "uninstall"
 };
 
 int (*builtin_func[]) (char **) = {
-    &mesh_help,
-    &mesh_shutdown,
-    &mesh_logout,
-    &mesh_list,
-    &mesh_play,
-    &mesh_query,
-    &mesh_install,
-    &mesh_uninstall
+        &mesh_help,
+        &mesh_shutdown,
+        &mesh_logout,
+        &mesh_list,
+        &mesh_play,
+        &mesh_query,
+        &mesh_install,
+        &mesh_uninstall
 };
 
 
@@ -164,15 +164,15 @@ int mesh_flash_write(void* data, unsigned int flash_location, unsigned int flash
             // Copy (byte by byte) until we've either reached the end of
             // this page, or we've copied the appropriate number of bytes
             for (;
-                 (flash_location + bytes_copied < page_starting_address + FLASH_PAGE_SIZE) && (bytes_copied < flash_length);
-                 ++bytes_copied)
+                    (flash_location + bytes_copied < page_starting_address + FLASH_PAGE_SIZE) && (bytes_copied < flash_length);
+                    ++bytes_copied)
             {
                 flash_data[(flash_location % FLASH_PAGE_SIZE) + bytes_copied] = ((char*) data)[bytes_copied];
             }
         }
-        // Otherwise, we either have an entire page that needs to be updated,
-        // or a partial page that we need to update. Either way, this page
-        // starts on a page bound
+            // Otherwise, we either have an entire page that needs to be updated,
+            // or a partial page that we need to update. Either way, this page
+            // starts on a page bound
         else
         {
             // Copy (byte by byte) until we've either reached the end of
@@ -521,7 +521,7 @@ int mesh_dump_flash(char **args)
         printf("%02x ", flash[i]);
         if (i % 16 == 15)
         {
-        printf("\n");
+            printf("\n");
         }
     }
     printf("\n");
@@ -660,8 +660,8 @@ int mesh_ls_iterate_dir(struct ext2fs_node *dir, char *fname)
         struct ext2_dirent dirent;
 
         status = ext4fs_read_file(diro, fpos,
-                       sizeof(struct ext2_dirent),
-                       (char *)&dirent, &actread);
+                                  sizeof(struct ext2_dirent),
+                                  (char *)&dirent, &actread);
         if (status < 0)
             return 0;
 
@@ -676,10 +676,10 @@ int mesh_ls_iterate_dir(struct ext2fs_node *dir, char *fname)
             int type = FILETYPE_UNKNOWN;
 
             status = ext4fs_read_file(diro,
-                          fpos +
-                          sizeof(struct ext2_dirent),
-                          dirent.namelen, filename,
-                          &actread);
+                                      fpos +
+                                      sizeof(struct ext2_dirent),
+                                      dirent.namelen, filename,
+                                      &actread);
             if (status < 0)
                 return 0;
 
@@ -703,9 +703,9 @@ int mesh_ls_iterate_dir(struct ext2fs_node *dir, char *fname)
                     type = FILETYPE_REG;
             } else {
                 status = ext4fs_read_inode(diro->data,
-                               le32_to_cpu
-                               (dirent.inode),
-                               &fdiro->inode);
+                                           le32_to_cpu
+                                                   (dirent.inode),
+                                           &fdiro->inode);
                 if (status == 0) {
                     free(fdiro);
                     return 0;
@@ -717,12 +717,12 @@ int mesh_ls_iterate_dir(struct ext2fs_node *dir, char *fname)
                     FILETYPE_INO_DIRECTORY) {
                     type = FILETYPE_DIRECTORY;
                 } else if ((le16_to_cpu(fdiro->inode.mode)
-                        & FILETYPE_INO_MASK) ==
-                       FILETYPE_INO_SYMLINK) {
+                            & FILETYPE_INO_MASK) ==
+                           FILETYPE_INO_SYMLINK) {
                     type = FILETYPE_SYMLINK;
                 } else if ((le16_to_cpu(fdiro->inode.mode)
-                        & FILETYPE_INO_MASK) ==
-                       FILETYPE_INO_REG) {
+                            & FILETYPE_INO_MASK) ==
+                           FILETYPE_INO_REG) {
                     type = FILETYPE_REG;
                 }
             }
@@ -734,9 +734,9 @@ int mesh_ls_iterate_dir(struct ext2fs_node *dir, char *fname)
             } else {
                 if (fdiro->inode_read == 0) {
                     status = ext4fs_read_inode(diro->data,
-                                 le32_to_cpu(
-                                 dirent.inode),
-                                 &fdiro->inode);
+                                               le32_to_cpu(
+                                                       dirent.inode),
+                                               &fdiro->inode);
                     if (status == 0) {
                         free(fdiro);
                         return 0;
@@ -744,17 +744,17 @@ int mesh_ls_iterate_dir(struct ext2fs_node *dir, char *fname)
                     fdiro->inode_read = 1;
                 }
                 switch (type) {
-                case FILETYPE_REG:
-                    // only print name if the user is in valid install list
-                    mesh_get_game_header(&game, filename);
-                    if (mesh_check_user(&game)){
-                        printf("%d      ", game_num++);
-                        printf("%s\n", filename);
-                    }
+                    case FILETYPE_REG:
+                        // only print name if the user is in valid install list
+                        mesh_get_game_header(&game, filename);
+                        if (mesh_check_user(&game)){
+                            printf("%d      ", game_num++);
+                            printf("%s\n", filename);
+                        }
 
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
                 }
             }
             free(fdiro);
@@ -781,7 +781,7 @@ int mesh_ls_ext4(const char *dirname, char *filename)
         return 0;
 
     status = ext4fs_find_file(dirname, &ext4fs_root->diropen, &dirnode,
-                  FILETYPE_DIRECTORY);
+                              FILETYPE_DIRECTORY);
     if (status != 1) {
         printf("** Can not find directory. **\n");
         return -1;
@@ -922,7 +922,7 @@ int mesh_read_hash(char *game_name){
             }
             row.hash[i] = '\0';
             hash_buffer[i] = '\0';
-
+            print("row.hash in mesh_read_hash: %s", row.hash);
             mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
 
             if (strcmp(row.hash, hash_buffer) == 0) {
@@ -1000,8 +1000,8 @@ int mesh_check_hash(char *game_name){
         full_name_from_short_name(full_name, &row);
 
         //checking shit
-        printf("Ascii_hash: %s", ascii_hash);
-        printf("Row.hash:  %s", row.hash);
+        printf("Ascii_hash: %s\n", ascii_hash);
+        printf("Row.hash:  %s\n", row.hash);
         puts("checking row.hash&ascii hash # 1");
 
         // check for game and specific user
@@ -1159,16 +1159,16 @@ int mesh_check_downgrade(char *game_name, unsigned int major_version, unsigned i
         {
             return_value = 1;
         }
-        // Fail if the major version of the new game is the same and the minor
-        // version is less or the same
+            // Fail if the major version of the new game is the same and the minor
+            // version is less or the same
         else if (major_version == row.major_version && minor_version < row.minor_version)
         {
             return_value = 1;
         }
-        // prevent a reinstall of the same version without an uninstall
+            // prevent a reinstall of the same version without an uninstall
         else if (major_version == row.major_version &&
-            minor_version == row.minor_version &&
-            row.install_flag == MESH_TABLE_INSTALLED)
+                 minor_version == row.minor_version &&
+                 row.install_flag == MESH_TABLE_INSTALLED)
         {
             return_value = return_value == 1 ? return_value : 2;
         }
@@ -1438,11 +1438,11 @@ int mesh_validate_user(User *user)
             // compare the calculated hash against the stored hash
             if (strcmp(mesh_users[i].pin, ascii_hash) == 0)
             {
-	            free(buff);
+                free(buff);
                 return 0;
             }
-	        printf("Pin hashes did not match\n");
-	        free(buff);
+            printf("Pin hashes did not match\n");
+            free(buff);
             return 1;
         }
     }
