@@ -1461,7 +1461,7 @@ char* mesh_read_line(int bufsize)
         c = getc();
 
         print("I got the char: %s\n", c);
-        
+
         if (position == bufsize - 1) {
             printf("\b");
         }
@@ -1563,7 +1563,7 @@ int mesh_login(User *user) {
 
     do {
         tmp_name = mesh_input("Enter your username: ");
-        print("SDFSDFSDFSDF")
+        print("SDFSDFSDFSDF");
     } while (!strlen(tmp_name));
 
     do {
