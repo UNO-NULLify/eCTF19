@@ -999,6 +999,11 @@ int mesh_check_hash(char *game_name){
         char* full_name = (char*) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
         full_name_from_short_name(full_name, &row);
 
+        //checking shit
+        printf("Ascii_hash: %s", ascii_hash);
+        printf("Row.hash:  %s", row.hash);
+        puts("checking row.hash&ascii hash # 1");
+
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
             strcmp(user.name, row.user_name) == 0) {
@@ -1008,6 +1013,10 @@ int mesh_check_hash(char *game_name){
             printf("row.hash: %s\n", row.hash);
 
             if(strcmp(ascii_hash, row.hash) == 0) {
+                //checking shit
+                printf("Ascii_hash: %s", ascii_hash);
+                printf("Row.hash:  %s", row.hash);
+                puts("checking row.hash&ascii hash # 2");
                 return 0;
             }
         }
