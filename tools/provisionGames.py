@@ -18,8 +18,7 @@ def gen_cipher(content):
     content = [x.strip() for x in content]
     nonce = content[0].encode()
     key = content[1].encode()
-    keypair = content[2].encode()
-    return (key, nonce, keypair)
+    return (key, nonce)
 
 
 def provision_game(line, cipher):
@@ -122,15 +121,6 @@ def provision_game(line, cipher):
             hash.write(hasher.hexdigest())
         f_out.close()
         print("wrote hash to file: " + str(os.path.join(gen_path, f_hash_out)))
-        # sign game hash
-        signer = PKCS1_v1_5.new(cipher[2])
-        with open(os.path.join(gen_path, f_hash_out), 'rb') as to_sign:
-            # all at once because signing seems to take one big digest
-            buf_s = to_sign.read()
-            digest = SHA256.new()
-            digest.update(buf_s)
-            signature = signer.sign(digest)
-            f_sign.write(signature)
 
     # need to verify here cuz why not
 

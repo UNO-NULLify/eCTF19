@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
 import os
 import base64
@@ -27,17 +26,9 @@ factory_secrets_fn = "FactorySecrets.txt"
 nonce = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(8)])
 # Key
 key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
-# Keypair
-keypair = RSA.generate(2048, e=65537)
-# PubKey
-pubkey = keypair.publickey()
-# PrivKey
-privkey = keypair.export_key('PEM')
 
 print("HERE IS YOUR nonce: ", nonce)
 print("HERE IS YOUR key:", key)
-print("HERE IS YOUR pubkey:", pubkey)
-print("HERE IS YOUR privkey:", privkey)
 
 
 def hash_pins(users):
