@@ -1196,8 +1196,6 @@ void mesh_get_game_header(Game *game, char *game_name){
     users = strtok(NULL, "\n");
 
 
-    printf("got Major version %s\n", major_version_str);
-    printf("got Minor version %s\n", minor_version_str);
     // copy major and minor version into struct
     game->major_version = simple_strtoul(major_version_str, NULL, 10);
     game->minor_version = simple_strtoul(minor_version_str, NULL, 10);
