@@ -34,13 +34,16 @@ unsigned char *skip_line(unsigned char *buf){
     return buf + i;
 }
 
-int mesh_decrypt_game(char *inputBuffer, loff_t game_size){
+int mesh_decrypt_game(unsigned char *inputBuffer, loff_t game_size){
     struct AES_ctx ctx;
     uint8_t* nonce = calloc(16,sizeof(uint8_t));
     char * key;
 
     strncat(nonce, NONCE, 8);
     key = KEY;
+
+    printf("Decrypt, Here is your KEY: %s", key);
+    printf("Decrypt, Here is your NONCE: %s", nonce);
 
     AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
     AES_CTR_xcrypt_buffer(&ctx, (uint8_t *) inputBuffer, game_size);
