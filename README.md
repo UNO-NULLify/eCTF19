@@ -1,7 +1,7 @@
 ## **eCTF Design Documentation:** 
 The document must describe how your system and game provisioning processes along with your console command protocols protect each of the flags. It also must contain descriptions of how each command works on the system. 
 
-### **Description:**
+### **Description:**  
 The provisioning process has not strayed far from the original diagram given to us in the original documentation. The most significant difference is that before running ProvisionSystem.py a shell script must be run that installs pip and the pycrypto library. The other changes made from the default provisioning process are that we store a nonce and an aes encryption key in mesh_users.h, and we encrypt the games files in ProvisionGames.py. 
 -----------------------------------------------------------------------------------------------------------------
 ### **Flags:**
@@ -65,7 +65,7 @@ It outputs the game names from games.txt and version of the game.
 **5. Play:**
 This command takes in filename of the provisioned game as defined by the output requirements for provisionGames.py. The Command writes the game to ram address 0x1fc00040 and the size of the game binary to 0x1fc00000. It then boots the linux kernel from the ram address 0x10000000. The linux kernel will read the game binary and execute it. Usage is play <game>
 
-**6. Query:** 
+**6. Query:**
 This command will list the installed games of the user. It implements the mesh shell query function.
 _**Output:**_
 The name of the game is printed out as specified in games.txt when the game is provisioned. 
@@ -76,5 +76,5 @@ This command takes in filename of the provisioned game as defined by the output 
 **8. Uninstall:**
 This command takes in filename of the provisioned games as defined by the output of the provisioned game as defined by the output requirements for provisonGames.py.  It will uninstall the specified game for the given users. This command implements the uninstall function from the mesh shell.
 
-**9. Dump (removed)**
-**10. Reset Flash (removed)**
+**9. Dump (removed)**  
+**10. Reset Flash (removed)**  
