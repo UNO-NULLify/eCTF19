@@ -34,6 +34,20 @@ unsigned char *skip_line(unsigned char *buf){
     return buf + i;
 }
 
+int mesh_decrypt_game(char *inputBuffer, loff_t game_size){
+    struct AES_ctx ctx;
+    uint8_t* nonce = calloc(16,sizeof(uint8_t));
+    char * key;
+
+    strncat(nonce, NONCE, 8);
+    key = KEY;
+
+    AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
+    AES_CTR_xcrypt_buffer(&ctx, (uint8_t *) inputBuffer, game_size);
+
+    return 0;
+}
+
 /*
     @brief Main entry point.
     @param argc Argument count.
@@ -59,8 +73,10 @@ int main(int argc, char **argv)
 
     // map the memory device so your can access it like a chunk of memory
     map = mmap(0, MAPSIZE, (PROT_READ | PROT_WRITE), MAP_SHARED, fd, BASE_ADDR);
-
     gameSize = *(int *)map;
+
+    mesh_decrypt_game(map, gameSize);
+
     gameFp = NULL;
 
     gameFp = fopen(GAMEPATH, "w+b");
@@ -76,9 +92,9 @@ int main(int argc, char **argv)
     // jump ahead to the reserved region for the game binary
     map += 0x40;
 
-    // dump first 3 header lines of the game so it is executable
+    // dump first 4 header lines of the game so it is executable
     map_tmp = map;
-    for (int i=0; i < 3; i++){
+    for (int i=0; i < 4; i++){
         map_tmp = skip_line(map_tmp);
     }
 

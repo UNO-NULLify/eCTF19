@@ -869,9 +869,6 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     strncat(nonce, NONCE, 8);
     key = KEY;
 
-    printf("Here is your key, %s\n", key);
-    printf("Here is your nonce, %s\n", nonce);
-
     // Decrypt the game
     // What is the counter?
     AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
@@ -908,8 +905,6 @@ int mesh_read_hash(char *game_name){
         // the most space that we could need to store the full game name
         char *full_name = (char *) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
         full_name_from_short_name(full_name, &row);
-        printf("Game name: %s, full_name %s\n", game_name, full_name);
-        printf("User.name %s, row.user_name %s\n", user.name, row.user_name);
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
             strcmp(user.name, row.user_name) == 0) {
@@ -998,24 +993,12 @@ int mesh_check_hash(char *game_name){
         char* full_name = (char*) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
         full_name_from_short_name(full_name, &row);
 
-        //checking shit
-        printf("Ascii_hash: %s\n", ascii_hash);
-        printf("Row.hash:  %s\n", row.hash);
-        puts("checking row.hash&ascii hash # 1\n");
-
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
             strcmp(user.name, row.user_name) == 0) {
             free(full_name);
 
-            printf("ascii_hash: %s\n", ascii_hash);
-            printf("row.hash: %s\n", row.hash);
-
             if(strcmp(ascii_hash, row.hash) == 0) {
-                //checking shit
-                printf("Ascii_hash: %s\n", ascii_hash);
-                printf("Row.hash:  %s\n", row.hash);
-                puts("checking row.hash&ascii hash # 2\n");
                 return 0;
             }
         }
