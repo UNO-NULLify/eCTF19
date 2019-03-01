@@ -13,7 +13,6 @@ SRC_URI = "file://main.c \
            file://aes.c \
            file://aes.h \
            file://mesh_users.h \
-           file://cmdLinesAES.c \
         "
 INITSCRIPT_NAME = "startup"
 INITSCRIPT_PARAMS = "defaults"
