@@ -1540,7 +1540,7 @@ char **mesh_split_line(char *line) {
 */
 char* mesh_input(char* prompt)
 {
-    printf(prompt);
+    printf("%s", prompt);
     return mesh_read_line(MAX_STR_LEN);
 }
 
