@@ -748,10 +748,12 @@ int mesh_ls_iterate_dir(struct ext2fs_node *dir, char *fname)
                 switch (type) {
                     case FILETYPE_REG:
                         // only print name if the user is in valid install list
-                        mesh_get_game_header(&game, filename);
-                        if (mesh_check_user(&game)){
-                            printf("%d      ", game_num++);
-                            printf("%s\n", filename);
+                        if (strstr(filename, "SHA256") == NULL) {
+                            mesh_get_game_header(&game, filename);
+                            if (mesh_check_user(&game)) {
+                                printf("%d      ", game_num++);
+                                printf("%s\n", filename);
+                            }
                         }
 
                         break;
