@@ -900,8 +900,7 @@ int mesh_read_hash(char *game_name){
 
     // read the game into a buffer
     char* hash_buffer = (char*) malloc((size_t) (hash_size + 1));
-    mesh_decrypt_game(hash_fn, hash_buffer);
-    //mesh_read_ext4(hash_fn, hash_buffer, hash_size);
+    mesh_read_ext4(hash_fn, hash_buffer, hash_size);
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
@@ -918,18 +917,10 @@ int mesh_read_hash(char *game_name){
 
             // copy hash
             for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
-                printf("i: %d", i);
                 row.hash[i] = hash_buffer[i];
             }
             row.hash[i] = '\0';
             hash_buffer[i] = '\0';
-            printf("Here is my row.hash: %s\n", row.hash);
-            printf("Here is my hash_buffer: %s\n", hash_buffer);
-            for(i = 0; i < 32; i++)
-            {
-                sprintf(&hash_buffer[i*2],"%02x", row.hash[i]);
-            }
-            printf("Here is my new hash_buffer: %s\n", hash_buffer);
             mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
 
             if (strcmp(row.hash, hash_buffer) == 0) {
@@ -968,7 +959,7 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     sha256_finish(&ctx, hash);
 
     hash[SHA256_DIGEST_LENGTH] = '\0';
-    printf("Here is the hash %s calcudated for the game %s\n", hash, game_name);
+
     memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
 
     //outputBuffer[SHA256_DIGEST_LENGTH] = '\0';
@@ -991,6 +982,7 @@ int mesh_check_hash(char *game_name){
 
     if(mesh_read_hash(game_name))
         printf("Failed to read hash from hash file!\n");
+
     mesh_sha256_file(game_name, gen_hash);
 
     for(i = 0; i < 32; i++)
