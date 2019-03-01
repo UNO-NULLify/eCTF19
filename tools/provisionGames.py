@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import AES
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
-import base64
 import os
 import argparse
 import hashlib
@@ -21,7 +18,8 @@ def gen_cipher(content):
     content = [x.strip() for x in content]
     nonce = content[0].encode()
     key = content[1].encode()
-    return (key, nonce)
+    keypair = content[2].encode()
+    return (key, nonce, keypair)
 
 
 def provision_game(line, cipher):
@@ -37,9 +35,6 @@ def provision_game(line, cipher):
     # 3. Match the game name and capture it
     # 4. Skip over whitespace
     # 5. Match the group (major.minor)
-    key = RSA.generate(2048, e=65537)
-    pub = key.publickey()
-    priv = key.exportKey('PEM')
 
     reg = r'^\s*([\w\/\-.\_]+)\s+([\w\-.\_]+)\s+(\d+\.\d+|\d+)((?:\s+\w+)+)'
     m = re.match(reg, line)
@@ -86,8 +81,6 @@ def provision_game(line, cipher):
     f_out.write(bytes("version:%s\n" % (version), "utf-8"))
     f_out.write(bytes("name:%s\n" % (name), "utf-8"))
     f_out.write(bytes("users:%s\n" % (" ".join(users)), "utf-8"))
-    # write pub key to header
-    f_out.write(bytes("public_key:%s\n" % (pub), "utf-8"))
 
     # Read in the binary source
     # block_size used as
@@ -130,7 +123,7 @@ def provision_game(line, cipher):
         f_out.close()
         print("wrote hash to file: " + str(os.path.join(gen_path, f_hash_out)))
         # sign game hash
-        signer = PKCS1_v1_5.new(key)
+        signer = PKCS1_v1_5.new(cipher[2])
         with open(os.path.join(gen_path, f_hash_out), 'rb') as to_sign:
             # all at once because signing seems to take one big digest
             buf_s = to_sign.read()
@@ -166,12 +159,6 @@ def provision_game(line, cipher):
 
     except Exception as e:
         print("NOPENOPE: ", e)
-
-    # with open(os.path.join(gen_path, f_out_name), 'rb') as fo:
-    #    plaintext = fo.read()
-    #enc = cipher.encrypt(plaintext)
-    # with open(os.path.join(gen_path, f_out_name), 'wb') as fo:
-    #    fo.write(enc)
 
     print("    %s -> %s" % (g_path, os.path.join(gen_path, f_out_name)))
 

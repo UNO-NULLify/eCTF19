@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
 import os
 import base64
@@ -22,15 +23,21 @@ gen_path = "files/generated"
 system_image_fn = "SystemImage.bif"
 # File name for the factory secrets
 factory_secrets_fn = "FactorySecrets.txt"
-# File name for the nonce+key
-nonce_key_fn = os.environ["ECTF_UBOOT"] + "/include/nonce_key.h"
 # Nonce
 nonce = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(8)])
 # Key
 key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+# Keypair
+keypair = RSA.generate(2048, e=65537)
+# PubKey
+pubkey = keypair.publickey()
+# PrivKey
+privkey = keypair.export_key('PEM')
 
 print("HERE IS YOUR nonce: ", nonce)
-print("HERE IS YOUR KEY:", key)
+print("HERE IS YOUR key:", key)
+print("HERE IS YOUR pubkey:", pubkey)
+print("HERE IS YOUR privkey:", privkey)
 
 
 def hash_pins(users):
@@ -198,26 +205,8 @@ def write_factory_secrets(f):
     f: open file to write the factory secrets to
     """
     f.write(nonce+"\n")
-    f.write(key)
-
-
-def write_nonce_key(f):
-    """Write the nonce+key file
-
-    f: open file to write the bif to
-    """
-    f.write("""
-/*
-* This is an automatically generated file by provisionSystem.py
-*
-*
-*/
-""")
-    data = '#define NONCE="%s";\n' % (nonce)
-    f.write(data)
-    data = '#define KEY="%s";\n' % (key)
-    f.write(data)
-
+    f.write(key+"\n")
+    f.write(privkey)
 
 def main():
     # Argument parsing
@@ -274,11 +263,6 @@ def main():
     except Exception as e:
         print("Unable to open %s: %s" % (factory_secrets_fn, e,))
         exit(2)
-    try:
-        f_nonce_key = open(nonce_key_fn, "w+")
-    except Exception as e:
-        print("Unable to open generated NONCE_KEY header file: %s" % (e,))
-        exit(2)
 
     # Read in all of the user information into a list and strip newlines
     lines = [line.rstrip('\n') for line in f_mesh_users_in]
@@ -308,11 +292,6 @@ def main():
     # Write the default games file
     write_mesh_default_h(args.DEFAULT_FILE, default_games_hpath)
     print("Generated default_games.h file")
-
-    # write nonce+key
-    write_nonce_key(f_nonce_key)
-    f_nonce_key.close
-    print("Generated NONCE_KEY file: %s" % nonce_key_fn)
 
     # build MES.bin
     build_images()
