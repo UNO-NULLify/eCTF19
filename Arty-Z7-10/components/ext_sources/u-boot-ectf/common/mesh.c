@@ -28,6 +28,8 @@
 #define EXIT_FAILURE 1
 #endif
 
+/*Full functional code */
+
 // declare user global
 User user;
 
