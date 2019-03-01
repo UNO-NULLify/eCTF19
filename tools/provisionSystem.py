@@ -197,7 +197,6 @@ def write_factory_secrets(f):
     """
     f.write(nonce+"\n")
     f.write(key+"\n")
-    f.write(privkey)
 
 def main():
     # Argument parsing

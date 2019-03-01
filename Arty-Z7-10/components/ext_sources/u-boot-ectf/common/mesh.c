@@ -13,7 +13,6 @@
 #include <mesh_users.h>
 #include <default_games.h>
 #include <aes.c>
-#include <nonce_key.h>
 #include <os.h>
 
 #define MESH_TOK_BUFSIZE 64
