@@ -3,6 +3,7 @@ The document must describe how your system and game provisioning processes along
 
 ### **Description:**
 The provisioning process has not strayed far from the original diagram given to us in the original documentation. The most significant difference is that before running ProvisionSystem.py a shell script must be run that installs pip and the pycrypto library. The other changes made from the default provisioning process are that we store a nonce and an aes encryption key in mesh_users.h, and we encrypt the games files in ProvisionGames.py.
+
 -----------------------------------------------------------------------------------------------------------------
 ### **Flags:**
 **1. Rollback (Versioning):**<br/>
@@ -35,6 +36,7 @@ We encrypt the binary during provisioning and only decrypt them when they are be
 Modify an unwinnable game to gain victory<br/>
 _**Protected:**_
 Games are encrypted during provisioning and decrypted before use. If the encrypted file is modified, it will fail to successfully decrypt and run.
+
 -----------------------------------------------------------------------------------------------------------------
 ### **Commands:**
 **1. Help:** 
@@ -75,5 +77,5 @@ This command takes in filename of the provisioned game as defined by the output 
 **8. Uninstall:**
 This command takes in filename of the provisioned games as defined by the output of the provisioned game as defined by the output requirements for provisonGames.py.  It will uninstall the specified game for the given users. This command implements the uninstall function from the mesh shell.
 
-**9. Dump (removed)**
+**9. Dump (removed)**<br/>
 **10. Reset Flash (removed)**
