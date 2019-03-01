@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 
     for(int i=0; i < 25; i++)
     {
-      printf("%c\n"map[i]);
+      printf("%c\n", map[i]);
     }
 
     gameFp = NULL;
