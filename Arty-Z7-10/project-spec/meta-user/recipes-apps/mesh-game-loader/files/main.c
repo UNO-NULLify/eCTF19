@@ -78,13 +78,6 @@ int main(int argc, char **argv)
     map = mmap(0, MAPSIZE, (PROT_READ | PROT_WRITE), MAP_SHARED, fd, BASE_ADDR);
     gameSize = *(int *)map;
 
-    mesh_decrypt_game(map, gameSize);
-
-    for(int i=0; i < 25; i++)
-    {
-      printf("%c\n", map[i]);
-    }
-
     gameFp = NULL;
 
     gameFp = fopen(GAMEPATH, "w+b");
@@ -99,6 +92,13 @@ int main(int argc, char **argv)
 
     // jump ahead to the reserved region for the game binary
     map += 0x40;
+
+    mesh_decrypt_game(map, gameSize);
+
+    for(int i=0; i < 25; i++)
+    {
+      printf("%c\n", map[i]);
+    }
 
     // dump first 4 header lines of the game so it is executable
     map_tmp = map;
