@@ -14,6 +14,8 @@
 #include <default_games.h>
 #include <aes.c>
 #include <os.h>
+#include <openssl/rsa.h>
+#include <openssl/evp.h>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
