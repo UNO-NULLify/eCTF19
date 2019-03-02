@@ -15,7 +15,9 @@
 #include <aes.c>
 #include <os.h>
 #include <openssl/rsa.h>
-#include <openssl/evp.h>
+#include <openssl/evp_pkey.h>
+#include <openssl/x509.h>
+#include <openssl/bio.h>
 
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
@@ -857,55 +859,51 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /******************************************************************************/
 
 /*
-Skeleton for now
+Take in the game_hash and game_name from mesh_check_hash and determines if
+the row.hash matches the signed hash that was done at provision.
 */
 int mesh_check_signedHash(char *game_hash, char *game_name){
-  EVP_PKEY_CTX *ctx;
   unsigned char *md, *sig;
   char * full_game_name;
-  size_t mdlen, siglen;
-  EVP_PKEY *verify_key;
+  char * cert;
+  size_t mdlen, siglen, cert_len;
+  int rc = 1;
 
-  //
+  BIO *b = NULL;
+  X509 *c;
+  EVP_PKEY *k = NULL;
+
   //append .256.SIG to the name of the game that was passed for lookup
   full_game_name = strcat(game_name, ".256.SIG\0");
-  //assign pointer to game_hash
-  md = game_hash;
-  mdlen = strlen(md);
   //call mesh_size_ext4
   siglen = mesh_size_ext4(full_game_name);
   sig = (char*) calloc((size_t) (siglen + 1), 0);
   //call mesh_read_ext4
   mesh_read_ext4(full_game_name,sig, siglen);
 
-  EVP_PKEY(type,NULL,pubkey, strlen(pubkey));
+  //Grab cert from #define in mesh_users.h file
+  cert = DER_CERT;
+  cert_len = strlen(cert);
 
-  /* NB: assumes verify_key, sig, siglen, md, and mdlen are already set up
-  * and that verify_key is an RSA public key
-  */
-  ctx = EVP_PKEY_CTX_new(verify_key);
-  if (!ctx){
-    return 1; /* Error occurred */
+  //Start of the process of verifying
+  b = BIO_new_mem_buf(cert, cert_len);
+  if (1 != rc){
+    print("BIO_new_mem_buf broke");
   }
-  if (EVP_PKEY_verify_init(ctx) <= 0){
-    return 1; /* Error */
+  c = d2i_X509_bio(b, NULL);
+  if (1 != rc){
+    print("d2i_x509_bio broke");
   }
-  if (EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_PKCS1_PADDING) <= 0){
-    return 1; /* Error */
+  k = X509_get_pubkey(c);
+  if (1 != rc){
+    print("X509_get_pubkey broke");
   }
-  if (EVP_PKEY_CTX_set_signature_md(ctx, EVP_sha256()) <= 0){
-    return 1;/* Error */
+  rc = RSA_verify(NID_sha256, hash_buffer, sizeof hash_buffer, sig, sig_len, EVP_PKEY_get1_RSA(k));
+  if (1 != rc){
+    print("Did not verify correctly");
+    return 1;
   }
-  /* Perform operation */
-  ret = EVP_PKEY_verify(ctx, sig, siglen, md, mdlen);
-
-  if(ret){
-    return 0; //success
-  }
-  return 1; //failure
-  /* ret == 1 indicates success, 0 verify failure and < 0 for some
-  * other error.
-  */
+  return 0;
 }
 
 
