@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from Crypto.Signature import PKCS1_v1_5
-from Crypto.Hash import SHA256
 import os
 import argparse
 import hashlib
