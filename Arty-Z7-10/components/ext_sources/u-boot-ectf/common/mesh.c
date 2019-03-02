@@ -15,7 +15,7 @@
 #include <aes.c>
 #include <os.h>
 
-
+#include <openssl/rsa.h>
 
 
 #define MESH_TOK_BUFSIZE 64
