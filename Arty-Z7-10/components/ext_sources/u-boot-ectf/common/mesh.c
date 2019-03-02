@@ -16,6 +16,7 @@
 #include <os.h>
 
 #include <openssl/evp.h>
+#include <openssl/x509.h>
 
 
 #define MESH_TOK_BUFSIZE 64
