@@ -15,7 +15,7 @@
 #include <aes.c>
 #include <os.h>
 #include <openssl/rsa.h>
-#include <openssl/evp_pkey.h>
+#include <openssl/evp.h>
 #include <openssl/x509.h>
 #include <openssl/bio.h>
 
