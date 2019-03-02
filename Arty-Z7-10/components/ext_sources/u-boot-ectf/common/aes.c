@@ -46,13 +46,13 @@ NOTE:   String length must be evenly divisible by 16byte (str_len % 16 == 0)
 
 #if defined(AES256) && (AES256 == 1)
     #define Nk 8
-    #define Nr 12
+    #define NR 12
 #elif defined(AES192) && (AES192 == 1)
     #define Nk 6
-    #define Nr 12
+    #define NR 12
 #else
     #define Nk 4        // The number of 32 bit words in a key.
-    #define Nr 10       // The number of rounds in AES Cipher.
+    #define NR 10       // The number of rounds in AES Cipher.
 #endif
 
 // jcallan@github points out that declaring Multiply as a function
@@ -147,7 +147,7 @@ static uint8_t getSBoxInvert(uint8_t num)
 */
 #define getSBoxInvert(num) (rsbox[(num)])
 
-// This function produces Nb(Nr+1) round keys. The round keys are used in each round to decrypt the states.
+// This function produces Nb(NR+1) round keys. The round keys are used in each round to decrypt the states.
 static void KeyExpansion(uint8_t* RoundKey, const uint8_t* Key)
 {
   unsigned i, j, k;
@@ -163,7 +163,7 @@ static void KeyExpansion(uint8_t* RoundKey, const uint8_t* Key)
   }
 
   // All other round keys are found from the previous round keys.
-  for (i = Nk; i < Nb * (Nr + 1); ++i)
+  for (i = Nk; i < Nb * (NR + 1); ++i)
   {
     {
       k = (i - 1) * 4;
@@ -414,10 +414,10 @@ static void Cipher(state_t* state, const uint8_t* RoundKey)
   // Add the First round key to the state before starting the rounds.
   AddRoundKey(0, state, RoundKey);
 
-  // There will be Nr rounds.
-  // The first Nr-1 rounds are identical.
-  // These Nr-1 rounds are executed in the loop below.
-  for (round = 1; round < Nr; ++round)
+  // There will be NR rounds.
+  // The first NR-1 rounds are identical.
+  // These NR-1 rounds are executed in the loop below.
+  for (round = 1; round < NR; ++round)
   {
     SubBytes(state);
     ShiftRows(state);
@@ -429,7 +429,7 @@ static void Cipher(state_t* state, const uint8_t* RoundKey)
   // The MixColumns function is not here in the last round.
   SubBytes(state);
   ShiftRows(state);
-  AddRoundKey(Nr, state, RoundKey);
+  AddRoundKey(NR, state, RoundKey);
 }
 
 #if (defined(CBC) && CBC == 1) || (defined(ECB) && ECB == 1)
@@ -438,12 +438,12 @@ static void InvCipher(state_t* state, const uint8_t* RoundKey)
   uint8_t round = 0;
 
   // Add the First round key to the state before starting the rounds.
-  AddRoundKey(Nr, state, RoundKey);
+  AddRoundKey(NR, state, RoundKey);
 
-  // There will be Nr rounds.
-  // The first Nr-1 rounds are identical.
-  // These Nr-1 rounds are executed in the loop below.
-  for (round = (Nr - 1); round > 0; --round)
+  // There will be NR rounds.
+  // The first NR-1 rounds are identical.
+  // These NR-1 rounds are executed in the loop below.
+  for (round = (NR - 1); round > 0; --round)
   {
     InvShiftRows(state);
     InvSubBytes(state);
