@@ -865,6 +865,7 @@ the row.hash matches the signed hash that was done at provision.
 */
 
 int mesh_check_signedHash(char *game_hash, char *game_name){
+  /*
   unsigned char *sig;
   char * full_game_name;
   char * cert;
@@ -904,7 +905,7 @@ int mesh_check_signedHash(char *game_hash, char *game_name){
   if (1 != rc){
     printf("Did not verify correctly");
     return 1;
-  }
+  }*/
   return 0;
 }
 
