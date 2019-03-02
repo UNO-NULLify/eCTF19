@@ -498,50 +498,51 @@ int mesh_uninstall(char **args)
 /*
     This is a development utility that allows you to easily dump flash
     memory to std out.
+
+int mesh_dump_flash(char **args)
+{
+    int argv = mesh_get_argv(args);
+    if (argv < 3){
+        printf("Not enough arguments specified.\nUsage: dump offset size\n");
+        return 0;
+    }
+    unsigned int size = simple_strtoul(args[2], NULL, 16);
+    unsigned int offset = simple_strtoul(args[1], NULL, 16);
+    printf("Dumping %u bytes of flash\n", size);
+    char* flash = (char*) malloc(sizeof(char) * size);
+    mesh_flash_read(flash, offset, size);
+
+    // print hex in 16 byte blocks
+    for(unsigned int i = 0; i < size; ++i)
+    {
+        if (i % 16 == 0)
+        {
+            printf("0x%06x ", i);
+        }
+        printf("%02x ", flash[i]);
+        if (i % 16 == 15)
+        {
+            printf("\n");
+        }
+    }
+    printf("\n");
+
+    free(flash);
+
+    return 0;
+}
+
+int mesh_reset_flash(char **args)
+{
+    // 0x1000000 is all 16 MB of flash
+     the erase page size is 64 KB or 0x10000 in hex
+    char* probe_cmd[] = {"sf", "erase", "0", "0x1000000"};
+    cmd_tbl_t* sf_tp = find_cmd("sf");
+
+    printf("Resetting flash. This may take more than a minute.\n");
+   return sf_tp->cmd(sf_tp, 0, 4, probe_cmd);
+}
 */
-//int mesh_dump_flash(char **args)
-//{
-//    int argv = mesh_get_argv(args);
-//    if (argv < 3){
-//        printf("Not enough arguments specified.\nUsage: dump offset size\n");
-//        return 0;
-//    }
-//    unsigned int size = simple_strtoul(args[2], NULL, 16);
-//    unsigned int offset = simple_strtoul(args[1], NULL, 16);
-//    printf("Dumping %u bytes of flash\n", size);
-//    char* flash = (char*) malloc(sizeof(char) * size);
-//    mesh_flash_read(flash, offset, size);
-//
-//    // print hex in 16 byte blocks
-//    for(unsigned int i = 0; i < size; ++i)
-//    {
-//        if (i % 16 == 0)
-//        {
-//            printf("0x%06x ", i);
-//        }
-//        printf("%02x ", flash[i]);
-//        if (i % 16 == 15)
-//        {
-//            printf("\n");
-//        }
-//    }
-//    printf("\n");
-//
-//    free(flash);
-//
-//    return 0;
-//}
-
-//int mesh_reset_flash(char **args)
-//{
-//    // 0x1000000 is all 16 MB of flash
-    // the erase page size is 64 KB or 0x10000 in hex
-//    char* probe_cmd[] = {"sf", "erase", "0", "0x1000000"};
-//    cmd_tbl_t* sf_tp = find_cmd("sf");
-
-//    printf("Resetting flash. This may take more than a minute.\n");
-//   return sf_tp->cmd(sf_tp, 0, 4, probe_cmd);
-//}
 
 /******************************************************************************/
 /******************************** End MESH Commands ***************************/
@@ -1547,9 +1548,9 @@ char* mesh_input(char* prompt)
 char* mesh_input_creds(char* prompt, int mode) {
     int len = 0;
     if (mode == 1) {
-        len = MAX_USERNAME_LENGTH;
+        len = MAX_USERNAME_LENGTH+1;
     } else {
-        len = MAX_PIN_LENGTH;
+        len = MAX_PIN_LENGTH+1;
     }
     printf("%s", prompt);
     return mesh_read_line(len);
@@ -1566,7 +1567,7 @@ int mesh_login(User *user) {
     char *tmp_name, *tmp_pin;
     int retval;
 
-    memset(user->name, 0, MAX_USERNAME_LENGTH);
+    memset(user->name, 0, MAX_USERNAME_LENGTH+1);
 
     do {
         tmp_name = mesh_input_creds("Enter your username: ", 1);
@@ -1576,14 +1577,14 @@ int mesh_login(User *user) {
         tmp_pin = mesh_input_creds("Enter your PIN: ", 0);
     } while (!strlen(tmp_pin));
 
-    strncpy(tmp_user.name, tmp_name, MAX_USERNAME_LENGTH);
-    strncpy(tmp_user.pin, tmp_pin, MAX_PIN_LENGTH);
+    strncpy(tmp_user.name, tmp_name, MAX_USERNAME_LENGTH+1);
+    strncpy(tmp_user.pin, tmp_pin, MAX_PIN_LENGTH+1);
 
     /* if valid user, copy into user */
     retval = mesh_validate_user(&tmp_user);
     if (!retval) {
-        strncpy(user->name, tmp_user.name, MAX_USERNAME_LENGTH);
-        strncpy(user->pin, tmp_user.pin, MAX_PIN_LENGTH);
+        strncpy(user->name, tmp_user.name, MAX_USERNAME_LENGTH+1);
+        strncpy(user->pin, tmp_user.pin, MAX_PIN_LENGTH+1);
     } else {
         printf("Login failed. Please try again\n");
     }
