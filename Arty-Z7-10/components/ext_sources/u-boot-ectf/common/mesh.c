@@ -976,7 +976,7 @@ int mesh_read_hash(char *game_name){
                 row.hash[i] = '\0';
                 hash_buffer[i] = '\0';
                 //check signed hash
-                if(mesh_check_signedHash(row.hash))
+                if(mesh_check_signedHash(row.hash, game_name))
                 {
                   memcpy(row.hash, 0, strlen(row.hash));
                   printf("Failed to verify signature: %s", row.hash);
