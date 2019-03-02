@@ -46,7 +46,7 @@ NOTE:   String length must be evenly divisible by 16byte (str_len % 16 == 0)
 
 #if defined(AES256) && (AES256 == 1)
     #define Nk 8
-    //#define Nr 14
+    #define Nr 14
 #elif defined(AES192) && (AES192 == 1)
     #define Nk 6
     #define Nr 12
