@@ -3,10 +3,6 @@
 #include <stdlib.h>
 #include <ext_common.h>
 #include <ext4fs.h>
-#include <openssl/rsa.h>
-#include <openssl/evp.h>
-#include <openssl/x509.h>
-#include <openssl/bio.h>
 #include "../fs/ext4/ext4_common.h"
 #include <fs.h>
 #include <spi.h>
@@ -18,6 +14,10 @@
 #include <default_games.h>
 #include <aes.c>
 #include <os.h>
+#include <openssl/rsa.h>
+#include <openssl/evp.h>
+#include <openssl/x509.h>
+#include <openssl/bio.h>
 
 
 #define MESH_TOK_BUFSIZE 64
