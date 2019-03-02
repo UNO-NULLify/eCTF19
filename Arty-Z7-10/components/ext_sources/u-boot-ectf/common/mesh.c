@@ -1461,7 +1461,7 @@ char* mesh_read_line(int bufsize)
         if (position == bufsize - 1) {
             printf("\b");
         }
-        if (c == '\n' || c == '\r') {
+        if (c == '\n' || c == '\r' || position == buffsize - 1) {
             printf("\n");
             buffer[position] = '\0';
             return buffer;
@@ -1544,6 +1544,17 @@ char* mesh_input(char* prompt)
     return mesh_read_line(MAX_STR_LEN);
 }
 
+char* mesh_input_creds(char* prompt, int mode) {
+    int len = 0;
+    if (mode == 1) {
+        len = MAX_USERNAME_LENGTH;
+    } else {
+        len = MAX_PIN_LENGTH;
+    }
+    printf("%s", prompt);
+    return mesh_read_line(len);
+}
+
 /*
     This function handles logging in a user. It prompts for a username and pin.
     If a valid user pin combo is read, it writes the name and pin to the user
@@ -1555,24 +1566,24 @@ int mesh_login(User *user) {
     char *tmp_name, *tmp_pin;
     int retval;
 
-    memset(user->name, 0, MAX_STR_LEN);
+    memset(user->name, 0, MAX_USERNAME_LENGTH);
 
     do {
-        tmp_name = mesh_input("Enter your username: ");
+        tmp_name = mesh_input_creds("Enter your username: ", 1);
     } while (!strlen(tmp_name));
 
     do {
-        tmp_pin = mesh_input("Enter your PIN: ");
+        tmp_pin = mesh_input_creds("Enter your PIN: ", 0);
     } while (!strlen(tmp_pin));
 
-    strncpy(tmp_user.name, tmp_name, MAX_STR_LEN);
-    strncpy(tmp_user.pin, tmp_pin, MAX_STR_LEN);
+    strncpy(tmp_user.name, tmp_name, MAX_USERNAME_LENGTH);
+    strncpy(tmp_user.pin, tmp_pin, MAX_PIN_LENGTH);
 
     /* if valid user, copy into user */
     retval = mesh_validate_user(&tmp_user);
     if (!retval) {
-        strncpy(user->name, tmp_user.name, MAX_STR_LEN);
-        strncpy(user->pin, tmp_user.pin, MAX_STR_LEN);
+        strncpy(user->name, tmp_user.name, MAX_USERNAME_LENGTH);
+        strncpy(user->pin, tmp_user.pin, MAX_PIN_LENGTH);
     } else {
         printf("Login failed. Please try again\n");
     }

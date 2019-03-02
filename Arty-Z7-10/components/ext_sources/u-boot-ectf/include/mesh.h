@@ -64,6 +64,7 @@ char* mesh_read_line(int bufsize);
 int mesh_get_argv(char **args);
 char **mesh_split_line(char *line) ;
 char* mesh_input(char* prompt);
+char* mesh_input_creds(char* prompt, int mode);
 int mesh_valid_install(char *game_name);
 void ptr_to_string(void* ptr, char* buf);
 void full_name_from_short_name(char* full_name, struct games_tbl_row* row);
