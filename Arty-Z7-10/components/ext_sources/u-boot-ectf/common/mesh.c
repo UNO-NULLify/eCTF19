@@ -499,49 +499,49 @@ int mesh_uninstall(char **args)
     This is a development utility that allows you to easily dump flash
     memory to std out.
 */
-int mesh_dump_flash(char **args)
-{
-    int argv = mesh_get_argv(args);
-    if (argv < 3){
-        printf("Not enough arguments specified.\nUsage: dump offset size\n");
-        return 0;
-    }
-    unsigned int size = simple_strtoul(args[2], NULL, 16);
-    unsigned int offset = simple_strtoul(args[1], NULL, 16);
-    printf("Dumping %u bytes of flash\n", size);
-    char* flash = (char*) malloc(sizeof(char) * size);
-    mesh_flash_read(flash, offset, size);
+//int mesh_dump_flash(char **args)
+//{
+//    int argv = mesh_get_argv(args);
+//    if (argv < 3){
+//        printf("Not enough arguments specified.\nUsage: dump offset size\n");
+//        return 0;
+//    }
+//    unsigned int size = simple_strtoul(args[2], NULL, 16);
+//    unsigned int offset = simple_strtoul(args[1], NULL, 16);
+//    printf("Dumping %u bytes of flash\n", size);
+//    char* flash = (char*) malloc(sizeof(char) * size);
+//    mesh_flash_read(flash, offset, size);
+//
+//    // print hex in 16 byte blocks
+//    for(unsigned int i = 0; i < size; ++i)
+//    {
+//        if (i % 16 == 0)
+//        {
+//            printf("0x%06x ", i);
+//        }
+//        printf("%02x ", flash[i]);
+//        if (i % 16 == 15)
+//        {
+//            printf("\n");
+//        }
+//    }
+//    printf("\n");
+//
+//    free(flash);
+//
+//    return 0;
+//}
 
-    // print hex in 16 byte blocks
-    for(unsigned int i = 0; i < size; ++i)
-    {
-        if (i % 16 == 0)
-        {
-            printf("0x%06x ", i);
-        }
-        printf("%02x ", flash[i]);
-        if (i % 16 == 15)
-        {
-            printf("\n");
-        }
-    }
-    printf("\n");
-
-    free(flash);
-
-    return 0;
-}
-
-int mesh_reset_flash(char **args)
-{
-    // 0x1000000 is all 16 MB of flash
+//int mesh_reset_flash(char **args)
+//{
+//    // 0x1000000 is all 16 MB of flash
     // the erase page size is 64 KB or 0x10000 in hex
-    char* probe_cmd[] = {"sf", "erase", "0", "0x1000000"};
-    cmd_tbl_t* sf_tp = find_cmd("sf");
+//    char* probe_cmd[] = {"sf", "erase", "0", "0x1000000"};
+//    cmd_tbl_t* sf_tp = find_cmd("sf");
 
-    printf("Resetting flash. This may take more than a minute.\n");
-    return sf_tp->cmd(sf_tp, 0, 4, probe_cmd);
-}
+//    printf("Resetting flash. This may take more than a minute.\n");
+//   return sf_tp->cmd(sf_tp, 0, 4, probe_cmd);
+//}
 
 /******************************************************************************/
 /******************************** End MESH Commands ***************************/
