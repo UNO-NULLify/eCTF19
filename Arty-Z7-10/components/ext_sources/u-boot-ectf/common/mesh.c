@@ -859,6 +859,56 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /*
 Skeleton for now
 */
+int mesh_check_signedHash(char *game_hash, char *game_name){
+  EVP_PKEY_CTX *ctx;
+  unsigned char *md, *sig;
+  char * full_game_name;
+  size_t mdlen, siglen;
+  EVP_PKEY *verify_key;
+
+  //append .256.SIG to the name of the game that was passed for lookup
+  full_game_name = strcat(game_name, ".256.SIG\0");
+  //assign pointer to game_hash
+  md = game_hash;
+  mdlen = strlen(md);
+  //call mesh_size_ext4
+  siglen = mesh_size_ext4(full_game_name);
+  sig = (char*) calloc((size_t) (siglen + 1), 0);
+  //call mesh_read_ext4
+  mesh_read_ext4(full_game_name,sig, siglen);
+
+  /* NB: assumes verify_key, sig, siglen, md, and mdlen are already set up
+  * and that verify_key is an RSA public key
+  */
+  ctx = EVP_PKEY_CTX_new(verify_key);
+  if (!ctx){
+    return 1; /* Error occurred */
+  }
+  if (EVP_PKEY_verify_init(ctx) <= 0){
+    return 1; /* Error */
+  }
+  if (EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_PKCS1_PADDING) <= 0){
+    return 1; /* Error */
+  }
+  if (EVP_PKEY_CTX_set_signature_md(ctx, EVP_sha256()) <= 0){
+    return 1;/* Error */
+  }
+  /* Perform operation */
+  ret = EVP_PKEY_verify(ctx, sig, siglen, md, mdlen);
+
+  if(ret){
+    return 0; //success
+  }
+  return 1; //failure
+  /* ret == 1 indicates success, 0 verify failure and < 0 for some
+  * other error.
+  */
+}
+
+
+/*
+Skeleton for now
+*/
 int mesh_decrypt_game(char *game_name, char *outputBuffer){
     struct AES_ctx ctx;
     loff_t game_size;
@@ -872,7 +922,7 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     mesh_read_ext4(game_name, outputBuffer, game_size);
 
     // Key and Nonce can be accessed via keys.KEY and keys.Nonce
-    strncat(nonce, NONCE, 8);
+    strncat(nonce, NONCE, 16);
     key = KEY;
 
     // Decrypt the game
@@ -924,6 +974,13 @@ int mesh_read_hash(char *game_name){
                 }
                 row.hash[i] = '\0';
                 hash_buffer[i] = '\0';
+                //check signed hash
+                if(mesh_check_signedHash(row.hash))
+                {
+                  memcpy(row.hash, 0, strlen(row.hash));
+                  printf("Failed to verify signature: %s", row.hash);
+                  return 1;
+                }
                 mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
             }
 
