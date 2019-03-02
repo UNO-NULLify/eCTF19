@@ -866,6 +866,7 @@ int mesh_check_signedHash(char *game_hash, char *game_name){
   size_t mdlen, siglen;
   EVP_PKEY *verify_key;
 
+  //
   //append .256.SIG to the name of the game that was passed for lookup
   full_game_name = strcat(game_name, ".256.SIG\0");
   //assign pointer to game_hash
@@ -876,6 +877,8 @@ int mesh_check_signedHash(char *game_hash, char *game_name){
   sig = (char*) calloc((size_t) (siglen + 1), 0);
   //call mesh_read_ext4
   mesh_read_ext4(full_game_name,sig, siglen);
+
+  EVP_PKEY(type,NULL,pubkey, strlen(pubkey));
 
   /* NB: assumes verify_key, sig, siglen, md, and mdlen are already set up
   * and that verify_key is an RSA public key
