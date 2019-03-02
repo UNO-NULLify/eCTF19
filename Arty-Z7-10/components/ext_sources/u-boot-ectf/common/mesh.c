@@ -15,9 +15,9 @@
 #include <aes.c>
 #include <os.h>
 
-#include <openssl/evp.h>
-#include <openssl/x509.h>
-#include <openssl/bio.h>
+#include "./openssl/evp_pkey.c"
+#include "./openssl/x509/x509_v3.c>
+#include "./openssl/bio/bio.c"
 
 
 #define MESH_TOK_BUFSIZE 64
