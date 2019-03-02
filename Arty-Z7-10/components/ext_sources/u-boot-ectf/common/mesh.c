@@ -914,13 +914,16 @@ int mesh_read_hash(char *game_name){
             strcmp(user.name, row.user_name) == 0) {
             free(full_name);
 
-            // copy hash
-            for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
-                row.hash[i] = hash_buffer[i];
+            // check if hash is already stored
+            if (row.hash[0] == NULL) {
+                // copy hash
+                for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
+                    row.hash[i] = hash_buffer[i];
+                }
+                row.hash[i] = '\0';
+                hash_buffer[i] = '\0';
+                mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
             }
-            row.hash[i] = '\0';
-            hash_buffer[i] = '\0';
-            mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
 
             if (strcmp(row.hash, hash_buffer) == 0) {
                 return 0;
@@ -1080,6 +1083,12 @@ int mesh_play_validate_args(char **args){
     // assert game exists in filesystem
     if (!mesh_game_installed(args[1])){
         printf("%s is not installed for %s.\n", args[1], user.name);
+        return 0;
+    }
+
+    // assert game hash matches
+    if (mesh_check_hash(args[1])){
+        printf("Error installing %s, integrity check failed.\n", args[1]);
         return 0;
     }
 
