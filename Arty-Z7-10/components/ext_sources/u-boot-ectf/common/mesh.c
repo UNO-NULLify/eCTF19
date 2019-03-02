@@ -877,9 +877,9 @@ int mesh_check_signedHash(char *game_hash, char *game_name){
   full_game_name = strcat(game_name, ".256.SIG\0");
   //call mesh_size_ext4
   sig_len = mesh_size_ext4(full_game_name);
-  sig = (char*) calloc((size_t) (siglen + 1), 0);
+  sig = (char*) calloc((size_t) (sig_len + 1), 0);
   //call mesh_read_ext4
-  mesh_read_ext4(full_game_name,sig, siglen);
+  mesh_read_ext4(full_game_name,sig, sig_len);
 
   //Grab cert from #define in mesh_users.h file
   cert = "";
