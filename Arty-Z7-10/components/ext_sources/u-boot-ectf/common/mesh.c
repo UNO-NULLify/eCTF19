@@ -866,7 +866,7 @@ int mesh_check_signedHash(char *game_hash, char *game_name){
   unsigned char *sig;
   char * full_game_name;
   char * cert;
-  size_t siglen, cert_len;
+  size_t sig_len, cert_len;
   int rc = 1;
 
   BIO *b = NULL;
