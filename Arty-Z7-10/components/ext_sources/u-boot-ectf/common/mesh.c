@@ -1461,7 +1461,7 @@ char* mesh_read_line(int bufsize)
         if (position == bufsize - 1) {
             printf("\b");
         }
-        if (c == '\n' || c == '\r' || position == buffsize - 1) {
+        if (c == '\n' || c == '\r' || position == bufsize - 1) {
             printf("\n");
             buffer[position] = '\0';
             return buffer;
