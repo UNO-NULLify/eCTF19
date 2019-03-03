@@ -1009,10 +1009,7 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     game_size = mesh_size_ext4(game_name);
     // read the game into a buffer
     game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
-    //
     mesh_decrypt_game(game_name, (char *) game_buffer);
-    //mesh_read_ext4(game_name, (char *) game_buffer, game_size);
-
     // hash the buffer
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256_context ctx;
@@ -1023,9 +1020,6 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     hash[SHA256_DIGEST_LENGTH] = '\0';
 
     memcpy(outputBuffer, hash, SHA256_DIGEST_LENGTH);
-
-    //outputBuffer[SHA256_DIGEST_LENGTH] = '\0';
-
     free(game_buffer);
     return 0;
 }
