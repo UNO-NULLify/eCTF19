@@ -32,8 +32,6 @@
 #define EXIT_FAILURE 1
 #endif
 
-/*Full functional code */
-
 // declare user global
 User user;
 
@@ -116,7 +114,6 @@ int mesh_flash_init(void)
     It writes the byte array data of length flash_length to flash address at
     flash_location.
 */
-
 int mesh_flash_write(void* data, unsigned int flash_location, unsigned int flash_length)
 {
     /* Write flash_length number of bytes starting at what's pointed to by data
@@ -499,7 +496,6 @@ int mesh_uninstall(char **args)
     return 0;
 }
 
-
 /*
     This is a development utility that allows you to easily dump flash
     memory to std out.
@@ -801,6 +797,10 @@ int mesh_ls_ext4(const char *dirname, char *filename)
     return ret ;
 }
 
+/*
+    This function checks for the file whose name was passed in the
+    directory whose name was passed.
+*/
 int mesh_query_ext4(const char *dirname, char *filename){
 
     int ret = 0;
@@ -836,6 +836,9 @@ loff_t mesh_size_ext4(char *fname){
     return size;
 }
 
+/*
+    This function reads the specified amount from the file passed into the buffer.
+*/
 loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
     loff_t actually_read;
 
@@ -860,10 +863,9 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /******************************************************************************/
 
 /*
-Take in the game_hash and game_name from mesh_check_hash and determines if
-the row.hash matches the signed hash that was done at provision.
+    Take in the game_hash and game_name from mesh_check_hash and determines if
+    the row.hash matches the signed hash that was done at provision.
 */
-
 int mesh_check_signedHash(char *game_hash, char *game_name){
   /*
   unsigned char *sig;
@@ -911,7 +913,7 @@ int mesh_check_signedHash(char *game_hash, char *game_name){
 
 
 /*
-Skeleton for now
+    This function decrypts the game using AES, so it can be hashed or run
 */
 int mesh_decrypt_game(char *game_name, char *outputBuffer){
     struct AES_ctx ctx;
@@ -922,7 +924,6 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     // get the size of the game
     game_size = mesh_size_ext4(game_name);
 
-    //game_buffer = (uint8_t*)malloc((size_t) (game_size + 1));
     mesh_read_ext4(game_name, outputBuffer, game_size);
 
     // Key and Nonce can be accessed via keys.KEY and keys.Nonce
@@ -930,12 +931,8 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     key = KEY;
 
     // Decrypt the game
-    // What is the counter?
     AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
     AES_CTR_xcrypt_buffer(&ctx, (uint8_t *) outputBuffer, game_size);
-
-    // Memcpy the buffer to a returnable pointer.
-    //memcpy(outputBuffer, outputBuffer, game_size);
     return 0;
 }
 
@@ -1030,7 +1027,6 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     //outputBuffer[SHA256_DIGEST_LENGTH] = '\0';
 
     free(game_buffer);
-
     return 0;
 }
 
@@ -1081,7 +1077,7 @@ int mesh_check_hash(char *game_name){
 }
 
 /*
-Converts a short name into a full_name based on the games table values for that game
+    Converts a short name into a full_name based on the games table values for that game
 */
 void full_name_from_short_name(char* full_name, struct games_tbl_row* row)
 {
@@ -1090,7 +1086,7 @@ void full_name_from_short_name(char* full_name, struct games_tbl_row* row)
 
 /*
     This function determines if the specified game is installed for the given
-    user. It return 1 if it is installed and 0 if it isnt.
+    user. It returns 1 if it is installed and 0 if it isnt.
 */
 int mesh_game_installed(char *game_name){
     struct games_tbl_row row;
@@ -1617,6 +1613,10 @@ char* mesh_input(char* prompt)
     return mesh_read_line(MAX_STR_LEN);
 }
 
+/*
+    This function acts the same as mesh_input, but passes the correct maximum
+    lengths for usernames and pins
+*/
 char* mesh_input_creds(char* prompt, int mode) {
     int len = 0;
     if (mode == 1) {
