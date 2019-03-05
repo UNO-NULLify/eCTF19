@@ -875,7 +875,7 @@ int mesh_check_signature(){
     size_t hash_len;
     size_t sig_len;
 
-    if (!br_rsa_pkcs1_vrfy(*sig_buffer, sig_len, *hash_oid, hash_len, *pub, *hash_out)) {
+    if (!(br_rsa_pkcs1_vrfy(*sig_buffer, sig_len, *hash_oid, hash_len, *pub, *hash_out))) {
         printf("Failed to verify signature!");
         return 1;
     }
