@@ -868,10 +868,10 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
     * comment code
 */
 int mesh_check_signature(unsigned char hash_oid){
-    br_rsa_public_key pub;
-    unsigned char sig_buffer;
+    br_rsa_public_key *pub;
+    unsigned char *sig_buffer;
     //unsigned char hash_oid;
-    unsigned char hash_out;
+    unsigned char *hash_out;
     size_t hash_len;
     size_t sig_len;
 
@@ -880,8 +880,8 @@ int mesh_check_signature(unsigned char hash_oid){
     hash_out = "\0";
     sig_buffer = "\0";
 
-    if(br_rsa_pkcs1_vrfy(*sig_buffer, sig_len, *hash_oid, hash_len, *pub, *hash_out) == 0) {
-        printf("Failed to verify signature!");
+    if(br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, NULL, hash_len, pub, hash_out) == 0) {
+        printf("Failed to verify signature");
         return 1;
     }
 
