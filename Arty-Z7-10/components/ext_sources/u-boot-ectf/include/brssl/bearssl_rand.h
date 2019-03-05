@@ -25,11 +25,12 @@
 #ifndef BR_BEARSSL_RAND_H__
 #define BR_BEARSSL_RAND_H__
 
-#include <stddef.h>
-#include <stdint.h>
+#include <linux/stddef.h>
+/*#include <stdint.h>*/
+#include <linux/types.h>
 
-#include "bearssl_block.h"
-#include "bearssl_hash.h"
+#include "brssl/bearssl_block.h"
+#include "brssl/bearssl_hash.h"
 
 #ifdef __cplusplus
 extern "C" {

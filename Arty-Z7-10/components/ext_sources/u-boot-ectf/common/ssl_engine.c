@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "inner.h"
+#include "brssl/inner.h"
 
 #if 0
 /* obsolete */
@@ -66,7 +66,7 @@
 #endif
 
 #if BR_USE_URANDOM
-#include <sys/types.h>
+#include <linux/types.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>

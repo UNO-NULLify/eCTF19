@@ -1,7 +1,7 @@
 /* Automatically generated code; do not modify directly. */
 
 #include <stddef.h>
-#include <stdint.h>
+#include <linux/types.h>
 
 typedef struct {
 	uint32_t *dp;
@@ -70,7 +70,7 @@ void br_ssl_hs_client_run(void *t0ctx);
 #include <stddef.h>
 #include <string.h>
 
-#include "inner.h"
+#include "brssl/inner.h"
 
 /*
  * This macro evaluates to a pointer to the current engine context.

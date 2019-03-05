@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "inner.h"
+#include "brssl/inner.h"
 
 /*
  * Parameters for supported curves (field modulus, and 'b' equation

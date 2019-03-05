@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "inner.h"
+#include "brssl/inner.h"
 
 static inline size_t
 block_size(const br_hash_class *dig)

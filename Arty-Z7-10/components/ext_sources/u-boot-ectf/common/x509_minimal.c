@@ -1,7 +1,7 @@
 /* Automatically generated code; do not modify directly. */
 
 #include <stddef.h>
-#include <stdint.h>
+#include <linux/types.h>
 
 typedef struct {
 	uint32_t *dp;
@@ -67,13 +67,13 @@ void br_x509_minimal_run(void *t0ctx);
 
 
 
-#include "inner.h"
+#include "brssl/inner.h"
 
 
 
 
 
-#include "inner.h"
+#include "brssl/inner.h"
 
 /*
  * Implementation Notes

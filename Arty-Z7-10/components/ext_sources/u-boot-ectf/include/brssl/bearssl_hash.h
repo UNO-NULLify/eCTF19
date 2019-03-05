@@ -25,9 +25,10 @@
 #ifndef BR_BEARSSL_HASH_H__
 #define BR_BEARSSL_HASH_H__
 
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
+#include <linux/stddef.h>
+/*#include <stdint.h>*/
+#include <linux/types.h>
+#include <linux/string.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -25,12 +25,13 @@
 #ifndef BRSSL_H__
 #define BRSSL_H__
 
-#include <stdio.h>
+#include <stdio_dev.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
+#include <linux/string.h>
+/*#include <stdint.h>*/
+#include <linux/types.h>
 
-#include "bearssl.h"
+#include "brssl/bearssl.h"
 
 /*
  * malloc() wrapper:

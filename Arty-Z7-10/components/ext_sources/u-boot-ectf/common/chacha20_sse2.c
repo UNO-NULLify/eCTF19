@@ -23,7 +23,7 @@
  */
 
 #define BR_ENABLE_INTRINSICS   1
-#include "inner.h"
+#include "brssl/inner.h"
 
 #if BR_SSE2
 

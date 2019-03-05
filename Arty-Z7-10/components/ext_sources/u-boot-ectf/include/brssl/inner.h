@@ -25,11 +25,11 @@
 #ifndef INNER_H__
 #define INNER_H__
 
-#include <string.h>
+#include <linux/string.h>
 #include <limits.h>
 
-#include "config.h"
-#include "bearssl.h"
+#include "brssl/config.h"
+#include "brssl/bearssl.h"
 
 /*
  * On MSVC, disable the warning about applying unary minus on an

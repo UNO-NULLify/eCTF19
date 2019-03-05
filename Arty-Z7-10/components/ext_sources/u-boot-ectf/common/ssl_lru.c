@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "inner.h"
+#include "brssl/inner.h"
 
 /*
  * Each entry consists in a fixed number of bytes. Entries are concatenated

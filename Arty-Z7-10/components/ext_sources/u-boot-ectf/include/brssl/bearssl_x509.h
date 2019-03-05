@@ -25,12 +25,13 @@
 #ifndef BR_BEARSSL_X509_H__
 #define BR_BEARSSL_X509_H__
 
-#include <stddef.h>
-#include <stdint.h>
+#include <linux/stddef.h>
+/*#include <stdint.h>*/
+#include <linux/types.h>
 
-#include "bearssl_ec.h"
-#include "bearssl_hash.h"
-#include "bearssl_rsa.h"
+#include "brssl/bearssl_ec.h"
+#include "brssl/bearssl_hash.h"
+#include "brssl/bearssl_rsa.h"
 
 #ifdef __cplusplus
 extern "C" {

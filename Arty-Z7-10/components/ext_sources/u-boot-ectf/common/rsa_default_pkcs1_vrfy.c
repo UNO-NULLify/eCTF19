@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "inner.h"
+#include "brssl/inner.h"
 
 /* see bearssl_rsa.h */
 br_rsa_pkcs1_vrfy
