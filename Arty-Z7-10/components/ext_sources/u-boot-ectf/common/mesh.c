@@ -15,11 +15,6 @@
 #include <aes.c>
 #include <os.h>
 
-#include <evp.h>
-#include <x509.h>
-#include <bio.h>
-
-
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
 #define MESH_RL_BUFSIZE 1024
@@ -863,56 +858,6 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /******************************************************************************/
 
 /*
-    Take in the game_hash and game_name from mesh_check_hash and determines if
-    the row.hash matches the signed hash that was done at provision.
-*/
-int mesh_check_signedHash(char *game_hash, char *game_name){
-  /*
-  unsigned char *sig;
-  char * full_game_name;
-  char * cert;
-  size_t sig_len, cert_len;
-  int rc = 1;
-
-  BIO *b = NULL;
-  X509 *c;
-  EVP_PKEY *k = NULL;
-
-  //append .256.SIG to the name of the game that was passed for lookup
-  full_game_name = strcat(game_name, ".256.SIG\0");
-  //call mesh_size_ext4
-  sig_len = mesh_size_ext4(full_game_name);
-  sig = (char*) calloc((size_t) (sig_len + 1), 0);
-  //call mesh_read_ext4
-  mesh_read_ext4(full_game_name,sig, sig_len);
-
-  //Grab cert from #define in mesh_users.h file
-  cert = "";
-  cert_len = strlen(cert);
-
-  //Start of the process of verifying
-  b = BIO_new_mem_buf(cert, cert_len);
-  if (1 != rc){
-    printf("BIO_new_mem_buf broke");
-  }
-  c = d2i_X509_bio(b, NULL);
-  if (1 != rc){
-    printf("d2i_x509_bio broke");
-  }
-  k = X509_get_pubkey(c);
-  if (1 != rc){
-    printf("X509_get_pubkey broke");
-  }
-  rc = RSA_verify(NID_sha256, game_hash, sizeof game_hash, sig, sig_len, EVP_PKEY_get1_RSA(k));
-  if (1 != rc){
-    printf("Did not verify correctly");
-    return 1;
-  }*/
-  return 0;
-}
-
-
-/*
     This function decrypts the game using AES, so it can be hashed or run
 */
 int mesh_decrypt_game(char *game_name, char *outputBuffer){
@@ -975,13 +920,6 @@ int mesh_read_hash(char *game_name){
                 }
                 row.hash[i] = '\0';
                 hash_buffer[i] = '\0';
-                //check signed hash
-                if(mesh_check_signedHash(row.hash, game_name))
-                {
-                  memcpy(row.hash, 0, strlen(row.hash));
-                  printf("Failed to verify signature: %s", row.hash);
-                  return 1;
-                }
                 mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
             }
 
