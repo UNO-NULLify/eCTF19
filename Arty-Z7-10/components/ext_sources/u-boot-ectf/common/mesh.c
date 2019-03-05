@@ -15,9 +15,9 @@
 #include <aes.c>
 #include <os.h>
 
-#include <evp.h>
-#include <x509.h>
-#include <bio.h>
+#include <openssl/bio.h>
+#include <openssl/evp.h>
+#include <openssl/x509.h>
 
 
 #define MESH_TOK_BUFSIZE 64
@@ -867,7 +867,6 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
     the row.hash matches the signed hash that was done at provision.
 */
 int mesh_check_signedHash(char *game_hash, char *game_name){
-  /*
   unsigned char *sig;
   char * full_game_name;
   char * cert;
@@ -907,7 +906,7 @@ int mesh_check_signedHash(char *game_hash, char *game_name){
   if (1 != rc){
     printf("Did not verify correctly");
     return 1;
-  }*/
+  }
   return 0;
 }
 
