@@ -17,13 +17,13 @@ struct MeshUser {
 };
 
 static struct MeshUser mesh_users[] = {
-    {.username="user1", .pin="01a9297a0587f9277716b88976fbb10e3d307bf37194c33cbeea16f9ae9a6ea3", .salt="sVMMMDqqTxN1cNC3"},
-    {.username="user", .pin="1fa8b83117fc132a730e665c8a9df174bfa2a1dc4eda83a893c6f7dca8925bd3", .salt="fihtAdHMIG40un4q"},
-    {.username="user2", .pin="01fb9773aff71d7b1d0cf16d267e4e5fabd52af449ce9f47e91c53224cb83775", .salt="NhCzRVtScQkUhysw"},
-    {.username="demo", .pin="8ed23818baf29814773ebf7f18d6fa8c1dc3714d7c4beb2d5d0584c0f7b93a17", .salt="BPaLslRGL7MJokSE"},
+    {.username="user1", .pin="66d2b5e5706659905a2cb479b7eb78d5c91abd1cd3a0525a0aa5d8c5d42af9eb", .salt="nfFgv6f6QLUGNCdi"},
+    {.username="user", .pin="a28f85bca56bac601c9e8324bbabd87794c145ba69a5746fcb94aed6fd87eec2", .salt="0UWqBvhVSvs1Itai"},
+    {.username="user2", .pin="7927e903cec507ee1e9cb6a288ffb187d4d6d185aa91580cb4cb749b3b01dc0a", .salt="rS3Axg9uZOQWHGMD"},
+    {.username="demo", .pin="87bdf35dc818fc2acd8fa3bf3efc94082b4b8b97ace7dd02a7dbc73a15db69ba", .salt="oGIZ80yr8a2hrKAG"},
 
 };
 
 #endif /* __MESH_USERS_H__ */
-#define NONCE "PoD9SR381XI8su9t"
-#define KEY "z8TpeEqmubuwlBFBIB4JPs1NozwVgbzj"
+#define NONCE "n1m345XRjzwvwz1l"
+#define KEY "m0pa5LuXt5rx99vtwK6iI17nOdZ7ExGv"

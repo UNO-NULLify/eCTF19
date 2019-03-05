@@ -10,7 +10,7 @@
 
 #ifdef USE_HOSTCC /* Eliminate "ANSI does not permit..." warnings */
 #include <stdint.h>
-#include <stdio.h>
+#include <stdio_dev.h>
 #include "fw_env.h"
 #include <env_attr.h>
 #include <env_flags.h>
