@@ -4,7 +4,7 @@
 #include"objects.h"
 #include"err.h"
 #include"cryptlib.h"
-#include"limits.h"
+#include"linux/limits.h"
 
 #define ADDED_NID	3
 #define ADDED_DATA	0

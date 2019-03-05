@@ -61,7 +61,7 @@
  * Stolen from tjh's ssl/ssl_trc.c stuff.
  */
 #include <common.h>
-#include <limits.h>
+#include <linux/limits.h>
 #include <stdarg.h>
 #include "cryptlib.h"
 #include <openssl/bn.h>         /* To get BN_LLONG properly defined */

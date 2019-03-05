@@ -1,7 +1,6 @@
 #include"cryptlib.h"
 #include"bn_lcl.h"
-#include"limits.h"
-#include"assert.h"
+#include"linux/limits.h"
 #include"bn.h"
 //#define BN_ULONG	unsigned long	//samyang add  depend on bn.h
 //#define BN_BITS2	32

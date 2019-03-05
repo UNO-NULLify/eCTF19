@@ -1,6 +1,6 @@
 #include "asn1.h"
 #include "asn1_mac.h"
-#include "limits.h"
+#include "linux/limits.h"
 #include "err.h"
 
 static void asn1_put_length(unsigned char **pp, int length);
