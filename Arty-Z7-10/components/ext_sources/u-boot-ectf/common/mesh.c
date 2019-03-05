@@ -867,20 +867,27 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
     * implement checking at different points
     * comment code
 */
-int mesh_check_signature(unsigned char hash_oid){
+int mesh_check_signature(char *game_hash, char * game_name){
     br_rsa_public_key *pub;
     unsigned char *sig_buffer;
     //unsigned char hash_oid;
     unsigned char *hash_out;
     size_t hash_len;
-    size_t sig_len;
 
-    sig_len = 0;
-    hash_len = 0;
-    hash_out = "\0";
-    sig_buffer = "\0";
+    pub = (br_rsa_public_key){.n=MODULUS, .nlen=sizeof(MODULUS), .e=PUBE, .elen=sizeof(PUBE)}
 
-    if(br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, NULL, hash_len, pub, hash_out) == 0) {
+    //append .256.SIG to the name of the game that was passed for lookup
+    full_game_name = strcat(game_name, ".256.SIG\0");
+    //call mesh_size_ext4
+    sig_len = mesh_size_ext4(full_game_name);
+    sig_buffer = (char*) calloc((size_t) (sig_len + 1), 0);
+    //call mesh_read_ext4
+    mesh_read_ext4(full_game_name,sig_buffer, sig_len);
+
+    hash_len = 32;
+    hash_out = calloc(32,sizeof(char));
+
+    if(br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out) == 0) {
         printf("Failed to verify signature");
         return 1;
     }
@@ -952,6 +959,12 @@ int mesh_read_hash(char *game_name){
                 }
                 row.hash[i] = '\0';
                 hash_buffer[i] = '\0';
+                if(mesh_check_signature())
+                {
+                    memcpy(row.hash, 0, strlen(row.hash));
+                    printf("Failed to verify signature: %s", row.hash);
+                    return 1;
+                }
                 mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
             }
 
