@@ -64,8 +64,8 @@
 #include <linux/limits.h>
 #include <stdarg.h>
 #include "cryptlib.h"
-#include <openssl/bn.h>         /* To get BN_LLONG properly defined */
-#include <openssl/bio.h>
+#include "openssl/bn.h"         /* To get BN_LLONG properly defined */
+#include "openssl/bio.h"
 /***************************************************************************/
 
 /*

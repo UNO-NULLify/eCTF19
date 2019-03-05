@@ -1,12 +1,12 @@
-#include"asn1t.h"
-#include"asn1.h"
-#include"rsa.h"
-#include"err.h"
-#include"buffer.h"
-#include"objects.h"
-#include"x509.h"
-#include"e_os2.h"
-#include"myfunction.h"
+#include "asn1t.h"
+#include "asn1.h"
+#include "rsa.h"
+#include "err.h"
+#include "buffer.h"
+#include "objects.h"
+#include "x509.h"
+#include "e_os2.h"
+#include "myfunction.h"
 
 #define MSTRING		0
 #define COMPAT		0

@@ -1,6 +1,6 @@
-#include"stack.h"
-#include"cryptlib.h"
-#include"objects.h"
+#include "stack.h"
+#include "cryptlib.h"
+#include "objects.h"
 
 #undef MIN_NODES
 #define MIN_NODES	4

@@ -1,6 +1,6 @@
-#include"bn_lcl.h"
-#include"buffer.h"
-#include"bn.h"
+#include "bn_lcl.h"
+#include "buffer.h"
+#include "bn.h"
 
 /////////////////// BN_bn2bin////////////////////////////////////////ok
 

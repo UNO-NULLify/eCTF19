@@ -57,7 +57,7 @@
  */
 
 #include "cryptlib.h"
-#include <openssl/buffer.h>
+#include "openssl/buffer.h"
 #include "bn_lcl.h"
 
 extern int BIO_snprintf(char *buf, size_t n, const char *format, ...);
