@@ -252,7 +252,7 @@
 extern "C" {
 #endif
 
-#include <stdio_dev.h>    /* needed for malloc_stats */
+#include <stdio.h>    /* needed for malloc_stats */
 
 
 /*

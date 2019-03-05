@@ -7,7 +7,7 @@
 
 #ifdef USE_HOSTCC /* Eliminate "ANSI does not permit..." warnings */
 #include <stdint.h>
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <linux/linux_string.h>
 #else
 #include <common.h>

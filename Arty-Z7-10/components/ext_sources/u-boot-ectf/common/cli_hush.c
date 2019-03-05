@@ -93,7 +93,7 @@
 #include <unistd.h>    /* getpid */
 #include <stdlib.h>    /* getenv, atoi */
 #include <string.h>    /* strchr */
-#include <stdio_dev.h>     /* popen etc. */
+#include <stdio.h>     /* popen etc. */
 #include <glob.h>      /* glob, of course */
 #include <stdarg.h>    /* va_list */
 #include <errno.h>
