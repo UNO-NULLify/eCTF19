@@ -34,7 +34,7 @@
  */
 #ifndef OPENSSL_NO_SEED
 
-# include <stdio_dev.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # ifdef _WIN32

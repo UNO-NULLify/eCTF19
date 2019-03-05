@@ -15,7 +15,7 @@
 #define xxxHASH    EVP_sha1()
 
 #include <openssl/opensslconf.h>
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/cryptlib.h"
 #include <openssl/evp.h>
 #include <openssl/bn.h>

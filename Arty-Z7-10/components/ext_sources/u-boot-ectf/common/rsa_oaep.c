@@ -22,7 +22,7 @@
 
 #include "internal/constant_time_locl.h"
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/cryptlib.h"
 #include <openssl/bn.h>
 #include <openssl/evp.h>

@@ -24,7 +24,7 @@
 NON_EMPTY_TRANSLATION_UNIT
 #else
 
-# include <stdio_dev.h>
+# include <stdio.h>
 # include <time.h>
 # include "internal/cryptlib.h"
 # include <openssl/evp.h>

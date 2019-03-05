@@ -30,7 +30,7 @@
 
 #if !defined(OPENSSL_NO_STDIO)
 
-# include <stdio_dev.h>
+# include <stdio.h>
 # ifdef __DJGPP__
 #  include <unistd.h>
 # endif

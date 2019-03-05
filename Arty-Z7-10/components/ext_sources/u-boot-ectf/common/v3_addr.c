@@ -11,7 +11,7 @@
  * Implementation of RFC 3779 section 2.2.
  */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "internal/cryptlib.h"

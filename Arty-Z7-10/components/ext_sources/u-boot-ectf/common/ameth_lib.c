@@ -9,7 +9,7 @@
 
 #include "e_os.h"               /* for strncasecmp */
 #include "internal/cryptlib.h"
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <openssl/asn1t.h>
 #include <openssl/x509.h>
 #include <openssl/engine.h>

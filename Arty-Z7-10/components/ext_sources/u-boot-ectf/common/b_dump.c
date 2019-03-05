@@ -11,7 +11,7 @@
  * Stolen from tjh's ssl/ssl_trc.c stuff.
  */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "bio_lcl.h"
 
 #define DUMP_WIDTH      16

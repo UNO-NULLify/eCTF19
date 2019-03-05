@@ -9,7 +9,7 @@
 
 #include "e_os.h"
 #include "internal/cryptlib.h"
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <time.h>
 #include <errno.h>
 #include <sys/types.h>

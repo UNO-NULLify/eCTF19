@@ -11,7 +11,7 @@
  * GENERALIZEDTIME implementation. Based on UTCTIME
  */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <time.h>
 #include "internal/cryptlib.h"
 #include <openssl/asn1.h>

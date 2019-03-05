@@ -9,7 +9,7 @@
 
 #include <openssl/opensslconf.h>
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <string.h>
 
 #if !defined(OPENSSL_NO_RC4) && !defined(OPENSSL_NO_MD5)

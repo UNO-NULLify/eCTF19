@@ -6,7 +6,7 @@
  * in the file LICENSE in the source distribution or at
  * https://www.openssl.org/source/license.html
  */
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/cryptlib.h"
 #include <openssl/conf.h>
 #include <openssl/ossl_typ.h>

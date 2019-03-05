@@ -10,7 +10,7 @@
 #include "e_os.h"
 #include "internal/cryptlib.h"
 #include "internal/cryptlib_int.h"
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <openssl/crypto.h>

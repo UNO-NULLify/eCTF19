@@ -9,7 +9,7 @@
 
 /* extension creation utilities */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/ctype.h"
 #include "internal/cryptlib.h"
 #include <openssl/conf.h>

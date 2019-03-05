@@ -8,7 +8,7 @@
  */
 
 /* NOCW */
-#include <stdio_dev.h>
+#include <stdio.h>
 #ifdef _OSD_POSIX
 # ifndef CHARSET_EBCDIC
 #  define CHARSET_EBCDIC 1

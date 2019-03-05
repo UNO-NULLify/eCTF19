@@ -12,7 +12,7 @@
  * dh_depr.c as wrappers to these ones.  - Geoff
  */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/cryptlib.h"
 #include <openssl/bn.h>
 #include "dh_locl.h"

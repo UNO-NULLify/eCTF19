@@ -14,7 +14,7 @@
 #if !defined(OPENSSL_SYS_VXWORKS)
 # include <memory.h>
 #endif
-#include <stdio_dev.h>
+#include <stdio.h>
 
 /* Streaming encode support for PKCS#7 */
 

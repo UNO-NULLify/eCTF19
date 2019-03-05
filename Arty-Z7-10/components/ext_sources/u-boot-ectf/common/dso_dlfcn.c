@@ -8,7 +8,7 @@
  */
 
 /*
- * We need to do this early, because stdio_dev.h includes the header files that
+ * We need to do this early, because stdio.h includes the header files that
  * handle _GNU_SOURCE and other similar macros.  Defining it later is simply
  * too late, because those headers are protected from re- inclusion.
  */

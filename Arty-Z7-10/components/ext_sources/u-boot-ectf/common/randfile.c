@@ -10,7 +10,7 @@
 #include "internal/cryptlib.h"
 
 #include <errno.h>
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -56,7 +56,7 @@
 /*
  * __FILE_ptr32 is a type provided by DEC C headers (types.h specifically)
  * to make sure the FILE* is a 32-bit pointer no matter what.  We know that
- * stdio functions return this type (a study of stdio_dev.h proves it).
+ * stdio functions return this type (a study of stdio.h proves it).
  *
  * This declaration is a nasty hack to get around vms' extension to fopen for
  * passing in sharing options being disabled by /STANDARD=ANSI89

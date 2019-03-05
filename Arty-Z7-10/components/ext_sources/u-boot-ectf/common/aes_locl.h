@@ -11,7 +11,7 @@
 # define HEADER_AES_LOCL_H
 
 # include <openssl/e_os2.h>
-# include <stdio_dev.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 

@@ -68,7 +68,7 @@
 
 */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <errno.h>
 #include <assert.h>
 #include "internal/cryptlib.h"

@@ -14,7 +14,7 @@
  *      generalTime    GeneralizedTime }
  */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <time.h>
 #include "internal/ctype.h"
 #include "internal/cryptlib.h"

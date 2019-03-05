@@ -8,7 +8,7 @@
  */
 
 #include "e_os.h"
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "internal/ctype.h"
 #include <string.h>

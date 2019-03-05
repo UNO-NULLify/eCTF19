@@ -1151,7 +1151,7 @@ void SHA3_sponge(const unsigned char *inp, size_t len,
     SHA3_squeeze(A, out, d, r);
 }
 
-# include <stdio_dev.h>
+# include <stdio.h>
 
 int main()
 {

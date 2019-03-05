@@ -11,12 +11,12 @@
 # define _GNU_SOURCE
 #endif
 #include "e_os.h"
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/cryptlib.h"
 #include <openssl/rand.h>
 #include "rand_lcl.h"
 #include "internal/rand_int.h"
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/dso.h"
 #if defined(__linux)
 # include <asm/unistd.h>

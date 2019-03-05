@@ -8,7 +8,7 @@
  */
 
 #include <string.h>
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/ctype.h"
 #include "openssl/ebcdic.h"
 

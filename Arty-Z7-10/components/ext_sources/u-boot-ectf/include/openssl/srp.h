@@ -17,7 +17,7 @@
 #include <openssl/opensslconf.h>
 
 #ifndef OPENSSL_NO_SRP
-# include <stdio_dev.h>
+# include <stdio.h>
 # include <string.h>
 # include <openssl/safestack.h>
 # include <openssl/bn.h>

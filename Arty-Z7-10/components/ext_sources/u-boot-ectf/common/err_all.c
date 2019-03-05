@@ -7,7 +7,7 @@
  * https://www.openssl.org/source/license.html
  */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/err_int.h"
 #include <openssl/asn1err.h>
 #include <openssl/bnerr.h>

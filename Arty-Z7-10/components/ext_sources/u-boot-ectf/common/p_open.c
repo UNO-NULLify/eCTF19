@@ -12,7 +12,7 @@
 NON_EMPTY_TRANSLATION_UNIT
 #else
 
-# include <stdio_dev.h>
+# include <stdio.h>
 # include <openssl/evp.h>
 # include <openssl/objects.h>
 # include <openssl/x509.h>

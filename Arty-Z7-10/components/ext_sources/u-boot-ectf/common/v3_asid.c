@@ -12,7 +12,7 @@
  */
 
 #include <assert.h>
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <string.h>
 #include "internal/cryptlib.h"
 #include <openssl/conf.h>

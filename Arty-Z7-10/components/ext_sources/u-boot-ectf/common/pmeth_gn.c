@@ -7,7 +7,7 @@
  * https://www.openssl.org/source/license.html
  */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "internal/cryptlib.h"
 #include <openssl/objects.h>

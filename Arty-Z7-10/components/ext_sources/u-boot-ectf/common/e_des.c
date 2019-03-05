@@ -7,7 +7,7 @@
  * https://www.openssl.org/source/license.html
  */
 
-#include <stdio_dev.h>
+#include <stdio.h>
 #include "internal/cryptlib.h"
 #ifndef OPENSSL_NO_DES
 # include <openssl/evp.h>
