@@ -867,15 +867,15 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
     * implement checking at different points
     * comment code
 */
-int mesh_check_signature(){
+int mesh_check_signature(unsigned char hash_oid){
     br_rsa_public_key pub;
     unsigned char sig_buffer;
-    unsigned char hash_oid;
+    //unsigned char hash_oid;
     unsigned char hash_out;
     size_t hash_len;
     size_t sig_len;
 
-    if (!(br_rsa_pkcs1_vrfy(*sig_buffer, sig_len, *hash_oid, hash_len, *pub, *hash_out))) {
+    if (br_rsa_pkcs1_vrfy(*sig_buffer, sig_len, *hash_oid, hash_len, *pub, *hash_out) == 0) {
         printf("Failed to verify signature!");
         return 1;
     }
