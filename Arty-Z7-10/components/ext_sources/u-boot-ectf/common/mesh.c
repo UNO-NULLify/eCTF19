@@ -15,6 +15,8 @@
 #include <aes.c>
 #include <os.h>
 
+#include "brssl/bearssl_rsa.h"
+
 #define MESH_TOK_BUFSIZE 64
 #define MESH_TOK_DELIM " \t\r\n\a"
 #define MESH_RL_BUFSIZE 1024
@@ -856,6 +858,31 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /******************************************************************************/
 /************************************* Helpers ********************************/
 /******************************************************************************/
+
+/*
+    Skeleton function
+    TODO:
+    * implement bearssl code
+    * implement mesh.h prototype
+    * implement checking at different points
+    * comment code
+*/
+int mesh_check_signature(){
+    br_rsa_public_key pub;
+    unsigned char sig_buffer;
+    unsigned char hash_oid;
+    unsigned char hash_out;
+    size_t hash_len;
+    size_t sig_len;
+
+    if (!br_rsa_pkcs1_vrfy(*sig_buffer, sig_len, *hash_oid, hash_len, *pub, *hash_out) {
+        printf("Failed to verify signature!");
+        return 1;
+    }
+
+    return 0;
+}
+
 
 /*
     This function decrypts the game using AES, so it can be hashed or run
