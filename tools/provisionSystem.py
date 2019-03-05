@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
 import os
 import base64
@@ -26,9 +27,17 @@ factory_secrets_fn = "FactorySecrets.txt"
 nonce = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(16)])
 # Key
 key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+# Keypair
+keypair = RSA.generate(2048)
+# Modulus
+modulus = keypair.n
+# Pube
+pube = keypair.e
 
 print("HERE IS YOUR nonce: ", nonce)
 print("HERE IS YOUR key:", key)
+print("HERE IS YOUR modulus: ", modulus)
+print("HERE IS YOUR pube:", pube)
 
 
 def hash_pins(users):
@@ -103,6 +112,10 @@ static struct MeshUser mesh_users[] = {{
     data = '#define NONCE "%s"\n' % nonce
     f.write(data)
     data = '#define KEY "%s"\n' % key
+    f.write(data)
+    data = '#define MODULUS "%s"\n' % modulus
+    f.write(data)
+    data = '#define PUBE "%s"\n' % pube
     f.write(data)
 
 
@@ -197,6 +210,7 @@ def write_factory_secrets(f):
     """
     f.write(nonce+"\n")
     f.write(key+"\n")
+    f.write(keypair.export_key('PEM'))
 
 def main():
     # Argument parsing

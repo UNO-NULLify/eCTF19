@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+from Crypto.Signature import pkcs1_15
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import RSA
 import os
 import argparse
-import hashlib
 import re
 import subprocess
 
@@ -16,7 +18,8 @@ def gen_cipher(content):
     content = [x.strip() for x in content]
     nonce = content[0].encode()
     key = content[1].encode()
-    return (key, nonce)
+    priv = content[2].encode()
+    return (key, nonce, priv)
 
 
 def provision_game(line, cipher):
@@ -102,28 +105,31 @@ def provision_game(line, cipher):
         f_sign.close()
         exit(1)
     try:
-        hasher = hashlib.sha256()
-        # print(str(f_out.name))
-        #path = str(os.path.join(gen_path, f_out.name))
-        # print(path)
+        key = RSA.import_key(cipher[2]).read()
         # hash game and save to file, tested locally
         with open(f_out.name, 'rb') as to_hash:
+            h = SHA256.new()
             buf = to_hash.read(block_size)
             while len(buf) > 0:
-                hasher.update(buf)
+                h.update(buf)
                 buf = to_hash.read(block_size)
+
         print("wrote contents to binary: " + f_out.name)
         # to_hash/f_out closed implicitly outside of with
 
         with open(os.path.join(gen_path, f_hash_out), "w+") as hash:
-            hash.write(hasher.hexdigest())
-        f_out.close()
+            hash.write(h.hexdigest())
+
         print("wrote hash to file: " + str(os.path.join(gen_path, f_hash_out)))
 
-    # need to verify here cuz why not
+        # need to verify here cuz why not
+        sig = pkcs1_15.new(key).sign(h)
 
-    # this is all in 1 try/catch block because we cannot have one
-    # part (writing header, hashing, signing, etc) to fail whilst the others continue
+        with open(os.path.join(gen_path, f_hash_out), "w+") as sign:
+            sign.write(sig)
+
+        # this is all in 1 try/catch block because we cannot have one
+        # part (writing header, hashing, signing, etc) to fail whilst the others continue
 
     except Exception as e:
         print("Error, could write OR hash binary OR write signature to source: %s" % (e))
