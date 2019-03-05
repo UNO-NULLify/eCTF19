@@ -16,9 +16,7 @@
 
 # include <openssl/e_os2.h>
 
-# ifndef OPENSSL_NO_STDIO
 #  include <stdio.h>
-# endif
 
 # include <openssl/safestack.h>
 # include <openssl/opensslv.h>
@@ -425,12 +423,7 @@ typedef LONG CRYPTO_ONCE;
 #    define CRYPTO_ONCE_STATIC_INIT 0
 #   endif
 #  else
-#   include <pthread.h>
-typedef pthread_once_t CRYPTO_ONCE;
-typedef pthread_key_t CRYPTO_THREAD_LOCAL;
-typedef pthread_t CRYPTO_THREAD_ID;
 
-#   define CRYPTO_ONCE_STATIC_INIT PTHREAD_ONCE_INIT
 #  endif
 # endif
 
