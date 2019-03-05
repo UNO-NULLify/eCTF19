@@ -1,6 +1,6 @@
-#include "asn1.h"
-#include "bio.h"
-#include "err.h"
+#include "openssl/asn1.h"
+#include "openssl/bio.h"
+#include "openssl/err.h"
 
 ///////////////BIO_write////////////////////ok
 

@@ -1,6 +1,6 @@
-#include "bn_lcl.h"
-#include "buffer.h"
-#include "bn.h"
+#include "openssl/bn_lcl.h"
+#include "openssl/buffer.h"
+#include "openssl/bn.h"
 
 /////////////////// BN_bn2bin////////////////////////////////////////ok
 

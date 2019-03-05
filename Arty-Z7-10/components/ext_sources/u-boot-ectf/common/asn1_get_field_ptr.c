@@ -1,7 +1,7 @@
-#include "asn1.h"
-#include "asn1t.h"
-#include "objects.h"
-#include "err.h"
+#include "openssl/asn1.h"
+#include "openssl/asn1t.h"
+#include "openssl/objects.h"
+#include "openssl/err.h"
 
 
 #define offset2ptr(addr, offset) (void *)(((char *) addr) + offset)

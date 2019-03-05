@@ -1,6 +1,6 @@
-#include "cryptlib.h"
-#include "asn1t.h"
-#include "bn.h"
+#include "openssl/cryptlib.h"
+#include "openssl/asn1t.h"
+#include "openssl/bn.h"
 
 
 #define BN_SENSITIVE	1

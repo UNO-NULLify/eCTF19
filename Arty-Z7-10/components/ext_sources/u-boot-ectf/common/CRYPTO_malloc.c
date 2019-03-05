@@ -1,7 +1,7 @@
-#include "crypto.h"
-#include "cryptlib.h"
-#include "lhash.h"
-#include "myfunction.h"
+#include "openssl/crypto.h"
+#include "openssl/cryptlib.h"
+#include "openssl/lhash.h"
+#include "openssl/myfunction.h"
 
 
 unsigned char cleanse_ctr = 0;

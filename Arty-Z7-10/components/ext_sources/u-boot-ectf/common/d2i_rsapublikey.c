@@ -1,12 +1,12 @@
-#include "asn1t.h"
-#include "asn1.h"
-#include "rsa.h"
-#include "err.h"
-#include "buffer.h"
-#include "objects.h"
-#include "x509.h"
-#include "e_os2.h"
-#include "myfunction.h"
+#include "openssl/asn1t.h"
+#include "openssl/asn1.h"
+#include "openssl/rsa.h"
+#include "openssl/err.h"
+#include "openssl/buffer.h"
+#include "openssl/objects.h"
+#include "openssl/x509.h"
+#include "openssl/e_os2.h"
+#include "openssl/myfunction.h"
 
 #define MSTRING		0
 #define COMPAT		0

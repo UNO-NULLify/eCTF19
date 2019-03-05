@@ -1,7 +1,7 @@
-#include "asn1.h"
-#include "asn1t.h"
-#include "x509v3.h"
-#include "rsa.h"
+#include "openssl/asn1.h"
+#include "openssl/asn1t.h"
+#include "openssl/x509v3.h"
+#include "openssl/rsa.h"
 
 static int pubkey_cb(int operation, ASN1_VALUE **pval, const ASN1_ITEM *it)
 	{

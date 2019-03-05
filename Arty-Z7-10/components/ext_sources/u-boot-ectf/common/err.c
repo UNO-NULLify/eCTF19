@@ -1,5 +1,5 @@
-#include "err.h"
-#include "bio.h"
+#include "openssl/err.h"
+#include "openssl/bio.h"
 
 ////////////ERR_put_error/////////////////////////////////////
 

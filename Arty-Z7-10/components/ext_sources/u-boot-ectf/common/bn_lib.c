@@ -56,8 +56,8 @@
  * [including the GNU Public Licence.]
  */
 
-#include "cryptlib.h"
-#include "bn_lcl.h"
+#include "openssl/cryptlib.h"
+#include "openssl/bn_lcl.h"
 
 void BN_free(BIGNUM *a)
 	{

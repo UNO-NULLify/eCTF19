@@ -1,10 +1,10 @@
-#include "asn1.h"
-#include "asn1t.h"
-#include "x509v3.h"
-#include "rsa.h"
-#include "bn.h"
-#include "ossl_typ.h"
-#include "myfunction.h"
+#include "openssl/asn1.h"
+#include "openssl/asn1t.h"
+#include "openssl/x509v3.h"
+#include "openssl/rsa.h"
+#include "openssl/bn.h"
+#include "openssl/ossl_typ.h"
+#include "openssl/myfunction.h"
 
 /////////////////////rsa_cb/////////////////////////////////
 

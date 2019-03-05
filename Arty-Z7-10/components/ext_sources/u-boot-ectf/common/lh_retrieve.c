@@ -1,6 +1,6 @@
 
-#include "myfunction.h"
-#include "lhash.h"
+#include "openssl/myfunction.h"
+#include "openssl/lhash.h"
 
 
 

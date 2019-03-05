@@ -56,11 +56,11 @@
  * [including the GNU Public Licence.]
  */
 
-#include <stack.h>
-#include <asn1.h>
-#include <objects.h>
-#include <evp.h>
-#include <x509.h>
+#include "openssl/stack.h"
+#include "openssl/asn1.h"
+#include "openssl/objects.h"
+#include "openssl/evp.h"
+#include "openssl/x509.h"
 
 int X509v3_get_ext_count(const STACK_OF(X509_EXTENSION) *x)
 	{

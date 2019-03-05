@@ -1,9 +1,9 @@
-#include "cryptlib.h"
-#include "bn.h"
-#include "evp.h"
-#include "objects.h"
+#include "openssl/cryptlib.h"
+#include "openssl/bn.h"
+#include "openssl/evp.h"
+#include "openssl/objects.h"
 #ifndef OPENSSL_NO_RSA
-#include "rsa.h"
+#include "openssl/rsa.h"
 #endif
 
 

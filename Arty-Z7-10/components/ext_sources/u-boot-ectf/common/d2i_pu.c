@@ -1,10 +1,10 @@
-#include "cryptlib.h"
-#include "bn.h"
-#include "evp.h"
-#include "objects.h"
-#include "asn1.h"
-#include "asn1t.h"
-#include "rsa.h"
+#include "openssl/cryptlib.h"
+#include "openssl/bn.h"
+#include "openssl/evp.h"
+#include "openssl/objects.h"
+#include "openssl/asn1.h"
+#include "openssl/asn1t.h"
+#include "openssl/rsa.h"
 
 /////////////////d2i_PublicKey////////////////////////////////////ok
 

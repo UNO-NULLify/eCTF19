@@ -57,9 +57,9 @@
  */
 
 
-#include <asn1.h>
-#include <bn.h>
-#include <err.h>
+#include "openssl/asn1.h"
+#include "openssl/bn.h"
+#include "openssl/err.h"
 
 long ASN1_INTEGER_get(ASN1_INTEGER *a)
 {

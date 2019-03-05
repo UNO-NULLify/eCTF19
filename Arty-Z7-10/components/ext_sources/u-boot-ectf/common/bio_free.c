@@ -1,6 +1,6 @@
-#include "bio.h"
-#include "err.h"
-#include "myfunction.h"
+#include "openssl/bio.h"
+#include "openssl/err.h"
+#include "openssl/myfunction.h"
 //////////////BIO_free/////////////////////////ok
 
 int BIO_free(BIO *a)

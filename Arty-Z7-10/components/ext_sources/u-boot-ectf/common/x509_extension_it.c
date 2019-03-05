@@ -1,6 +1,6 @@
-#include "asn1.h"
-#include "asn1t.h"
-#include "x509v3.h"
+#include "openssl/asn1.h"
+#include "openssl/asn1t.h"
+#include "openssl/x509v3.h"
 
 /////////////////X509_EXTENSION_it///////////////////////////
 

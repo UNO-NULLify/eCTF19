@@ -1,9 +1,9 @@
-#include "asn1.h"
-#include "obj_dat.h"
-#include "lhash.h"
-#include "objects.h"
-#include "err.h"
-#include "cryptlib.h"
+#include "openssl/asn1.h"
+#include "openssl/obj_dat.h"
+#include "openssl/lhash.h"
+#include "openssl/objects.h"
+#include "openssl/err.h"
+#include "openssl/cryptlib.h"
 #include "linux/limits.h"
 
 #define ADDED_NID	3

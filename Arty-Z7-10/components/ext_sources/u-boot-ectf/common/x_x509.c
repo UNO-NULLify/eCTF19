@@ -1,7 +1,7 @@
-#include "evp.h"
-#include "asn1t.h"
-#include "x509.h"
-#include "x509v3.h"
+#include "openssl/evp.h"
+#include "openssl/asn1t.h"
+#include "openssl/x509.h"
+#include "openssl/x509v3.h"
 
 /////////////////X509_CINF_IT////////////////////////////////
 

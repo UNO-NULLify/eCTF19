@@ -1,8 +1,8 @@
-#include "bio.h"
+#include "openssl/bio.h"
 #include "errno.h"
-#include "err.h"
-#include "cryptlib.h"
-#include "bio_lcl.h"
+#include "openssl/err.h"
+#include "openssl/cryptlib.h"
+#include "openssl/bio_lcl.h"
 
 #define MS_CALLBACK			//samyang  modify
 

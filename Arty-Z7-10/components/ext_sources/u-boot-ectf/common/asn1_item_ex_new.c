@@ -1,8 +1,8 @@
-#include "asn1.h"
-#include "asn1t.h"
-#include "err.h"
-#include "objects.h"
-#include "myfunction.h"
+#include "openssl/asn1.h"
+#include "openssl/asn1t.h"
+#include "openssl/err.h"
+#include "openssl/objects.h"
+#include "openssl/myfunction.h"
 
 static int asn1_item_ex_combine_new(ASN1_VALUE **pval, const ASN1_ITEM *it,int combine);
 static void asn1_template_clear(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt);

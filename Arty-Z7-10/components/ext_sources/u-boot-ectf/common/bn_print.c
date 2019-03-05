@@ -56,9 +56,9 @@
  * [including the GNU Public Licence.]
  */
 
-#include "cryptlib.h"
+#include "openssl/cryptlib.h"
 #include "openssl/buffer.h"
-#include "bn_lcl.h"
+#include "openssl/bn_lcl.h"
 
 extern int BIO_snprintf(char *buf, size_t n, const char *format, ...);
 

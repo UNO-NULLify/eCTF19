@@ -74,7 +74,6 @@
 # endif
 #endif
 
-#include <assert.h>
 #include <linux/limits.h>
 #include <stdlib.h>
 #include <string.h>
@@ -83,7 +82,7 @@
 #include "openssl/err.h"
 #include "openssl/crypto.h"
 
-#include "e_os.h"
+#include "openssl/e_os.h"
 
 /* VxWorks defines SSIZE_MAX with an empty value causing compile errors */
 #if defined(OPENSSL_SYS_VXWORKS)
