@@ -13,19 +13,19 @@ obj-y += exports.o
 obj-y += hash.o
 obj-$(CONFIG_HUSH_PARSER) += cli_hush.o
 obj-$(CONFIG_AUTOBOOT) += autoboot.o
-obj-y +=  openssl/CRYPTO_malloc.o
-obj-y +=  openssl/err/err.o
-obj-y +=  openssl/objects/obj_dat.o
-obj-y +=  openssl/asn1/a_int.o openssl/asn1/asn1_get_field_ptr.o openssl/asn1/ASN1_INTEGER_get.o openssl/asn1/asn1_item_ex_new.o  \
-            openssl/asn1/asn1_lock_free.o openssl/asn1/asn1_new_free.o openssl/asn1/asn1_put_object.o openssl/asn1/asn1_string.o    \
-            openssl/asn1/ASN1_STRING_print.o openssl/asn1/d2i_pu.o openssl/asn1/d2i_rsapublikey.o openssl/asn1/EVP_pkey.o           \
-            openssl/asn1/i2a_ASN1_INTEGER.o openssl/asn1/i2d_pu.o openssl/asn1/X509_PUBKEY_it.o openssl/asn1/x_bignum.o             \
-            openssl/asn1/x_x509.o openssl/asn1/RSAPublicKey_it.o  openssl/asn1/tasn_enc.o openssl/asn1/stk.o openssl/asn1/x509_extension_it.o
-obj-y +=  openssl/x509/x509_v3.o openssl/x509/x509_ext.o openssl/x509/extension.o
-obj-y +=  openssl/bn/bn_lib.o openssl/bn/bn_word.o openssl/bn/bn_bn2dec.o openssl/bn/bn_print.o openssl/bn/bn_asm.o openssl/bn/bn_shift.o
-obj-y +=  openssl/bio/bio.o openssl/bio/b_print.o openssl/bio/bio_free.o openssl/bio/bio_s_mem.o openssl/bio/bio_read.o
-obj-y +=  openssl/lhash/lh_retrieve.o
-obj-y +=  openssl/rsa/rsa.o
+obj-y +=  CRYPTO_malloc.o
+obj-y +=  err.o
+obj-y +=  obj_dat.o
+obj-y +=  a_int.o asn1_get_field_ptr.o ASN1_INTEGER_get.o asn1_item_ex_new.o  \
+            asn1_lock_free.o asn1_new_free.o asn1_put_object.o asn1_string.o    \
+            ASN1_STRING_print.o d2i_pu.o d2i_rsapublikey.o EVP_pkey.o           \
+            i2a_ASN1_INTEGER.o i2d_pu.o X509_PUBKEY_it.o x_bignum.o             \
+            x_x509.o RSAPublicKey_it.o  tasn_enc.o stk.o x509_extension_it.o
+obj-y +=  x509_v3.o x509_ext.o extension.o
+obj-y +=  bn_lib.o bn_word.o bn_bn2dec.o bn_print.o bn_asm.o bn_shift.o
+obj-y +=  bio.o b_print.o bio_free.o bio_s_mem.o bio_read.o
+obj-y +=  lh_retrieve.o
+obj-y +=  rsa.o
 obj-y += mesh.o
 
 # This option is not just y/n - it can have a numeric value
