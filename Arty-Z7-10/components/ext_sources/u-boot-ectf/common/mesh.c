@@ -877,7 +877,7 @@ int mesh_check_signature(char *game_hash, char *game_name){
 
     calloc(SHA256_DIGEST_LENGTH, hash_out);
 
-    printf("Declared vars");
+    printf("Declared vars\n");
     calloc(sizeof(MODULUS),localMod);
     localMod = MODULUS;
     pub->n = localMod;
@@ -885,7 +885,7 @@ int mesh_check_signature(char *game_hash, char *game_name){
     pub->e = PUBE;
     pub->elen = sizeof(PUBE);
 
-    printf("\nmodulus: %s\n\npube: %s", pub->n, pub->e);
+    printf("\nmodulus: %s\npube: %s\n", pub->n, pub->e);
     // append .SHA256.SIG to the name of the game that was passed for lookup
     full_game_name = (char*) malloc(snprintf(NULL, 0, "%s.SHA256.SIG", game_name) + 1);
     sprintf(full_game_name, "%s.SHA256.SIG\0", game_name);
@@ -895,14 +895,14 @@ int mesh_check_signature(char *game_hash, char *game_name){
     sig_len = mesh_size_ext4(full_game_name);
     sig_buffer = (char*) malloc((size_t) (sig_len + 1));
 
-    printf("\nHere is the sig_buffer: %s", sig_buffer);
+    printf("Here is the sig_buffer: %s\n", sig_buffer);
 
     // call mesh_read_ext4
     mesh_read_ext4(full_game_name,sig_buffer, sig_len);
     hash_len = SHA256_DIGEST_LENGTH;
     hash_out = (char*) malloc((size_t) (hash_len +1));
 
-    printf("Verifying sig");
+    printf("Verifying sig\n");
     br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out);
     if (strcmp(hash_out, game_hash) != 0) {
         printf("Signature verification failed\n");
@@ -977,6 +977,7 @@ int mesh_read_hash(char *game_name){
             if (row.hash[0] == NULL) {
                 // copy hash
                 for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
+                  printf("Character from hash_buffer[%d], %c", hash_buffer[i]);
                     row.hash[i] = hash_buffer[i];
                 }
                 row.hash[i] = '\0';
