@@ -905,7 +905,7 @@ int mesh_check_signature(char *game_name, char * game_hash){
     //still need to compare the hashes
     br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out);
     if (memcmp(hash_out, game_hash, SHA256_DIGEST_LENGTH) != 0) {
-      for (int i = 0; i < SHA256; i++)
+      for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
   	   printf("%x02", hash_out[i]);
       printf("Signature verification failed\n");
       free(sig_buffer);
