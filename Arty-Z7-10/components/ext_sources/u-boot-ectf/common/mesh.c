@@ -915,17 +915,12 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     mesh_read_ext4(game_name, outputBuffer, game_size);
 
     // Key and Nonce can be accessed via keys.KEY and keys.Nonce
-    strncat(nonce, NONCE, 16);
+    strncat(nonce, NONCE, 8);
     key = KEY;
 
-    printf("Here is your key: %s, Here is your NONCE: %s", key, nonce);
     // Decrypt the game
     AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
     AES_CTR_xcrypt_buffer(&ctx, (uint8_t *) outputBuffer, game_size);
-    printf("After Decryption\n");
-    for(int i=0; i < 40; i++){
-        printf("Here is the character at %d: %c\n", i, outputBuffer[i]);
-    }
     return 0;
 }
 
