@@ -11,7 +11,7 @@
 #ifdef USE_HOSTCC /* Eliminate "ANSI does not permit..." warnings */
 #include <linux/types.h>
 #include <stdio.h>
-#include "fw_env.h"
+#include "brssl/fw_env.h"
 #include <env_attr.h>
 #include <env_flags.h>
 #define getenv fw_getenv
