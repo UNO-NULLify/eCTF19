@@ -876,9 +876,9 @@ int mesh_check_signature(char *game_name, char * game_hash){
 
     printf("Declared vars");
     pub->n = MODULUS;
-    pub->nlen = strlen(MODULUS);
+    pub->nlen = 617;
     pub->e = PUBE;
-    pub->elen = strlen(PUBE);
+    pub->elen = 5;
 
     printf("Here is the size of MODULUS: %d", strlen(MODULUS));
 
