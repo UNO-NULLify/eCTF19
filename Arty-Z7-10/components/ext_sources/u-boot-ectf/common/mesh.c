@@ -870,8 +870,9 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 int mesh_check_signature(char *game_hash, char * game_name){
     br_rsa_public_key *pub;
     unsigned char *sig_buffer;
-    //unsigned char hash_oid;
     unsigned char *hash_out;
+    char * full_game_name;
+    size_t sig_len;
     size_t hash_len;
 
     pub = (br_rsa_public_key){.n=MODULUS, .nlen=sizeof(MODULUS), .e=PUBE, .elen=sizeof(PUBE)};
@@ -959,7 +960,7 @@ int mesh_read_hash(char *game_name){
                 }
                 row.hash[i] = '\0';
                 hash_buffer[i] = '\0';
-                if(mesh_check_signature())
+                if(mesh_check_signature(row.hash, game_name))
                 {
                     memcpy(row.hash, 0, strlen(row.hash));
                     printf("Failed to verify signature: %s", row.hash);
