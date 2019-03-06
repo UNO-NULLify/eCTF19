@@ -895,7 +895,7 @@ int mesh_check_signature(char *game_hash, char *game_name){
     sig_len = mesh_size_ext4(full_game_name);
     sig_buffer = (char*) malloc((size_t) (sig_len + 1));
 
-    print("\nHere is the sig_buffer: %s", sig_buffer);
+    printf("\nHere is the sig_buffer: %s", sig_buffer);
 
     // call mesh_read_ext4
     mesh_read_ext4(full_game_name,sig_buffer, sig_len);
