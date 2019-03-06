@@ -862,12 +862,11 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
 /*
     Skeleton function
     TODO:
-    * implement bearssl code
     * implement mesh.h prototype
     * implement checking at different points
     * comment code
 */
-int mesh_check_signature(char *game_hash, char * game_name){
+int mesh_check_signature(char *game_hash, char *game_name){
     br_rsa_public_key *pub;
     unsigned char *sig_buffer;
     unsigned char *hash_out;
@@ -880,21 +879,26 @@ int mesh_check_signature(char *game_hash, char * game_name){
     strcpy(pub->e, PUBE);
     pub->elen=sizeof(PUBE);
 
-    //append .256.SIG to the name of the game that was passed for lookup
-    full_game_name = strcat(game_name, ".256.SIG\0");
-    //call mesh_size_ext4
+    // append .SHA256.SIG to the name of the game that was passed for lookup
+    full_game_name = (char*) malloc(snprintf(NULL, 0, "%s.SHA256.SIG", game_name) + 1);
+    sprintf(full_game_name, "%s.SHA256.SIG\0", game_name);
+
+    // call mesh_size_ext4
     sig_len = mesh_size_ext4(full_game_name);
-    sig_buffer = (char*) calloc((size_t) (sig_len + 1), 0);
-    //call mesh_read_ext4
+    sig_buffer = (char*) malloc((size_t) (sig_len + 1));
+
+    // call mesh_read_ext4
     mesh_read_ext4(full_game_name,sig_buffer, sig_len);
 
-    hash_len = 32;
-    hash_out = calloc(32,sizeof(char));
+    hash_len = SHA256_DIGEST_LENGTH;
+    hash_out = (char*) malloc((size_t) (hash_len +1));
 
     if(br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out) == 0) {
         printf("Failed to verify signature");
-        return 1;
+        free(sig_buffer);
+	return 1;
     }
+    free(sig_buffer);
 
     return 0;
 }
