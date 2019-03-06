@@ -874,7 +874,7 @@ int mesh_check_signature(char *game_hash, char * game_name){
     unsigned char *hash_out;
     size_t hash_len;
 
-    pub = (br_rsa_public_key){.n=MODULUS, .nlen=sizeof(MODULUS), .e=PUBE, .elen=sizeof(PUBE)}
+    pub = (br_rsa_public_key){.n=MODULUS, .nlen=sizeof(MODULUS), .e=PUBE, .elen=sizeof(PUBE)};
 
     //append .256.SIG to the name of the game that was passed for lookup
     full_game_name = strcat(game_name, ".256.SIG\0");
