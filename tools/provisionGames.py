@@ -15,12 +15,13 @@ block_size = 65536
 
 
 def gen_cipher(content):
-    content = [x.strip() for x in content]
-    nonce = content[0].encode()
-    key = content[1].encode()
-    priv = content[2].encode()
+    scontent = [x.strip() for x in content]
+    nonce = scontent[0].encode()
+    key = scontent[1].encode()
+    priv = ""
+    for x in range(2, len(content)):
+        priv += content[x]
     return (key, nonce, priv)
-
 
 def provision_game(line, cipher):
     """Given a line from games.txt, provision a game and write to the
@@ -105,7 +106,8 @@ def provision_game(line, cipher):
         f_sign.close()
         exit(1)
     try:
-        key = RSA.import_key(cipher[2]).read()
+        print(cipher[2])
+        key = RSA.import_key(cipher[2])
         # hash game and save to file, tested locally
         with open(f_out.name, 'rb') as to_hash:
             h = SHA256.new()
@@ -125,7 +127,7 @@ def provision_game(line, cipher):
         # need to verify here cuz why not
         sig = pkcs1_15.new(key).sign(h)
 
-        with open(os.path.join(gen_path, f_hash_out), "w+") as sign:
+        with open(os.path.join(gen_path, f_hash_out), "wb") as sign:
             sign.write(sig)
 
         # this is all in 1 try/catch block because we cannot have one
