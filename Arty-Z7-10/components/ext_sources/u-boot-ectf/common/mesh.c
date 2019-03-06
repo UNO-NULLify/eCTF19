@@ -876,9 +876,9 @@ int mesh_check_signature(char *game_name, char * game_hash){
 
     printf("Declared vars");
     pub->n = MODULUS;
-    pub->nlen = sizeof(MODULUS);
+    pub->nlen = strlen(MODULUS);
     pub->e = PUBE;
-    pub->elen = sizeof(PUBE);
+    pub->elen = strlen(PUBE);
 
     printf("Here is the size of MODULUS: %d", strlen(MODULUS));
 
@@ -890,7 +890,7 @@ int mesh_check_signature(char *game_name, char * game_hash){
     printf("\nChecking fn: %s\n", full_game_name);
     // call mesh_size_ext4
     sig_len = mesh_size_ext4(full_game_name);
-    sig_buffer = (char*) malloc((size_t) (sig_len + 1));
+    sig_buffer = (char*) calloc((size_t) (sig_len + 1));
 
     printf("sig_buffer: ");
     for (int i = 0; i < sig_len; i++)
