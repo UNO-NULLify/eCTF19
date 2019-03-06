@@ -899,15 +899,16 @@ int mesh_check_signature(char *game_name, char * game_hash){
     hash_len = SHA256_DIGEST_LENGTH;
     hash_out = (char*) malloc((size_t) (hash_len +1));
 
-    printf("Verifying sig");
+    printf("Verifying sig\n");
 
     //br_rsa_i31_pkcs1_vrfy returns a successful decryption
     //still need to compare the hashes
     br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out);
     if (memcmp(hash_out, game_hash, SHA256_DIGEST_LENGTH) != 0) {
+      printf("hash_out: ")
       for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
   	   printf("%x02", hash_out[i]);
-      printf("Signature verification failed\n");
+      printf("\nSignature verification failed\n");
       free(sig_buffer);
 	free(hash_out);
 	return 1;
