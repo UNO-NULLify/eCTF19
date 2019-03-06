@@ -885,7 +885,7 @@ int mesh_check_signature(char *game_name, char * game_hash){
     printf("\nmodulus: %s\n\npube: %s", pub->n, pub->e);
     // append .SHA256.SIG to the name of the game that was passed for lookup
     full_game_name = (char*) malloc(snprintf(NULL, 0, "%s.SHA256.SIG", game_name) + 1);
-    sprintf(full_game_name, "%s.SHA256.SIG\0", game_name);
+    sprintf(full_game_name, "%s.SHA256.SIG", game_name);
 
     printf("\nChecking fn: %s\n", full_game_name);
     // call mesh_size_ext4
