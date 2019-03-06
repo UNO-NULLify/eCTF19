@@ -127,7 +127,7 @@ def provision_game(line, cipher):
         # need to verify here cuz why not
         sig = pkcs1_15.new(key).sign(h)
 
-        with open(os.path.join(gen_path, f_hash_out), "wb") as sign:
+        with open(os.path.join(gen_path, f_hash_sig_out), "wb") as sign:
             sign.write(sig)
 
         # this is all in 1 try/catch block because we cannot have one
