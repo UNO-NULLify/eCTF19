@@ -876,7 +876,7 @@ int mesh_check_signature(char *game_hash, char * game_name){
     size_t hash_len;
 
     strcpy(pub->n, MODULUS);
-    pub->nlen=sizeof(MODULUS)
+    pub->nlen=sizeof(MODULUS);
     strcpy(pub->e, PUBE);
     pub->elen=sizeof(PUBE);
 
