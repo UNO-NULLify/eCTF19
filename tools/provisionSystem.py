@@ -210,7 +210,7 @@ def write_factory_secrets(f):
     """
     f.write(nonce+"\n")
     f.write(key+"\n")
-    f.write(keypair.export_key('PEM'))
+    f.write(keypair.exportKey('PEM').decode())
 
 def main():
     # Argument parsing
