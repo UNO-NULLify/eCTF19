@@ -875,6 +875,7 @@ int mesh_check_signature(char *game_hash, char * game_name){
     size_t sig_len;
     size_t hash_len;
 
+    pub = (br_rsa_public_key) publickey;
     strcpy(pub.n, MODULUS);
     pub.nlen=sizeof(MODULUS)
     strcpy(pub.e, PUBE);
