@@ -866,7 +866,7 @@ loff_t mesh_read_ext4(char *fname, char*buf, loff_t size){
     * implement checking at different points
     * comment code
 */
-int mesh_check_signature(char *game_name){
+int mesh_check_signature(char *game_name, char * game_hash){
     br_rsa_public_key *pub;
     unsigned char *sig_buffer;
     unsigned char *hash_out;
@@ -892,7 +892,7 @@ int mesh_check_signature(char *game_name){
 
     printf("sig_buffer: ");
     for (int i = 0; i < sig_len; i++)
-	printf("%x02", sig_buffer);
+	   printf("%x02", sig_buffer[i]);
 
     // call mesh_read_ext4
     mesh_read_ext4(full_game_name,sig_buffer, sig_len);
@@ -900,10 +900,15 @@ int mesh_check_signature(char *game_name){
     hash_out = (char*) malloc((size_t) (hash_len +1));
 
     printf("Verifying sig");
-    if (br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out) == 0) {
-        printf("Signature verification failed\n");
-        printf("hash_out: %s\n", hash_out);
-        free(sig_buffer);
+
+    //br_rsa_i31_pkcs1_vrfy returns a successful decryption
+    //still need to compare the hashes
+    br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out);
+    if (memcmp(hash_out, game_hash, SHA256_DIGEST_LENGTH) != 0) {
+      for (int i = 0; i < SHA256; i++)
+  	   printf("%x02", hash_out[i]);
+      printf("Signature verification failed\n");
+      free(sig_buffer);
 	free(hash_out);
 	return 1;
     }
@@ -979,7 +984,7 @@ int mesh_read_hash(char *game_name){
                 row.hash[i] = '\0';
                 hash_buffer[i] = '\0';
                 printf("Checking new game sig");
-                if(mesh_check_signature(game_name))
+                if(mesh_check_signature(game_name, game_hash))
                 {
                     printf("Failed to verify signature: %s", hash_buffer);
                     return 1;
