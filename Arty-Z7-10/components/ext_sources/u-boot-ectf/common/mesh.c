@@ -918,9 +918,17 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     strncat(nonce, NONCE, 16);
     key = KEY;
 
+    printf("Before decryption\n");
+    for(int i=0; i < 40; i++){
+        printf("Here is the character at %d: %c", i, outputBuffer[i]);
+    }
     // Decrypt the game
     AES_init_ctx_iv(&ctx, (uint8_t*) key, (uint8_t *) nonce);
     AES_CTR_xcrypt_buffer(&ctx, (uint8_t *) outputBuffer, game_size);
+    printf("After Decryption\n");
+    for(int i=0; i < 40; i++){
+        printf("Here is the character at %d: %c", i, outputBuffer[i]);
+    }
     return 0;
 }
 
