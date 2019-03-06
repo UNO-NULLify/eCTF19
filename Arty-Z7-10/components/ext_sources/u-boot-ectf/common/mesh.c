@@ -874,32 +874,39 @@ int mesh_check_signature(char *game_hash, char *game_name){
     size_t sig_len;
     size_t hash_len;
 
-    strcpy(pub->n, MODULUS);
-    pub->nlen=sizeof(MODULUS);
-    strcpy(pub->e, PUBE);
-    pub->elen=sizeof(PUBE);
+    printf("Declared vars");
+    pub->n = MODULUS;
+    pub->nlen = sizeof(MODULUS);
+    pub->e = PUBE;
+    pub->elen = sizeof(PUBE);
 
+    printf("\nmodulus: %s\n\npube: %s", pub->n, pub->e);
     // append .SHA256.SIG to the name of the game that was passed for lookup
     full_game_name = (char*) malloc(snprintf(NULL, 0, "%s.SHA256.SIG", game_name) + 1);
     sprintf(full_game_name, "%s.SHA256.SIG\0", game_name);
 
+    printf("\nChecking fn: %s\n", full_game_name);
     // call mesh_size_ext4
     sig_len = mesh_size_ext4(full_game_name);
     sig_buffer = (char*) malloc((size_t) (sig_len + 1));
 
     // call mesh_read_ext4
     mesh_read_ext4(full_game_name,sig_buffer, sig_len);
-
     hash_len = SHA256_DIGEST_LENGTH;
     hash_out = (char*) malloc((size_t) (hash_len +1));
 
-    if(br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out) == 0) {
-        printf("Failed to verify signature");
+    printf("Verifying sig");
+    if (br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out) == 0) {
+        printf("Signature verification failed\n");
+        printf("hash_out: %s\n", hash_out);
         free(sig_buffer);
+	free(hash_out);
 	return 1;
     }
     free(sig_buffer);
+    free(hash_out);
 
+    printf("Sig verified\n");
     return 0;
 }
 
@@ -967,8 +974,10 @@ int mesh_read_hash(char *game_name){
                 }
                 row.hash[i] = '\0';
                 hash_buffer[i] = '\0';
-                if(mesh_check_signature(row.hash, game_name))
+                printf("Checking new game sig");
+                if(mesh_check_signature(hash_buffer, game_name))
                 {
+                    printf("Clearing row.hash");
                     memcpy(row.hash, 0, strlen(row.hash));
                     printf("Failed to verify signature: %s", row.hash);
                     return 1;
@@ -977,6 +986,7 @@ int mesh_read_hash(char *game_name){
             }
 
             if (strcmp(row.hash, hash_buffer) == 0) {
+                printf("Hashes match!");
                 return 0;
             }
         }
