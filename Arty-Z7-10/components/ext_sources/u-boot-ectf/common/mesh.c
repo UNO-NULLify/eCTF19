@@ -977,8 +977,8 @@ int mesh_read_hash(char *game_name){
             if (row.hash[0] == NULL) {
                 // copy hash
                 for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
-                  printf("Character from hash_buffer[%d], %c", hash_buffer[i]);
-                    row.hash[i] = hash_buffer[i];
+                  printf("Character from hash_buffer[%d], %c\n", hash_buffer[i]);
+                  row.hash[i] = hash_buffer[i];
                 }
                 row.hash[i] = '\0';
                 hash_buffer[i] = '\0';
