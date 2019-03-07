@@ -212,8 +212,6 @@ def write_factory_secrets(f):
     """
     f.write(nonce+"\n")
     f.write(key+"\n")
-    f.write(str(keypair.e)+"\n") # public exponent
-    f.write(str(keypair.d)+"\n") # private exponents
     f.write(str(keypair.p)+"\n") #first prime factor
     f.write(str(keypair.q)+"\n") #second prime factor
     f.write(str(keypair.d % (keypair.p-1))+"\n") #first reduced exponent d mod p-1
