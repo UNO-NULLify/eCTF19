@@ -874,7 +874,7 @@ int mesh_check_signature(char *game_name, char * game_hash){
     size_t sig_len;
     size_t hash_len;
 
-    printf("Declared vars");
+    printf("Declared vars\n");
     pub->n = MODULUS;
     pub->nlen = 617;
     pub->e = PUBE;
@@ -892,23 +892,24 @@ int mesh_check_signature(char *game_name, char * game_hash){
     sig_len = mesh_size_ext4(full_game_name);
     sig_buffer = (char*) malloc((size_t) (sig_len + 1));
 
-    printf("sig_buffer: ");
-    for (int i = 0; i < sig_len; i++)
-	   printf("%x02", sig_buffer[i]);
-
     // call mesh_read_ext4
     mesh_read_ext4(full_game_name,sig_buffer, sig_len);
-    hash_len = SHA256_DIGEST_LENGTH;
+    hash_len = 32;
     hash_out = (char*) malloc((size_t) (hash_len +1));
 
-    printf("Verifying sig\n");
+    printf("sig_buffer: ");
+    for (int i = 0; i < sig_len; i++)
+	   printf("%02x", sig_buffer[i]);
+
+    printf("\nVerifying sig\n");
 
     //br_rsa_i31_pkcs1_vrfy returns a successful decryption
     //still need to compare the hashes
-    br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out);
+    int var = br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out);
+    printf("var: %d\n", var);
     if (memcmp(hash_out, game_hash, SHA256_DIGEST_LENGTH) != 0) {
-      printf("hash_out:    ");
-      for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
+      printf("hash_out: %s\n", hash_out);
+      for (int i = 0; i < 32; i++)
   	   printf("%x02", hash_out[i]);
       printf("\nSignature verification failed\n");
       free(sig_buffer);
@@ -986,17 +987,17 @@ int mesh_read_hash(char *game_name){
                 }
                 row.hash[i] = '\0';
                 hash_buffer[i] = '\0';
-                printf("Checking new game sig");
+                printf("Checking new game sig\n");
                 if(mesh_check_signature(game_name, row.hash))
                 {
-                    printf("Failed to verify signature: %s", hash_buffer);
+                    printf("Failed to verify signature: %s\n", hash_buffer);
                     return 1;
                 }
                 mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
             }
 
             if (strcmp(row.hash, hash_buffer) == 0) {
-                printf("Hashes match!");
+                printf("Hashes match!\n");
                 return 0;
             }
         }
