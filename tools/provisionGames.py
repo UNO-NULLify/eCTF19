@@ -106,11 +106,12 @@ def provision_game(line, cipher):
         f_sign.close()
         exit(1)
     try:
-        print(cipher[2])
         key = RSA.import_key(cipher[2])
+        print(key.exportKey())
+        h = SHA256.new()
+
         # hash game and save to file, tested locally
         with open(f_out.name, 'rb') as to_hash:
-            h = SHA256.new()
             buf = to_hash.read(block_size)
             while len(buf) > 0:
                 h.update(buf)
@@ -125,7 +126,10 @@ def provision_game(line, cipher):
         print("wrote hash to file: " + str(os.path.join(gen_path, f_hash_out)))
 
         # need to verify here cuz why not
-        sig = pkcs1_15.new(key).sign(h)
+        try:
+            sig = pkcs1_15.new(key).sign(h)
+        except (ValueError, TypeError):
+            print("Failed to create signature")
 
         with open(os.path.join(gen_path, f_hash_sig_out), "wb") as sign:
             sign.write(sig)
