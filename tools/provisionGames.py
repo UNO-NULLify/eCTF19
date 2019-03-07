@@ -100,12 +100,7 @@ def provision_game(line, cipher):
     f_hash_out = f_out_name + ".SHA256"
     f_hash_sig_out = f_hash_out + ".SIG"
     try:
-        f_sign = open(os.path.join(gen_path, f_hash_sig_out), "wb")
-    except Exception as e:
-        print("Error, could not open signature output file: %s" % e)
-        f_sign.close()
-        exit(1)
-    try:
+        print(cipher[2])
         key = RSA.import_key(cipher[2])
         print(key.exportKey())
         h = SHA256.new()
