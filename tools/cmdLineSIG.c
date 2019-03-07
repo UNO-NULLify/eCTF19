@@ -29,6 +29,7 @@ int main(int argc, char *const argv[])
   priv->dplen = sizeof(argv[5]);
   priv->dqlen = sizeof(argv[6]);
   priv->iqlen = sizeof(argv[7]);
+  hash_len = sizeof(hash_buffer);
 
   printf("Here is your hash, %s\n", hash_buffer);
   printf("Here is your hash_len, %s\n", hash_len);
