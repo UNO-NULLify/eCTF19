@@ -2,6 +2,7 @@
 
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
+from Crypto.Util import number
 import os
 import base64
 import subprocess
@@ -28,11 +29,12 @@ nonce = ''.join([random.choice(string.ascii_letters + string.digits) for n in ra
 # Key
 key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
 # Keypair
-keypair = RSA.generate(2048)
+keypair = RSA.generate(1664)
 # Modulus
 modulus = keypair.n
-# Pube
+# PubE
 pube = keypair.e
+
 
 print("HERE IS YOUR nonce: ", nonce)
 print("HERE IS YOUR key:", key)

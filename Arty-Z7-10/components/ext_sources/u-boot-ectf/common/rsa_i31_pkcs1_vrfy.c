@@ -23,7 +23,7 @@
  */
 
 #include "brssl/inner.h"
-
+#include "common.h"
 /* see bearssl_rsa.h */
 uint32_t
 br_rsa_i31_pkcs1_vrfy(const unsigned char *x, size_t xlen,
@@ -33,11 +33,20 @@ br_rsa_i31_pkcs1_vrfy(const unsigned char *x, size_t xlen,
 	unsigned char sig[BR_MAX_RSA_SIZE >> 3];
 
 	if (xlen > (sizeof sig)) {
+		printf("sig size wrong\n");
 		return 0;
 	}
 	memcpy(sig, x, xlen);
 	if (!br_rsa_i31_public(sig, xlen, pk)) {
+                printf("public key wrong\n");
 		return 0;
 	}
-	return br_rsa_pkcs1_sig_unpad(sig, xlen, hash_oid, hash_len, hash_out);
+
+        if (br_rsa_pkcs1_sig_unpad(sig, xlen, hash_oid, hash_len, hash_out) == 0) {
+            printf("unpadding failed\n");
+            return 0;
+        } else {
+            printf("padding successful\n");
+            return 1;
+	}
 }

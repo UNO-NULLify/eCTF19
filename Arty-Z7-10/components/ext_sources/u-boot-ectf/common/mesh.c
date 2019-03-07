@@ -876,9 +876,9 @@ int mesh_check_signature(char *game_name, char * game_hash){
 
     printf("Declared vars\n");
     pub->n = MODULUS;
-    pub->nlen = 617;
+    pub->nlen = sizeof(MODULUS);
     pub->e = PUBE;
-    pub->elen = 5;
+    pub->elen = sizeof(PUBE);
 
     printf("Here is the size of MODULUS: %d", strlen(MODULUS));
 
@@ -908,7 +908,6 @@ int mesh_check_signature(char *game_name, char * game_hash){
     int var = br_rsa_i31_pkcs1_vrfy(sig_buffer, sig_len, BR_HASH_OID_SHA256, hash_len, pub, hash_out);
     printf("var: %d\n", var);
     if (memcmp(hash_out, game_hash, SHA256_DIGEST_LENGTH) != 0) {
-      printf("hash_out: %s\n", hash_out);
       for (int i = 0; i < 32; i++)
   	   printf("%x02", hash_out[i]);
       printf("\nSignature verification failed\n");

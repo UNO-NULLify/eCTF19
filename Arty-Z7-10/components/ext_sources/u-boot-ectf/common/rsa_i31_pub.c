@@ -23,7 +23,7 @@
  */
 
 #include "brssl/inner.h"
-
+#include "common.h"
 /*
  * As a strict minimum, we need four buffers that can hold a
  * modular integer.
@@ -54,6 +54,7 @@ br_rsa_i31_public(unsigned char *x, size_t xlen,
 		nlen --;
 	}
 	if (nlen == 0 || nlen > (BR_MAX_RSA_SIZE >> 3) || xlen != nlen) {
+                printf("Modulus is wrong size: %d\nxlen: %d\nBR_MAX: %d\n", nlen, xlen, BR_MAX_RSA_SIZE);
 		return 0;
 	}
 	z = (long)nlen << 3;
