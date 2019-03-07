@@ -18,14 +18,12 @@ def gen_cipher(content):
     scontent = [x.strip() for x in content]
     nonce = scontent[0].encode()
     key = scontent[1].encode()
-    keypairE = scontent[2].encode()
-    keypairD = scontent[3].encode()
-    keypairP = scontent[4].encode()
-    keypairQ = scontent[5].encode()
-    keypairFR = scontent[6].encode()
-    keypairSR = scontent[7].encode()
-    keypairCRT = scontent[8].encode()
-    return (key, nonce, keypairE, keypairD, keypairP, keypairQ, keypairFR, keypairSR, keypairCRT)
+    keypairP = scontent[2].encode()
+    keypairQ = scontent[3].encode()
+    keypairFR = scontent[4].encode()
+    keypairSR = scontent[5].encode()
+    keypairCRT = scontent[6].encode()
+    return (key, nonce, keypairP, keypairQ, keypairFR, keypairSR, keypairCRT)
 
 def provision_game(line, cipher):
     """Given a line from games.txt, provision a game and write to the
@@ -126,12 +124,19 @@ def provision_game(line, cipher):
 
         # need to verify here cuz why not
         try:
-            sig = pkcs1_15.new(key).sign(h)
-        except (ValueError, TypeError):
-            print("Failed to create signature")
+            subprocess.check_call("gcc -o cmdSIG cmdLineSIG.c", shell=True)
+        except Exception as e:
+            print("NOPE2: ", e)
+        try:
+            print("Gen_path: ", gen_path)
+            print("Key: ", cipher[0])
+            print("Nonce: ", cipher[1])
+            print("File Name: ", f_out_name)
+            subprocess.check_call("./cmdSIG %s %s %s %s %s %s %s" % (gen_path+"/"+f_hash_sig_out, h.hexdigest(),
+                                                     cipher[2].decode(), cipher[3].decode(), cipher[4].decode(), cipher[5].decode(), cipher[6].decode()), shell=True)
+        except Exception as e:
+            print("NOPENOPE2: ", e)
 
-        with open(os.path.join(gen_path, f_hash_sig_out), "wb") as sign:
-            sign.write(sig)
 
         # this is all in 1 try/catch block because we cannot have one
         # part (writing header, hashing, signing, etc) to fail whilst the others continue

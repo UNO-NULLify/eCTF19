@@ -16,7 +16,19 @@ int main(int argc, char *const argv[])
   // grab the arguments
   path_to_hash = argv[1];
   hash_buffer = argv[2];
-  hash_len = argv[3];
+  priv->p = argv[3];
+  priv->q = argv[4];
+  priv->dp = argv[5];
+  priv->dq = argv[6];
+  priv->iq = argv[7];
+
+  // initialize lens
+  priv->n_bitlen = 2048;
+  priv->plen = sizeof(argv[3]);
+  priv->qlen = sizeof(argv[4]);
+  priv->dplen = sizeof(argv[5]);
+  priv->dqlen = sizeof(argv[6]);
+  priv->iqlen = sizeof(argv[7]);
 
   printf("Here is your hash, %s\n", hash_buffer);
   printf("Here is your hash_len, %s\n", hash_len);
