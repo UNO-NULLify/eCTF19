@@ -18,10 +18,14 @@ def gen_cipher(content):
     scontent = [x.strip() for x in content]
     nonce = scontent[0].encode()
     key = scontent[1].encode()
-    priv = ""
-    for x in range(2, len(content)):
-        priv += content[x]
-    return (key, nonce, priv)
+    keypairE = scontent[2].encode()
+    keypairD = scontent[3].encode()
+    keypairP = scontent[4].encode()
+    keypairQ = scontent[5].encode()
+    keypairFR = scontent[6].encode()
+    keypairSR = scontent[7].encode()
+    keypairCRT = scontent[8].encode()
+    return (key, nonce, keypairE, keypairD, keypairP, keypairQ, keypairFR, keypairSR, keypairCRT)
 
 def provision_game(line, cipher):
     """Given a line from games.txt, provision a game and write to the
