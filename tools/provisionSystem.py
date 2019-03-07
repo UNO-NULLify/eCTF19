@@ -212,7 +212,13 @@ def write_factory_secrets(f):
     """
     f.write(nonce+"\n")
     f.write(key+"\n")
-    f.write(keypair.exportKey('PEM').decode())
+    f.write(str(keypair.e)+"\n") # public exponent
+    f.write(str(keypair.d)+"\n") # private exponents
+    f.write(str(keypair.p)+"\n") #first prime factor
+    f.write(str(keypair.q)+"\n") #second prime factor
+    f.write(str(keypair.d % (keypair.p-1))+"\n") #first reduced exponent d mod p-1
+    f.write(str(keypair.d % (keypair.q-1))+"\n") #second reduced exponent d mod q-1
+    f.write(str((1/keypair.q) % keypair.p)+"\n") #CRT coefficient
 
 def main():
     # Argument parsing
