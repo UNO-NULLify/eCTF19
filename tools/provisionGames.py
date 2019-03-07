@@ -102,9 +102,6 @@ def provision_game(line, cipher):
     f_hash_out = f_out_name + ".SHA256"
     f_hash_sig_out = f_hash_out + ".SIG"
     try:
-        print(cipher[2])
-        key = RSA.import_key(cipher[2])
-        print(key.exportKey())
         h = SHA256.new()
 
         # hash game and save to file, tested locally
@@ -122,29 +119,28 @@ def provision_game(line, cipher):
 
         print("wrote hash to file: " + str(os.path.join(gen_path, f_hash_out)))
 
+    except Exception as e:
+        print("Error, could write OR hash binary source: %s" % (e))
+
         # need to verify here cuz why not
-        try:
-            subprocess.check_call("gcc -o cmdSIG cmdLineSIG.c", shell=True)
-        except Exception as e:
-            print("NOPE2: ", e)
-        try:
-            print("Gen_path: ", gen_path)
-            print("Key: ", cipher[0])
-            print("Nonce: ", cipher[1])
-            print("File Name: ", f_out_name)
-            subprocess.check_call("./cmdSIG %s %s %s %s %s %s %s" % (gen_path+"/"+f_hash_sig_out, h.hexdigest(),
+    try:
+        subprocess.check_call("gcc -o cmdSIG cmdLineSIG.c", shell=True)
+    except Exception as e:
+        print("NOPE2: ", e)
+    try:
+        print("Gen_path: ", gen_path)
+        print("Key: ", cipher[0])
+        print("Nonce: ", cipher[1])
+        print("File Name: ", f_out_name)
+        subprocess.check_call("./cmdSIG %s %s %s %s %s %s %s" % (gen_path+"/"+f_hash_sig_out, h.hexdigest(),
                                                      cipher[2].decode(), cipher[3].decode(), cipher[4].decode(), cipher[5].decode(), cipher[6].decode()), shell=True)
-        except Exception as e:
-            print("NOPENOPE2: ", e)
+    except Exception as e:
+        print("NOPENOPE2: ", e)
 
 
         # this is all in 1 try/catch block because we cannot have one
         # part (writing header, hashing, signing, etc) to fail whilst the others continue
 
-    except Exception as e:
-        print("Error, could write OR hash binary OR write signature to source: %s" % (e))
-        # f_out.close()
-        # exit(1)
 
     # encrypt games
     # 1. GCC the cmdLineAES.c with
