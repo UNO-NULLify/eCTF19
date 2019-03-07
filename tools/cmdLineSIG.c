@@ -1,4 +1,16 @@
-#include "../Arty-Z7-10/components/ext_sources/u-boot-ectf/include/brssl/bearssl_rsa.h"
+#include "./inc/bearssl_aead.h"
+#include "./inc/bearssl.h"
+#include "./inc/bearssl_kdf.h"
+#include "./inc/bearssl_rand.h"
+#include "./inc/bearssl_x509.h"
+#include "./inc/bearssl_block.h"
+#include "./inc/bearssl_hash.h"
+#include "./inc/bearssl_pem.h"
+#include "./inc/bearssl_rsa.h"
+#include "./inc/bearssl_ec.h"
+#include "./inc/bearssl_hmac.h"
+#include "./inc/bearssl_prf.h"
+#include "./inc/bearssl_ssl.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -12,7 +24,7 @@ int main(int argc, char *const argv[])
   char *path_to_sig;
   size_t  hash_len;
 
-  sign_out = (char *) malloc(sizeof(2048))
+  sign_out = (char *) malloc(sizeof(2048));
 
 
   // grab the arguments
@@ -34,11 +46,11 @@ int main(int argc, char *const argv[])
   hash_len = sizeof(hash_buffer);
 
   printf("Here is your hash, %s\n", hash_buffer);
-  printf("Here is your hash_len, %s\n", hash_len);
+  printf("Here is your hash_len, %d\n", hash_len);
   printf("Here is the path to the hash, %s\n", path_to_hash);
 
   // sign hash
-  br_rsa_i31_pkcs1_sign(BR_HASH_OID_SHA256, hash_buffer, hash_len, priv, sign_out)
+  br_rsa_i31_pkcs1_sign(BR_HASH_OID_SHA256, hash_buffer, hash_len, priv, sign_out);
 
   // create path to signature file
   path_to_sig = (char*) malloc(snprintf(NULL, 0, "%s.SIG", path_to_hash) + 1);
