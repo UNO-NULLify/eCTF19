@@ -1,4 +1,4 @@
-#include "./include/bearssl_rsa.h"
+#include "../Arty-Z7-10/components/ext_sources/u-boot-ectf/include/brssl/bearssl_rsa.h"
 #include <stdlib.h>
 #include <stdio.h>
 
