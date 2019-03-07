@@ -12,6 +12,8 @@ int main(int argc, char *const argv[])
   char *path_to_sig;
   size_t  hash_len;
 
+  sign_out = (char *) malloc(sizeof(2048))
+
 
   // grab the arguments
   path_to_hash = argv[1];
@@ -39,8 +41,8 @@ int main(int argc, char *const argv[])
   br_rsa_i31_pkcs1_sign(BR_HASH_OID_SHA256, hash_buffer, hash_len, priv, sign_out)
 
   // create path to signature file
-  path_to_sig = (char*) malloc(snprintf(NULL, 0, "%s.SHA256.SIG", path_to_hash) + 1);
-  sprintf(path_to_sig, "%s.SHA256.SIG", path_to_hash);
+  path_to_sig = (char*) malloc(snprintf(NULL, 0, "%s.SIG", path_to_hash) + 1);
+  sprintf(path_to_sig, "%s.SIG", path_to_hash);
 
   // open the file for write binary mode
   FILE * signature = fopen(path_to_sig, "wb");
@@ -51,4 +53,3 @@ int main(int argc, char *const argv[])
   // end of function
   return 0;
 }
-
