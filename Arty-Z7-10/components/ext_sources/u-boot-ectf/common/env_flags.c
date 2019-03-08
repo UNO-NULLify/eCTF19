@@ -9,9 +9,9 @@
 #include <linux/ctype.h>
 
 #ifdef USE_HOSTCC /* Eliminate "ANSI does not permit..." warnings */
-#include <linux/types.h>
+#include <stdint.h>
 #include <stdio.h>
-#include "brssl/fw_env.h"
+#include "fw_env.h"
 #include <env_attr.h>
 #include <env_flags.h>
 #define getenv fw_getenv

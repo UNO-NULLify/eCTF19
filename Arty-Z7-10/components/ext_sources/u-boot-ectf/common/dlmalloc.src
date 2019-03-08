@@ -245,7 +245,7 @@
 #if __STD_C
 #include <stddef.h>   /* for size_t */
 #else
-#include <linux/types.h>
+#include <sys/types.h>
 #endif
 
 #ifdef __cplusplus

@@ -101,7 +101,7 @@
 #include <getopt.h>    /* should be pretty obvious */
 
 #include <sys/stat.h>  /* ulimit */
-#include <linux/types.h>
+#include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
 

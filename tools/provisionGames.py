@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-from Crypto.Signature import pkcs1_15
+from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
-from Crypto.PublicKey import RSA
 import os
 import argparse
+import hashlib
 import re
 import subprocess
 
@@ -15,15 +15,11 @@ block_size = 65536
 
 
 def gen_cipher(content):
-    scontent = [x.strip() for x in content]
-    nonce = scontent[0].encode()
-    key = scontent[1].encode()
-    keypairP = scontent[2].encode()
-    keypairQ = scontent[3].encode()
-    keypairFR = scontent[4].encode()
-    keypairSR = scontent[5].encode()
-    keypairCRT = scontent[6].encode()
-    return (key, nonce, keypairP, keypairQ, keypairFR, keypairSR, keypairCRT)
+    content = [x.strip() for x in content]
+    nonce = content[0].encode()
+    key = content[1].encode()
+    return (key, nonce)
+
 
 def provision_game(line, cipher):
     """Given a line from games.txt, provision a game and write to the
@@ -102,45 +98,39 @@ def provision_game(line, cipher):
     f_hash_out = f_out_name + ".SHA256"
     f_hash_sig_out = f_hash_out + ".SIG"
     try:
-        h = SHA256.new()
-
+        f_sign = open(os.path.join(gen_path, f_hash_sig_out), "wb")
+    except Exception as e:
+        print("Error, could not open signature output file: %s" % e)
+        f_sign.close()
+        exit(1)
+    try:
+        hasher = hashlib.sha256()
+        # print(str(f_out.name))
+        #path = str(os.path.join(gen_path, f_out.name))
+        # print(path)
         # hash game and save to file, tested locally
         with open(f_out.name, 'rb') as to_hash:
             buf = to_hash.read(block_size)
             while len(buf) > 0:
-                h.update(buf)
+                hasher.update(buf)
                 buf = to_hash.read(block_size)
-
         print("wrote contents to binary: " + f_out.name)
         # to_hash/f_out closed implicitly outside of with
 
         with open(os.path.join(gen_path, f_hash_out), "w+") as hash:
-            hash.write(h.hexdigest())
-
+            hash.write(hasher.hexdigest())
+        f_out.close()
         print("wrote hash to file: " + str(os.path.join(gen_path, f_hash_out)))
 
+    # need to verify here cuz why not
+
+    # this is all in 1 try/catch block because we cannot have one
+    # part (writing header, hashing, signing, etc) to fail whilst the others continue
+
     except Exception as e:
-        print("Error, could write OR hash binary source: %s" % (e))
-
-        # need to verify here cuz why not
-    try:
-        subprocess.check_call("gcc -o cmdSIG cmdLineSIG.c", shell=True)
-    except Exception as e:
-        print("NOPE2: ", e)
-    try:
-        print("Gen_path: ", gen_path)
-        print("Key: ", cipher[0])
-        print("Nonce: ", cipher[1])
-        print("File Name: ", f_out_name)
-        subprocess.check_call("./cmdSIG %s %s %s %s %s %s %s" % (gen_path+"/"+f_hash_sig_out, h.hexdigest(),
-                                                     cipher[2].decode(), cipher[3].decode(), cipher[4].decode(), cipher[5].decode(), cipher[6].decode()), shell=True)
-    except Exception as e:
-        print("NOPENOPE2: ", e)
-
-
-        # this is all in 1 try/catch block because we cannot have one
-        # part (writing header, hashing, signing, etc) to fail whilst the others continue
-
+        print("Error, could write OR hash binary OR write signature to source: %s" % (e))
+        # f_out.close()
+        # exit(1)
 
     # encrypt games
     # 1. GCC the cmdLineAES.c with

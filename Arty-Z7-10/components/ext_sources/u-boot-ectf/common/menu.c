@@ -10,7 +10,7 @@
 #include <errno.h>
 #include <linux/list.h>
 
-#include "brssl/menu.h"
+#include "menu.h"
 
 /*
  * Internally, each item in a menu is represented by a struct menu_item.

@@ -1,6 +1,43 @@
 ## **eCTF Design Documentation:** 
 The document must describe how your system and game provisioning processes along with your console command protocols protect each of the flags. It also must contain descriptions of how each command works on the system. 
 
+### **Description:**
+The provisioning process has not strayed far from the original diagram given to us in the original documentation. The most significant difference is that before running ProvisionSystem.py a shell script must be run that installs pip and the pycrypto library. The other changes made from the default provisioning process are that we store a nonce and an aes encryption key in mesh_users.h, and we encrypt the games files in ProvisionGames.py.
+
+-----------------------------------------------------------------------------------------------------------------
+### **Flags:**
+**1. Rollback (Versioning):**<br/>
+Install a “vulnerable” piece of software with a version older than the prepackaged one. To capture this flag, a current version of the software (preinstalled) must be executed prior to running the old version.<br/>
+_**Protected:**_
+Hash the game on the provisioning side and store the hash into a file that is signed with a public key for the private key of the public key pair and then embed the public key into the header of the game file and then hash it all. Sign the hash with the private key and store a signed hash into a separate file on the SD Card. The game then is encrypted and put into the SD Card.  So now that the game has been loaded from the SD Card to the Board, it will call the decrypt function and decrypt the game each time.
+
+**2. Jailbreak (Arbitrary Code Execution):**<br/>
+Use the jailbreak proof program or create a functional equivalent and run it to extract a flag from the PL Memory Region Read/Write Access)<br/>
+_**Protected:**_
+Read/Write access is mandatory in this memory region for games to operate.
+We reviewed the implementation provided by Mitre and made no changes.
+
+**3. Pin Extraction (Confidentiality):**<br/>
+Determine the PIN of an account you don’t have access to<br/>
+_**Protected:**_
+Pins are hashed using SHA256, preventing them from being read, and we implemented a 5 second delay after a failed login attempt to increase the amount of time a brute-force attack would take.
+
+**4. PIN Bypass (Authentication):** 
+Run a game from an account you don’t have access to<br/>
+_**Protected:**_
+A user must successfully authenticate prior to launching a game, and when they attempt to launch the game, it checks that they can launch the game, and upon success runs the game as the authenticated user. 
+
+**5. Intellectual Property (Confidentiality):**<br/>
+Read the value of the flag stored in plaintext in the binary<br/>
+_**Protected:**_
+We encrypt the binary during provisioning and only decrypt them when they are being played, so running strings are otherwise viewing the file will fail to produce useful output.
+
+**6. Hacker Mods (Integrity):**<br/>
+Modify an unwinnable game to gain victory<br/>
+_**Protected:**_
+Games are encrypted during provisioning and decrypted before use. If the encrypted file is modified, it will fail to successfully decrypt and run.
+
+-----------------------------------------------------------------------------------------------------------------
 ### **Commands:**
 **1. Help:** 
 Prints out all the commands available to the user.<br/>
