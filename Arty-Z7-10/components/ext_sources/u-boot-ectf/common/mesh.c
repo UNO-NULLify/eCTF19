@@ -914,6 +914,8 @@ int mesh_read_hash(char *game_name){
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
             strcmp(user.name, row.user_name) == 0) {
+            //TODO: Remove printf
+            printf("full_name: %s\nrow.user: %s\nrow.hash: %s\nhash_buffer: %s\n", full_name, row.user_name, row.hash, hash_buffer);
 
             // check if hash is already stored
             if (row.hash == NULL) {
@@ -921,12 +923,20 @@ int mesh_read_hash(char *game_name){
                 for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
                     row.hash[i] = hash_buffer[i];
                 }
+                //TODO: Remove printf
+                printf("Copied hash_buffer into row.hash: %s\n", row.hash);
                 row.hash[i] = '\0';
                 mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
+            }
+            else {
+                //TODO: Remove printf
+                printf("Hash already stored.\n");
             }
 
             if (strcmp(row.hash, hash_buffer) == 0) {
                free(full_name);
+               //TODO: Remove printf
+               printf("row.hash matches hash_buffer\n");
                return 0;
             }
         }
@@ -1006,9 +1016,9 @@ int mesh_check_hash(char *game_name){
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
             strcmp(user.name, row.user_name) == 0) {
-            free(full_name);
 
             if(strcmp(ascii_hash, row.hash) == 0) {
+                free(full_name);
                 return 0;
             }
         }
