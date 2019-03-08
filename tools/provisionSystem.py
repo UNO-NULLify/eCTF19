@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
+from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
+from Crypto.Util import number
 import os
 import base64
 import subprocess
@@ -26,9 +28,18 @@ factory_secrets_fn = "FactorySecrets.txt"
 nonce = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(8)])
 # Key
 key = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(32)])
+# Keypair
+keypair = RSA.generate(1664)
+# Modulus
+modulus = keypair.n
+# PubE
+pube = keypair.e
+
 
 print("HERE IS YOUR nonce: ", nonce)
 print("HERE IS YOUR key:", key)
+print("HERE IS YOUR modulus: ", modulus)
+print("HERE IS YOUR pube:", pube)
 
 
 def hash_pins(users):
@@ -103,6 +114,10 @@ static struct MeshUser mesh_users[] = {{
     data = '#define NONCE "%s"\n' % nonce
     f.write(data)
     data = '#define KEY "%s"\n' % key
+    f.write(data)
+    data = '#define MODULUS "%s"\n' % modulus
+    f.write(data)
+    data = '#define PUBE "%s"\n' % pube
     f.write(data)
 
 
@@ -197,6 +212,11 @@ def write_factory_secrets(f):
     """
     f.write(nonce+"\n")
     f.write(key+"\n")
+    f.write(str(keypair.p)+"\n") #first prime factor
+    f.write(str(keypair.q)+"\n") #second prime factor
+    f.write(str(keypair.d % (keypair.p-1))+"\n") #first reduced exponent d mod p-1
+    f.write(str(keypair.d % (keypair.q-1))+"\n") #second reduced exponent d mod q-1
+    f.write(str((1/keypair.q) % keypair.p)+"\n") #CRT coefficient
 
 def main():
     # Argument parsing

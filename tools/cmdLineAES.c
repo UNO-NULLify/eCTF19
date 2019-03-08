@@ -9,8 +9,8 @@ int main(int argc, char *const argv[])
   uint32_t  game_size;
   char * path_to_game;
   char * key = calloc(32, sizeof(char));
-  char * pre_nonce = calloc(8, sizeof(char));
-  uint8_t * nonce = calloc(16,sizeof(uint8_t));
+  char * pre_nonce = calloc(16, sizeof(char));
+  uint8_t * nonce = calloc(8,sizeof(uint8_t));
   char * game_buffer;
 
 
@@ -31,7 +31,7 @@ int main(int argc, char *const argv[])
   // reset the file pointer
   fseek(game, 0L, SEEK_SET);
 
-  // Insert the NONCE into the nonce buffer that is 16 bytes and keeps the last 8 bytes NULL <-- we should change this
+  // Insert the NONCE into the nonce buffer that is 16 bytes
   strncat(nonce, pre_nonce, 8);
 
   printf("Here is your key, %s\n", key);
@@ -62,3 +62,4 @@ int main(int argc, char *const argv[])
   // End of function
   return 0;
 }
+
