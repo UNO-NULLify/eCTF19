@@ -900,8 +900,10 @@ int mesh_read_hash(char *game_name){
     hash_size = mesh_size_ext4(hash_fn);
 
     // read the game into a buffer
-    char* hash_buffer = (char*) malloc((size_t) (hash_size + 1));
+    char* hash_buffer = (char*) malloc((size_t) hash_size);
     mesh_read_ext4(hash_fn, hash_buffer, hash_size);
+    hash_buffer[hash_size] = '\0';
+
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
@@ -912,21 +914,20 @@ int mesh_read_hash(char *game_name){
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
             strcmp(user.name, row.user_name) == 0) {
-            free(full_name);
 
             // check if hash is already stored
-            if (row.hash[0] == NULL) {
+            if (row.hash == NULL) {
                 // copy hash
                 for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
                     row.hash[i] = hash_buffer[i];
                 }
                 row.hash[i] = '\0';
-                hash_buffer[i] = '\0';
                 mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
             }
 
             if (strcmp(row.hash, hash_buffer) == 0) {
-                return 0;
+               free(full_name);
+               return 0;
             }
         }
         free(full_name);
@@ -982,8 +983,10 @@ int mesh_check_hash(char *game_name){
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
     int i = 0;
 
-    if(mesh_read_hash(game_name))
+    if(mesh_read_hash(game_name)) {
         printf("Failed to read hash from hash file!\n");
+        return 1;
+    }
 
     mesh_sha256_file(game_name, gen_hash);
 
