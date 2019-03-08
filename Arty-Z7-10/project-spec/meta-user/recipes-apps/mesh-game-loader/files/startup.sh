@@ -23,6 +23,9 @@ start ()
 
     # set tty device with correct baud
     stty -F /dev/ttyPS0 speed 115200
+    
+    #remove root login in case of shell escape
+    sed -i 's|root:x:0:0:root:/root:/bin/bash|root:x:0:0:root:/root:/sbin/nologin|g' /etc/passwd
 
     # login ectf
     /bin/login -f ectf
