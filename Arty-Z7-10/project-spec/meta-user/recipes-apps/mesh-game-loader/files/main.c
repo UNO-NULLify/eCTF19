@@ -100,9 +100,9 @@ int main(int argc, char **argv)
       printf("%c\n", map[i]);
     }
 
-    // dump first 4 header lines of the game so it is executable
+    // dump first 3 header lines of the game so it is executable
     map_tmp = map;
-    for (int i=0; i < 4; i++){
+    for (int i=0; i < 3; i++){
         map_tmp = skip_line(map_tmp);
     }
 
