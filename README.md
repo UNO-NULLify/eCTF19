@@ -39,8 +39,8 @@ It could take over an hour depending on your system specs.
 
 0. Clone the [Vagrant Setup repository](https://github.com/mitre-cyber-academy/2019-ectf-vagrant) onto your machine.
 1. Navigate to the directory where this `README` is located; this should be where the `Vagrantfile` is.
-2. Modify configuration options contained in `provision/config.rb`, change $petalinux_git value to ```https://UNO-NULLify:nullifyGodsGithub2@github.com/UNO-NULLify/eCTF19```.
-3. Download the [Petalinux Tools](https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2017.4-final-installer.run) with username and password `tworort:asdfghjk1!` and put it in the `downloads` folder. 
+2. Modify configuration options contained in `provision/config.rb`, change $petalinux_git value to ```https://$USER:$PASS@github.com/$NULLIFYGITHUB/$REPO```.
+3. Download the [Petalinux Tools](https://www.xilinx.com/member/forms/download/xef.html?filename=petalinux-v2017.4-final-installer.run) with username and password and put it in the `downloads` folder. 
 4. Create, boot, and provision the VM via the `vagrant up` command. The GUI will appear before the vagrant provisioning process has completed. **Wait for the vagrant process to finish before interacting with the VM.**
 5. Restart the VM for all changes to take place with `vagrant halt && vagrant up`.
 6. Login the vm with username and password `vagrant:vagrant` or ssh into VM with `vagrant ssh`
