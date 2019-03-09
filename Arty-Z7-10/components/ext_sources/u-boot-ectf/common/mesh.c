@@ -898,7 +898,7 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     This function reads a hash from a hash file and stores it in the
     games_tbl_row struct.
 */
-int mesh_read_hash(char *game_name, char outputBuffer[64]){
+int mesh_read_hash(char *game_name, char outputBuffer[65]){
     loff_t hash_size;
 
     char* hash_fn = (char*) malloc(snprintf(NULL, 0, "%s.SHA256", game_name) + 1);
@@ -917,7 +917,7 @@ int mesh_read_hash(char *game_name, char outputBuffer[64]){
     mesh_read_ext4(hash_fn, hash_buffer, hash_size);
     hash_buffer[hash_size] = '\0';
 
-    memcpy(outputBuffer, hash_buffer, 64);
+    memcpy(outputBuffer, hash_buffer, 65);
 
     printf("hash_buffer: %s\noutputBuffer: %s\n", hash_buffer, outputBuffer);
 
@@ -965,7 +965,7 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     file on the SD card. It returns 0 if it matches and 1 if it doesn't.
 */
 int mesh_check_hash(char *game_name){
-    char read_hash[64];
+    char read_hash[65];
     unsigned char gen_hash[32];
     char ascii_gen_hash[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
@@ -986,7 +986,11 @@ int mesh_check_hash(char *game_name){
     ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
 
     //TODO: Remove printf
-    printf("read_hash: %s\n ascii_gen_hash: %s\n", read_hash, ascii_gen_hash);
+    printf("read_hash as chars: ");
+    for (i = 0; i < sizeof(ascii_gen_hash); i++) {
+        printf("%c", read_hash[i]);
+    }
+    printf("\n\nread_hash: %s\n ascii_gen_hash: %s\n", read_hash, ascii_gen_hash);
 
     if(mesh_game_installed(game_name)) {
         for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
