@@ -417,7 +417,7 @@ int mesh_install(char **args)
     row.minor_version = simple_strtoul(minor_version, NULL, 10);
 
     // store hash value
-    unsigned char read_hash[SHA256_DIGEST_LENGTH];
+    char read_hash[SHA256_DIGEST_LENGTH];
     if (mesh_read_hash(full_game_name, read_hash)) {
         printf("Failed to read hash");
         return 1;
@@ -898,7 +898,7 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     This function reads a hash from a hash file and stores it in the
     games_tbl_row struct.
 */
-int mesh_read_hash(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_LENGTH]){
+int mesh_read_hash(char *game_name, char outputBuffer[SHA256_DIGEST_LENGTH]){
     loff_t hash_size;
 
     char* hash_fn = (char*) malloc(snprintf(NULL, 0, "%s.SHA256", game_name) + 1);
@@ -913,10 +913,15 @@ int mesh_read_hash(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_LEN
     }
 
     // read the game into a buffer
-    outputBuffer = (char*) malloc((size_t) hash_size);
-    mesh_read_ext4(hash_fn, outputBuffer, hash_size);
-    outputBuffer[hash_size] = '\0';
+    char hash_buffer = (char*) malloc((size_t) hash_size);
+    mesh_read_ext4(hash_fn, hash_buffer, hash_size);
+    hash_buffer[hash_size] = '\0';
 
+    memcpy(outputBuffer, hash_buffer, SHA256_DIGEST_LENGTH);
+
+    printf("outputBuffer: %s\n", outputBuffer);
+
+    free(hash_buffer);
     printf("Read hash successfully\n");
     return 0;
 }
@@ -960,7 +965,7 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     file on the SD card. It returns 0 if it matches and 1 if it doesn't.
 */
 int mesh_check_hash(char *game_name){
-    unsigned char read_hash[SHA256_DIGEST_LENGTH];
+    char read_hash[SHA256_DIGEST_LENGTH];
     unsigned char gen_hash[32];
     char ascii_gen_hash[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
@@ -980,7 +985,10 @@ int mesh_check_hash(char *game_name){
     }
     ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
 
-    if(mesh_game_installed) {
+    //TODO: Remove printf
+    printf("read_hash: %s\n ascii_gen_hash: %s\n", read_hash, ascii_gen_hash);
+
+    if(mesh_game_installed(game_name)) {
         for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
             row.install_flag != MESH_TABLE_END;
             mesh_flash_read(&row, offset, sizeof(struct games_tbl_row))) {
