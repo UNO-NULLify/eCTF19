@@ -917,11 +917,10 @@ int mesh_read_hash(char *game_name, char outputBuffer[65]){
     mesh_read_ext4(hash_fn, hash_buffer, hash_size);
     hash_buffer[hash_size] = '\0';
 
-    memcpy(outputBuffer, hash_buffer, 65);
+    memcpy(outputBuffer, hash_buffer, hash_size+1);
 
-    printf("hash_buffer: %s\noutputBuffer: %s\n", hash_buffer, outputBuffer);
+    printf("hash_size: %d, sizeof(hash_buffer): %d, sizeof(outputBuffer): %d\nhash_buffer: %s\noutputBuffer: %s\n", hash_size, sizeof(hash_buffer), sizeof(outputBuffer), hash_buffer, outputBuffer);
 
-    free(hash_buffer);
     printf("Read hash successfully\n");
     return 0;
 }
@@ -990,7 +989,7 @@ int mesh_check_hash(char *game_name){
     for (i = 0; i < sizeof(ascii_gen_hash); i++) {
         printf("%c", read_hash[i]);
     }
-    printf("\n\nread_hash: %s\n ascii_gen_hash: %s\n", read_hash, ascii_gen_hash);
+    printf("\n\nread_hash: %s\nascii_gen_hash: %s\n", read_hash, ascii_gen_hash);
 
     if(mesh_game_installed(game_name)) {
         for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
