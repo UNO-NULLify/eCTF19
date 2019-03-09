@@ -899,11 +899,16 @@ int mesh_read_hash(char *game_name){
     // get file size of hash file
     hash_size = mesh_size_ext4(hash_fn);
 
+    //TODO: Remove printf
+    printf("hash_fn: %s\nhash_size: %d", hash_fn, hash_size);
+
     // read the game into a buffer
     char* hash_buffer = (char*) malloc((size_t) hash_size);
     mesh_read_ext4(hash_fn, hash_buffer, hash_size);
     hash_buffer[hash_size] = '\0';
 
+    //TODO: Remove printf
+    printf("read hash_buffer: %s\n", hash_buffer);
 
     for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
         row.install_flag != MESH_TABLE_END;
@@ -911,11 +916,13 @@ int mesh_read_hash(char *game_name){
         // the most space that we could need to store the full game name
         char *full_name = (char *) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
         full_name_from_short_name(full_name, &row);
+        //TODO: Remove printf
+        printf("full_name: %s\ngame_name: %s\nrow.install_flag: %d", full_name, game_name, row.install_flag);
         // check for game and specific user
         if (strcmp(game_name, full_name) == 0 &&
             strcmp(user.name, row.user_name) == 0) {
             //TODO: Remove printf
-            printf("full_name: %s\nrow.user: %s\nrow.hash: %s\nhash_buffer: %s\n", full_name, row.user_name, row.hash, hash_buffer);
+            printf("\nrow.user: %s\nrow.hash: %s\nhash_buffer: %s\n", full_name, row.user_name, row.hash, hash_buffer);
 
             // check if hash is already stored
             if (row.hash == NULL) {
