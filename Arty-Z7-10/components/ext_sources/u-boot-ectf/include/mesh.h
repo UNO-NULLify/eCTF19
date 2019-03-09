@@ -68,8 +68,8 @@ char* mesh_input_creds(char* prompt, int mode);
 int mesh_valid_install(char *game_name);
 void ptr_to_string(void* ptr, char* buf);
 void full_name_from_short_name(char* full_name, struct games_tbl_row* row);
-int mesh_read_hash(char *game_name);
-
+int mesh_read_hash(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_LENGTH]);
+int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]);
 int mesh_check_hash(char *game_name);
 
 /*

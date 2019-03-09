@@ -418,11 +418,14 @@ int mesh_install(char **args)
 
     // store hash value
     unsigned char read_hash[SHA256_DIGEST_LENGTH];
-    if (mesh_read_hash(row.game_name, read_hash)) {
+    if (mesh_read_hash(full_game_name, read_hash)) {
         printf("Failed to read hash");
         return 1;
     }
-    row.hash = read_hash;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH && read_hash[i] != '\0'; i++) {
+        row.hash[i] = read_hash[i];
+    }
+    row.hash[i] = '\0';
 
     printf("Installing game %s for %s...\n", row.game_name, row.user_name);
 
@@ -1002,7 +1005,6 @@ int mesh_check_hash(char *game_name){
     }
 
     if(strcmp(read_hash, ascii_gen_hash) == 0) {
-        free(full_name);
         printf("Hashes Matched!\n");
         return 0;
     }
