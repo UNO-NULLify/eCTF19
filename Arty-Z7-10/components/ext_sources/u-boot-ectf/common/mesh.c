@@ -416,6 +416,14 @@ int mesh_install(char **args)
     row.major_version = simple_strtoul(major_version, NULL, 10);
     row.minor_version = simple_strtoul(minor_version, NULL, 10);
 
+    // store hash value
+    unsigned char read_hash[SHA256_DIGEST_LENGTH];
+    if (mesh_read_hash(row.game_name, read_hash)) {
+        printf("Failed to read hash");
+        return 1;
+    }
+    row.hash = read_hash;
+
     printf("Installing game %s for %s...\n", row.game_name, row.user_name);
 
 
@@ -887,11 +895,8 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     This function reads a hash from a hash file and stores it in the
     games_tbl_row struct.
 */
-int mesh_read_hash(char *game_name){
-    struct games_tbl_row row;
-    unsigned int offset = MESH_INSTALL_GAME_OFFSET;
+int mesh_read_hash(char *game_name, unsigned char outputBuffer[SHA256_DIGEST_LENGTH]){
     loff_t hash_size;
-    int i;
 
     char* hash_fn = (char*) malloc(snprintf(NULL, 0, "%s.SHA256", game_name) + 1);
     sprintf(hash_fn, "%s.SHA256\0", game_name);
@@ -899,60 +904,18 @@ int mesh_read_hash(char *game_name){
     // get file size of hash file
     hash_size = mesh_size_ext4(hash_fn);
 
-    //TODO: Remove printf
-    printf("hash_fn: %s\nhash_size: %d", hash_fn, hash_size);
-
-    // read the game into a buffer
-    char* hash_buffer = (char*) malloc((size_t) hash_size);
-    mesh_read_ext4(hash_fn, hash_buffer, hash_size);
-    hash_buffer[hash_size] = '\0';
-
-    //TODO: Remove printf
-    printf("read hash_buffer: %s\n", hash_buffer);
-
-    for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
-        row.install_flag != MESH_TABLE_END;
-        mesh_flash_read(&row, offset, sizeof(struct games_tbl_row))) {
-        // the most space that we could need to store the full game name
-        char *full_name = (char *) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
-        full_name_from_short_name(full_name, &row);
-        //TODO: Remove printf
-        printf("full_name: %s\ngame_name: %s\nrow.install_flag: %d", full_name, game_name, row.install_flag);
-        // check for game and specific user
-        if (strcmp(game_name, full_name) == 0 &&
-            strcmp(user.name, row.user_name) == 0) {
-            //TODO: Remove printf
-            printf("\nrow.user: %s\nrow.hash: %s\nhash_buffer: %s\n", full_name, row.user_name, row.hash, hash_buffer);
-
-            // check if hash is already stored
-            if (row.hash == NULL) {
-                // copy hash
-                for (i = 0; i < SHA256_DIGEST_LENGTH && hash_buffer[i] != '\0'; i++) {
-                    row.hash[i] = hash_buffer[i];
-                }
-                //TODO: Remove printf
-                printf("Copied hash_buffer into row.hash: %s\n", row.hash);
-                row.hash[i] = '\0';
-                mesh_flash_write(&row, offset, sizeof(struct games_tbl_row));
-            }
-            else {
-                //TODO: Remove printf
-                printf("Hash already stored.\n");
-            }
-
-            if (strcmp(row.hash, hash_buffer) == 0) {
-               free(full_name);
-               //TODO: Remove printf
-               printf("row.hash matches hash_buffer\n");
-               return 0;
-            }
-        }
-        free(full_name);
-        offset += sizeof(struct games_tbl_row);
+    if (hash_size < 64) {
+        printf("Failed to read hash properly\n");
+        return 1;
     }
 
-    printf("Failed to read %s\n", hash_fn);
-    return 1;
+    // read the game into a buffer
+    outputBuffer = (char*) malloc((size_t) hash_size);
+    mesh_read_ext4(hash_fn, outputBuffer, hash_size);
+    outputBuffer[hash_size] = '\0';
+
+    printf("Read hash successfully\n");
+    return 0;
 }
 
 /*
@@ -994,13 +957,14 @@ int mesh_sha256_file(char *game_name, unsigned char outputBuffer[32]){
     file on the SD card. It returns 0 if it matches and 1 if it doesn't.
 */
 int mesh_check_hash(char *game_name){
+    unsigned char read_hash[SHA256_DIGEST_LENGTH];
     unsigned char gen_hash[32];
-    char ascii_hash[SHA256_DIGEST_LENGTH];
+    char ascii_gen_hash[SHA256_DIGEST_LENGTH];
     struct games_tbl_row row;
     unsigned int offset = MESH_INSTALL_GAME_OFFSET;
     int i = 0;
 
-    if(mesh_read_hash(game_name)) {
+    if(mesh_read_hash(game_name, read_hash)) {
         printf("Failed to read hash from hash file!\n");
         return 1;
     }
@@ -1009,28 +973,38 @@ int mesh_check_hash(char *game_name){
 
     for(i = 0; i < 32; i++)
     {
-        sprintf(&ascii_hash[i*2],"%02x", gen_hash[i]);
+        sprintf(&ascii_gen_hash[i*2],"%02x", gen_hash[i]);
     }
-    ascii_hash[SHA256_DIGEST_LENGTH] = '\0';
+    ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
 
-    for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
-        row.install_flag != MESH_TABLE_END;
-        mesh_flash_read(&row, offset, sizeof(struct games_tbl_row))) {
-        // the most space that we could need to store the full game name
-        char* full_name = (char*) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
-        full_name_from_short_name(full_name, &row);
+    if(mesh_game_installed) {
+        for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
+            row.install_flag != MESH_TABLE_END;
+            mesh_flash_read(&row, offset, sizeof(struct games_tbl_row))) {
+            // the most space that we could need to store the full game name
+            char* full_name = (char*) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
+            full_name_from_short_name(full_name, &row);
 
-        // check for game and specific user
-        if (strcmp(game_name, full_name) == 0 &&
-            strcmp(user.name, row.user_name) == 0) {
+            // check for game and specific user
+            if (strcmp(game_name, full_name) == 0 &&
+                strcmp(user.name, row.user_name) == 0) {
 
-            if(strcmp(ascii_hash, row.hash) == 0) {
-                free(full_name);
-                return 0;
+                if(strcmp(ascii_gen_hash, row.hash) != 0) {
+                    free(full_name);
+                    printf("Game hash has been changed.");
+                    return 1;
+                }
             }
+            free(full_name);
+            offset += sizeof(struct games_tbl_row);
         }
+
+    }
+
+    if(strcmp(read_hash, ascii_gen_hash) == 0) {
         free(full_name);
-        offset += sizeof(struct games_tbl_row);
+        printf("Hashes Matched!\n");
+        return 0;
     }
 
     printf("\nHashes did not match.\n");
