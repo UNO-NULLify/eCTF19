@@ -898,14 +898,16 @@ int mesh_decrypt_game(char *game_name, char *outputBuffer){
     This function reads a hash from a hash file and stores it in the
     games_tbl_row struct.
 */
-int mesh_read_hash(char *game_name, char outputBuffer[65]){
+int mesh_read_hash(char *game_name, char * outputBuffer){
     loff_t hash_size;
 
     char* hash_fn = (char*) malloc(snprintf(NULL, 0, "%s.SHA256", game_name) + 1);
-    sprintf(hash_fn, "%s.SHA256\0", game_name);
+    sprintf(hash_fn, "%s.SHA256", game_name);
 
     // get file size of hash file
     hash_size = mesh_size_ext4(hash_fn);
+
+    printf("hash_size: %ul", hash_size);
 
     if (hash_size < 64) {
         printf("Failed to read hash properly\n");
@@ -913,13 +915,13 @@ int mesh_read_hash(char *game_name, char outputBuffer[65]){
     }
 
     // read the game into a buffer
-    char* hash_buffer = (char*) malloc((size_t) hash_size);
-    mesh_read_ext4(hash_fn, hash_buffer, hash_size);
-    hash_buffer[hash_size] = '\0';
+    char hash_buffer[64];
+    mesh_read_ext4(hash_fn, hash_buffer, 64);
+    hash_buffer[64] = '\0';
 
-    memcpy(outputBuffer, hash_buffer, hash_size+1);
+    memcpy(outputBuffer, hash_buffer, 64);
 
-    printf("hash_size: %d, sizeof(hash_buffer): %d, sizeof(outputBuffer): %d\nhash_buffer: %s\noutputBuffer: %s\n", hash_size, sizeof(hash_buffer), sizeof(outputBuffer), hash_buffer, outputBuffer);
+    printf("strlen(hash_buffer): %d, strlen(outputBuffer): %d\nhash_buffer: %s\noutputBuffer: %s\n", strlen(hash_buffer), strlen(outputBuffer), hash_buffer, outputBuffer);
 
     printf("Read hash successfully\n");
     return 0;
@@ -1015,8 +1017,16 @@ int mesh_check_hash(char *game_name){
 
     }
 
+    memcpy(read_hash, ascii_gen_hash, 1);
+    read_hash[64] = "\0";
+    //TODO: Remove print statement
+    printf("read_hash as chars after memcpy and null terminate: ");
+    for(int i=0; i < 64; i++){
+        printf("%c", read_hash[i]);
+    }
+
     if(strcmp(read_hash, ascii_gen_hash) == 0) {
-        printf("Hashes Matched!\n");
+        printf("\nHashes Matched!\nOff by %d", strcmp(read_hash, ascii_gen_hash));
         return 0;
     }
 
