@@ -442,7 +442,7 @@ int mesh_install(char **args)
     for (int i = 0; i < SHA256_DIGEST_LENGTH && read_hash[i] != '\0'; i++) {
         row.hash[i] = read_hash[i];
     }
-    row.hash[i] = '\0';
+    row.hash[64] = '\0';
     printf("\nrow.hash: %s\n", row.hash);
 
     printf("Installing game %s for %s...\n", row.game_name, row.user_name);
