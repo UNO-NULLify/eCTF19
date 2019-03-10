@@ -379,6 +379,7 @@ int mesh_install(char **args)
 {
     /* Install the game */
     char ascii_gen_hash[SHA256_DIGEST_LENGTH];
+    int i;
     int validated = 0;
     if ((validated = mesh_install_validate_args(args))){
         return validated;
@@ -419,7 +420,7 @@ int mesh_install(char **args)
     row.install_flag = MESH_TABLE_INSTALLED;
 
     // Copy the game name into our struct (padded with 0's)
-    int i;
+
     for(i = 0; i < MAX_GAME_LENGTH && short_game_name[i] != '\0'; ++i)
         row.game_name[i] = short_game_name[i];
     for(; i < MAX_GAME_LENGTH; ++i)
