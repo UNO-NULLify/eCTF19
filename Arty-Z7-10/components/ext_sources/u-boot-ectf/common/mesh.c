@@ -419,12 +419,12 @@ int mesh_install(char **args)
 
     // store hash value
     char read_hash[SHA256_DIGEST_LENGTH];
-    if (mesh_read_hash(full_game_name, read_hash)) {
+    if (mesh_read_hash(args[1], read_hash)) {
         printf("Failed to read hash");
         return 1;
     }
     char gen_hash[SHA256_DIGEST_LENGTH];
-    if(mesh_sha256_file(full_game_name, gen_hash)){
+    if(mesh_sha256_file(args[1], gen_hash)){
         printf("Failed to gen hash");
         return 1;
     }
