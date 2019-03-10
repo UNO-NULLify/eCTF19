@@ -440,7 +440,6 @@ int mesh_install(char **args)
 
 
     for (int i = 0; i < SHA256_DIGEST_LENGTH && read_hash[i] != '\0'; i++) {
-        printf("went through %d", i);
         row.hash[i] = read_hash[i];
     }
     row.hash[i] = '\0';
