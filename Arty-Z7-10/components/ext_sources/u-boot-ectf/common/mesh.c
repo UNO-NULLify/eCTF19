@@ -378,7 +378,7 @@ int mesh_query(char **args)
 int mesh_install(char **args)
 {
     /* Install the game */
-
+    char ascii_gen_hash[SHA256_DIGEST_LENGTH];
     int validated = 0;
     if ((validated = mesh_install_validate_args(args))){
         return validated;
@@ -404,7 +404,7 @@ int mesh_install(char **args)
     printf("\nread_hash: %s\n", read_hash);
 
     char* full_game_name = args[1];
-    char ascii_gen_hash[SHA256_DIGEST_LENGTH];
+
 
     // get the short name of the game (the stuff before the "-")
     char* short_game_name = strtok(full_game_name, "-");
