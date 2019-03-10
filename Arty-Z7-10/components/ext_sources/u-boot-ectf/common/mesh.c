@@ -434,6 +434,7 @@ int mesh_install(char **args)
     }
     ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
     memcpy(read_hash, ascii_gen_hash, 1);
+    printf("\nread_hash: %s\n", read_hash);
     for (int i = 0; i < SHA256_DIGEST_LENGTH && read_hash[i] != '\0'; i++) {
         row.hash[i] = read_hash[i];
     }
