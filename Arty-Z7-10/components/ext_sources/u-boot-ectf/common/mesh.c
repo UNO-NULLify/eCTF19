@@ -1013,6 +1013,7 @@ int mesh_check_hash(char *game_name){
 
     memcpy(read_hash, ascii_gen_hash, 1);
     read_hash[64] = '\0';
+    ascii_gen_hash[64]= '\0';
 
     //TODO: Remove print statement
     printf("read_hash as chars after memcpy and null terminate: ");
@@ -1035,6 +1036,10 @@ int mesh_check_hash(char *game_name){
                 strcmp(user.name, row.user_name) == 0) {
                 printf("row.user_name: %s\ngame_name: %s\n", row.user_name, game_name);
                 printf("ascii_gen_hash: %s\nrow.hash: %s\n", ascii_gen_hash, row.hash);
+                printf("row.hash per character");
+                for(int i=0; i < 64; i++){
+                    printf("%c", row.hash[i]);
+                }
                 if(memcmp(ascii_gen_hash, row.hash, 64) != 0) {
                     free(full_name);
                     printf("Game hash has been changed.");
