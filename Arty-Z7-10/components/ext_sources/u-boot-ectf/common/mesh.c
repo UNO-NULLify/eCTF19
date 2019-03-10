@@ -994,7 +994,13 @@ int mesh_check_hash(char *game_name){
     printf("\n\nread_hash: %s\nascii_gen_hash: %s\n", read_hash, ascii_gen_hash);
 
     memcpy(read_hash, ascii_gen_hash, 1);
-    read_hash[64] = "\0";
+    read_hash[64] = '\0';
+
+    //TODO: Remove print statement
+    printf("read_hash as chars after memcpy and null terminate: ");
+    for(int i=0; i < 64; i++){
+        printf("%c", read_hash[i]);
+    }
 
     if(mesh_game_installed(game_name)) {
         for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
@@ -1004,26 +1010,27 @@ int mesh_check_hash(char *game_name){
             char* full_name = (char*) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
             full_name_from_short_name(full_name, &row);
 
+            printf("full_name: %s\n", full_name);
+
             // check for game and specific user
             if (strcmp(game_name, full_name) == 0 &&
                 strcmp(user.name, row.user_name) == 0) {
+                printf("row.user_name: %s\ngame_name: %s\n", row.user_name, game_name);
 
                 if(memcmp(ascii_gen_hash, row.hash, 64) != 0) {
                     free(full_name);
                     printf("Game hash has been changed.");
                     return 1;
                 }
+                else {
+                    printf("\nHashes Matched!\n");
+                    return 0;
+                }
             }
             free(full_name);
             offset += sizeof(struct games_tbl_row);
         }
 
-    }
-
-    //TODO: Remove print statement
-    printf("read_hash as chars after memcpy and null terminate: ");
-    for(int i=0; i < 64; i++){
-        printf("%c", read_hash[i]);
     }
 
     if(memcmp(read_hash, ascii_gen_hash, 64) == 0) {
