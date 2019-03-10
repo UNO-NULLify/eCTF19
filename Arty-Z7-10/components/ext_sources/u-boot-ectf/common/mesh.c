@@ -402,6 +402,7 @@ int mesh_install(char **args)
     }
     ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
     memcpy(read_hash, ascii_gen_hash, 1);
+    read_hash[SHA256_DIGEST_LENGTH] = '\0';
     printf("\nread_hash: %s\n", read_hash);
 
     char* full_game_name = args[1];
