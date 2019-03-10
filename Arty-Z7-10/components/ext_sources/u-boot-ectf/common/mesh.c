@@ -403,7 +403,6 @@ int mesh_install(char **args)
     ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
     memcpy(read_hash, ascii_gen_hash, 1);
     read_hash[SHA256_DIGEST_LENGTH] = '\0';
-    printf("\nread_hash: %s\n", read_hash);
 
     char* full_game_name = args[1];
 
@@ -443,7 +442,6 @@ int mesh_install(char **args)
         row.hash[i] = read_hash[i];
     }
     row.hash[64] = '\0';
-    printf("\nrow.hash: %s\n", row.hash);
 
     printf("Installing game %s for %s...\n", row.game_name, row.user_name);
 
@@ -925,8 +923,6 @@ int mesh_read_hash(char *game_name, char * outputBuffer){
     // get file size of hash file
     hash_size = mesh_size_ext4(hash_fn);
 
-    printf("hash_size: %ul", hash_size);
-
     if (hash_size < 64) {
         printf("Failed to read hash properly\n");
         return 1;
@@ -938,8 +934,6 @@ int mesh_read_hash(char *game_name, char * outputBuffer){
     hash_buffer[64] = '\0';
 
     memcpy(outputBuffer, hash_buffer, 64);
-
-    printf("strlen(hash_buffer): %d, strlen(outputBuffer): %d\nhash_buffer: %s\noutputBuffer: %s\n", strlen(hash_buffer), strlen(outputBuffer), hash_buffer, outputBuffer);
 
     printf("Read hash successfully\n");
     return 0;
@@ -1004,22 +998,9 @@ int mesh_check_hash(char *game_name){
     }
     ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
 
-    //TODO: Remove printf
-    printf("read_hash as chars: ");
-    for (i = 0; i < sizeof(ascii_gen_hash); i++) {
-        printf("%c", read_hash[i]);
-    }
-    printf("\n\nread_hash: %s\nascii_gen_hash: %s\n", read_hash, ascii_gen_hash);
-
     memcpy(read_hash, ascii_gen_hash, 1);
     read_hash[64] = '\0';
     ascii_gen_hash[64]= '\0';
-
-    //TODO: Remove print statement
-    printf("read_hash as chars after memcpy and null terminate: ");
-    for(int i=0; i < 64; i++){
-        printf("%c", read_hash[i]);
-    }
 
     if(mesh_game_installed(game_name)) {
         for(mesh_flash_read(&row, offset, sizeof(struct games_tbl_row));
@@ -1029,17 +1010,9 @@ int mesh_check_hash(char *game_name){
             char* full_name = (char*) malloc(snprintf(NULL, 0, "%s-v%d.%d", row.game_name, row.major_version, row.minor_version) + 1);
             full_name_from_short_name(full_name, &row);
 
-            printf("full_name: %s\n", full_name);
-
             // check for game and specific user
             if (strcmp(game_name, full_name) == 0 &&
                 strcmp(user.name, row.user_name) == 0) {
-                printf("row.user_name: %s\ngame_name: %s\n", row.user_name, game_name);
-                printf("ascii_gen_hash: %s\nrow.hash: %s\n", ascii_gen_hash, row.hash);
-                printf("row.hash per character");
-                for(int i=0; i < 64; i++){
-                    printf("%c", row.hash[i]);
-                }
                 int number_correct = 0;
                 for(int i=0; i < 64; i++){
                     if(memcmp(ascii_gen_hash[i], row.hash[i], 1) == 0){
@@ -1073,8 +1046,7 @@ int mesh_check_hash(char *game_name){
         }
     }
 
-    printf("\nHashes did not match.\nOff by: %d\n", memcmp(read_hash, ascii_gen_hash, 64));
-    printf("strlen(read_hash): %d, strlen(ascii_gen_hash): %d\n", strlen(read_hash), strlen(ascii_gen_hash));
+    printf("\nHashes did not match.\n");
     return 1;
 }
 
