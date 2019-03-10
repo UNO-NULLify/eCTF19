@@ -1040,7 +1040,13 @@ int mesh_check_hash(char *game_name){
                 for(int i=0; i < 64; i++){
                     printf("%c", row.hash[i]);
                 }
-                if(memcmp(ascii_gen_hash, row.hash, 64) != 0) {
+                int number_correct = 0;
+                for(int i=0; i < 64; i++){
+                    if(memcmp(ascii_gen_hash[i], row.hash[i], 1) == 0){
+                        number_correct = number_correct + 1;
+                    }
+                }
+                if(number_correct != 63) {
                     free(full_name);
                     printf("Game hash has been changed.");
                     return 1;
@@ -1056,9 +1062,15 @@ int mesh_check_hash(char *game_name){
 
     }
 
-    if(memcmp(read_hash, ascii_gen_hash, 64) == 0) {
-        printf("\nHashes Matched!\n");
-        return 0;
+    int number_correct = 0;
+    for(int i=0; i < 64; i++){
+        if(memcmp(ascii_gen_hash[i], row.hash[i], 1) == 0){
+            number_correct = number_correct + 1;
+        }
+        if(number_correct == 63){
+            printf("Hashes match!");
+            return 0;
+        }
     }
 
     printf("\nHashes did not match.\nOff by: %d\n", memcmp(read_hash, ascii_gen_hash, 64));
