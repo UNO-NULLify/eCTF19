@@ -443,6 +443,7 @@ int mesh_install(char **args)
         row.hash[i] = read_hash[i];
     }
     row.hash[i] = '\0';
+    printf("\nrow.hash: %s\n", row.hash);
 
     printf("Installing game %s for %s...\n", row.game_name, row.user_name);
 
