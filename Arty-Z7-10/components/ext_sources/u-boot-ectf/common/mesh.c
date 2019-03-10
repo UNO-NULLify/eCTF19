@@ -1034,7 +1034,7 @@ int mesh_check_hash(char *game_name){
             if (strcmp(game_name, full_name) == 0 &&
                 strcmp(user.name, row.user_name) == 0) {
                 printf("row.user_name: %s\ngame_name: %s\n", row.user_name, game_name);
-
+                printf("ascii_gen_hash: %s\nrow.hash: %s\n", ascii_gen_hash, row.hash);
                 if(memcmp(ascii_gen_hash, row.hash, 64) != 0) {
                     free(full_name);
                     printf("Game hash has been changed.");
