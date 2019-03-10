@@ -385,6 +385,7 @@ int mesh_install(char **args)
     }
 
     char* full_game_name = args[1];
+    char ascii_gen_hash[SHA256_DIGEST_LENGTH];
 
     // get the short name of the game (the stuff before the "-")
     char* short_game_name = strtok(full_game_name, "-");
@@ -422,6 +423,17 @@ int mesh_install(char **args)
         printf("Failed to read hash");
         return 1;
     }
+    char gen_hash[SHA256_DIGEST_LENGTH];
+    if(mesh_sha256_file(full_game_name, gen_hash)){
+        printf("Failed to gen hash");
+        return 1;
+    }
+    for(i = 0; i < 32; i++)
+    {
+        sprintf(&ascii_gen_hash[i*2],"%02x", gen_hash[i]);
+    }
+    ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
+    memcpy(read_hash, ascii_gen_hash, 1);
     for (int i = 0; i < SHA256_DIGEST_LENGTH && read_hash[i] != '\0'; i++) {
         row.hash[i] = read_hash[i];
     }
