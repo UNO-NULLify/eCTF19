@@ -384,6 +384,25 @@ int mesh_install(char **args)
         return validated;
     }
 
+    // store hash value
+    char read_hash[SHA256_DIGEST_LENGTH];
+    if (mesh_read_hash(args[1], read_hash)) {
+        printf("Failed to read hash");
+        return 1;
+    }
+    char gen_hash[SHA256_DIGEST_LENGTH];
+    if(mesh_sha256_file(args[1], gen_hash)){
+        printf("Failed to gen hash");
+        return 1;
+    }
+    for(i = 0; i < 32; i++)
+    {
+        sprintf(&ascii_gen_hash[i*2],"%02x", gen_hash[i]);
+    }
+    ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
+    memcpy(read_hash, ascii_gen_hash, 1);
+    printf("\nread_hash: %s\n", read_hash);
+
     char* full_game_name = args[1];
     char ascii_gen_hash[SHA256_DIGEST_LENGTH];
 
@@ -417,24 +436,7 @@ int mesh_install(char **args)
     row.major_version = simple_strtoul(major_version, NULL, 10);
     row.minor_version = simple_strtoul(minor_version, NULL, 10);
 
-    // store hash value
-    char read_hash[SHA256_DIGEST_LENGTH];
-    if (mesh_read_hash(args[1], read_hash)) {
-        printf("Failed to read hash");
-        return 1;
-    }
-    char gen_hash[SHA256_DIGEST_LENGTH];
-    if(mesh_sha256_file(args[1], gen_hash)){
-        printf("Failed to gen hash");
-        return 1;
-    }
-    for(i = 0; i < 32; i++)
-    {
-        sprintf(&ascii_gen_hash[i*2],"%02x", gen_hash[i]);
-    }
-    ascii_gen_hash[SHA256_DIGEST_LENGTH] = '\0';
-    memcpy(read_hash, ascii_gen_hash, 1);
-    printf("\nread_hash: %s\n", read_hash);
+
     for (int i = 0; i < SHA256_DIGEST_LENGTH && read_hash[i] != '\0'; i++) {
         row.hash[i] = read_hash[i];
     }
