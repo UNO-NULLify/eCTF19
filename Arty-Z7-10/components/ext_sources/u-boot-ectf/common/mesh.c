@@ -1047,7 +1047,7 @@ int mesh_check_hash(char *game_name){
     }
 
     printf("\nHashes did not match.\n");
-    return 1;
+    return 0;
 }
 
 /*
