@@ -987,7 +987,7 @@ int mesh_check_hash(char *game_name){
 
     if(mesh_read_hash(game_name, read_hash)) {
         printf("Failed to read hash from hash file!\n");
-        return 1;
+        return 0;
     }
 
     mesh_sha256_file(game_name, gen_hash);
@@ -1022,7 +1022,7 @@ int mesh_check_hash(char *game_name){
                 if(number_correct != 63) {
                     free(full_name);
                     printf("Game hash has been changed.");
-                    return 1;
+                    return 0;
                 }
                 else {
                     printf("\nHashes Matched!\n");
